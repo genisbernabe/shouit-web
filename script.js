@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- SHOUIT letter explosion ---------- */
   const brand = document.getElementById('heroBrand');
   const word = 'SHOUIT';
-  const colors = ['var(--white)', 'var(--green)'];
+  const colors = ['var(--black)', 'var(--white)'];
 
   [...word].forEach((ch, i) => {
     const span = document.createElement('span');
