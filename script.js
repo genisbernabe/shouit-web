@@ -5,12 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  /* ---------- Hero word-by-word timing ----------
+  /* ---------- Hero prompt: cortina diagonal + punto ----------
      Starts after the intro overlay has faded out (~2.2s). */
   const HERO_START = reduceMotion ? 0 : 2.3;
-  const words = document.querySelectorAll('.hero__prompt .w');
-  words.forEach((w, i) => { w.style.animationDelay = `${HERO_START + i * 0.18}s`; });
-  const wordsEnd = HERO_START + words.length * 0.18 + 0.6; // last word finishes
+  const heroPrompt = document.getElementById('heroPrompt');
+  if (reduceMotion) {
+    heroPrompt.classList.add('is-live');
+  } else {
+    heroPrompt.style.animationDelay = `${HERO_START}s`;
+    setTimeout(() => heroPrompt.classList.add('is-live'), HERO_START * 1000);
+  }
+  const wordsEnd = HERO_START + 1.7 + 1.5 + 1.1; // curtain + dot travel + settle
 
   /* ---------- SHOUIT letter explosion ---------- */
   const brand = document.getElementById('heroBrand');
