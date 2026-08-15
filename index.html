@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHOUIT — Estudio creativo en Barcelona</title>
+<meta name="description" content="SHOUIT es un estudio creativo en Barcelona: diseño web, fotografía y contenido, y gestión de redes sociales para negocios locales.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ INTRO ============ -->
+<div class="intro" id="intro" aria-hidden="true">
+  <span class="intro__mark">SH</span>
+</div>
+
+<!-- ============ CUSTOM CURSOR ============ -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+</div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a href="#top" class="nav__logo">SHOUIT<span class="dot">.</span></a>
+
+  <nav class="nav__links" id="navLinks">
+    <a href="#servicios"><span>01</span> Servicios</a>
+    <a href="#portfolio"><span>02</span> Portfolio</a>
+    <a href="#sobre-mi"><span>03</span> Sobre mí</a>
+    <a href="#contacto" class="nav__cta">Hablemos</a>
+  </nav>
+
+  <button class="nav__burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <p class="hero__eyebrow">ESTUDIO CREATIVO — BARCELONA</p>
+
+    <h1 class="hero__prompt" id="heroPrompt" aria-label="SHOW YOUR POTENTIAL">
+      <span class="w">SHOW</span> <span class="w">YOUR</span> <span class="w">POTENTIAL</span>
+    </h1>
+
+    <div class="hero__brand" id="heroBrand" aria-label="SHOUIT"></div>
+
+    <p class="hero__sub">
+      Diseño web, fotografía / contenido y gestión de redes sociales<br>
+      para negocios que quieren hacerse notar en Barcelona.
+    </p>
+
+    <a href="#servicios" class="hero__scroll">
+      <span>Scroll</span>
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1v17M1 12l6 6 6-6" stroke="currentColor" stroke-width="1.5"/></svg>
+    </a>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee">
+    <div class="marquee__track">
+      <span>DISEÑO WEB</span><i></i><span>FOTOGRAFÍA</span><i></i><span>CONTENIDO</span><i></i><span>REDES SOCIALES</span><i></i><span>BARCELONA</span><i></i>
+      <span>DISEÑO WEB</span><i></i><span>FOTOGRAFÍA</span><i></i><span>CONTENIDO</span><i></i><span>REDES SOCIALES</span><i></i><span>BARCELONA</span><i></i>
+    </div>
+  </div>
+
+  <!-- ============ SERVICIOS ============ -->
+  <section class="servicios" id="servicios">
+    <div class="section-head">
+      <p class="section-head__eyebrow">Qué hago</p>
+      <h2 class="section-head__title">Tres formas de<br>hacer ruido.</h2>
+    </div>
+
+    <div class="accordion" id="accordion">
+
+      <div class="acc-item is-open" data-item>
+        <button class="acc-item__head" data-trigger>
+          <span class="acc-item__num">01</span>
+          <span class="acc-item__title">Diseño web</span>
+          <span class="acc-item__plus" aria-hidden="true"></span>
+        </button>
+        <div class="acc-item__body" data-body>
+          <div class="acc-item__body-inner">
+            <p>Webs a medida en código real — rápidas, responsive y hechas para convertir visitas en clientes. Nada de plantillas genéricas: cada proyecto se diseña desde el negocio que lo necesita.</p>
+            <ul>
+              <li>Diseño y desarrollo a medida</li>
+              <li>Sitios rápidos, sin plugins de sobra</li>
+              <li>Pensadas para SEO local</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item" data-item>
+        <button class="acc-item__head" data-trigger>
+          <span class="acc-item__num">02</span>
+          <span class="acc-item__title">Fotografía &amp; contenido</span>
+          <span class="acc-item__plus" aria-hidden="true"></span>
+        </button>
+        <div class="acc-item__body" data-body>
+          <div class="acc-item__body-inner">
+            <p>Producto, local, equipo, ambiente — contenido visual que tu marca puede usar en la web, redes y publicidad. Sesiones pensadas para durar, no para un solo post.</p>
+            <ul>
+              <li>Fotografía de producto y local</li>
+              <li>Contenido para redes (foto + vídeo)</li>
+              <li>Entrega editada, lista para publicar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item" data-item>
+        <button class="acc-item__head" data-trigger>
+          <span class="acc-item__num">03</span>
+          <span class="acc-item__title">Gestión de redes</span>
+          <span class="acc-item__plus" aria-hidden="true"></span>
+        </button>
+        <div class="acc-item__body" data-body>
+          <div class="acc-item__body-inner">
+            <p>Gestión continua de Instagram y Facebook: calendario de contenido, publicación, y una estrategia pensada para que un negocio local se convierta en una referencia de su barrio.</p>
+            <ul>
+              <li>Estrategia y calendario mensual</li>
+              <li>Creación y publicación de contenido</li>
+              <li>Seguimiento de resultados</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ PORTFOLIO ============ -->
+  <section class="portfolio" id="portfolio">
+    <div class="section-head">
+      <p class="section-head__eyebrow">Trabajo</p>
+      <h2 class="section-head__title">Proyectos<br>reales.</h2>
+    </div>
+
+    <div class="grid" id="grid">
+
+      <button class="tile tile--lg" data-modal="cenema">
+        <span class="tile__tag">Web + Fotografía</span>
+        <span class="tile__title">CENEMA</span>
+        <span class="tile__view">Ver proyecto</span>
+      </button>
+
+      <button class="tile" data-modal="mataro">
+        <span class="tile__tag">Redes sociales</span>
+        <span class="tile__title">Port de Mataró</span>
+        <span class="tile__view">Ver proyecto</span>
+      </button>
+
+      <button class="tile" data-modal="shouit">
+        <span class="tile__tag">Marca propia</span>
+        <span class="tile__title">SHOUIT</span>
+        <span class="tile__view">Ver proyecto</span>
+      </button>
+
+      <a href="#contacto" class="tile tile--cta">
+        <span class="tile__tag">¿El siguiente?</span>
+        <span class="tile__title">Tu proyecto<br>aquí</span>
+        <span class="tile__view">Hablemos →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ============ MODALS ============ -->
+  <div class="modal-layer" id="modalLayer">
+
+    <div class="modal" data-modal-panel="cenema">
+      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
+      <p class="modal__tag">Web · Fotografía — Barcelona</p>
+      <h3 class="modal__title">CENEMA</h3>
+      <p class="modal__desc">Diseño y desarrollo web completo junto a sesión de fotografía de producto y local. Una identidad visual limpia, pensada para que la web cargue rápido y venda desde el primer scroll.</p>
+      <a href="https://cenemabc.com" target="_blank" rel="noopener" class="modal__link">Visitar cenemabc.com →</a>
+    </div>
+
+    <div class="modal" data-modal-panel="mataro">
+      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
+      <p class="modal__tag">Gestión de redes — Mataró</p>
+      <h3 class="modal__title">Port de Mataró</h3>
+      <p class="modal__desc">Gestión activa de redes sociales: contenido, calendario y comunidad para uno de los puertos deportivos de referencia de la costa del Maresme.</p>
+    </div>
+
+    <div class="modal" data-modal-panel="shouit">
+      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
+      <p class="modal__tag">Marca propia — Barcelona</p>
+      <h3 class="modal__title">SHOUIT</h3>
+      <p class="modal__desc">La web que estás viendo ahora mismo. Diseñada, escrita y programada a medida como carta de presentación del estudio: identidad, movimiento y una idea clara de a quién quiere ayudar.</p>
+    </div>
+
+  </div>
+
+  <!-- ============ SOBRE MÍ ============ -->
+  <section class="about" id="sobre-mi">
+    <div class="about__col">
+      <p class="section-head__eyebrow">Quién hay detrás</p>
+      <h2 class="section-head__title">Genís<br>Bernabe.</h2>
+    </div>
+    <div class="about__col about__text">
+      <p>Fundé SHOUIT en Barcelona porque vi a demasiados negocios locales — restaurantes, barberías, estudios — con webs a medio hacer o directamente sin ella, dependiendo solo de un perfil de Instagram para existir.</p>
+      <p>Vengo de construir webs sobre WordPress y Elementor, pero hoy trabajo con código a medida: HTML, CSS y JS, sin plugins de sobra, para que cada sitio cargue rápido y se vea exactamente como se diseñó. El objetivo siempre es el mismo: que un negocio de barrio compita, en digital, como uno grande.</p>
+      <a href="#contacto" class="about__link">Cuéntame tu proyecto →</a>
+    </div>
+  </section>
+
+  <!-- ============ CONTACTO ============ -->
+  <section class="contact" id="contacto">
+    <div class="section-head">
+      <p class="section-head__eyebrow">Hablemos</p>
+      <h2 class="section-head__title">Hagamos<br>ruido juntos.</h2>
+    </div>
+
+    <form class="form" action="https://formspree.io/f/xjgjvbzg" method="POST">
+      <div class="form__row">
+        <label for="name">Nombre</label>
+        <input id="name" name="name" type="text" required placeholder="¿Cómo te llamas?">
+      </div>
+      <div class="form__row">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="tu@email.com">
+      </div>
+      <div class="form__row">
+        <label for="business">Tipo de negocio</label>
+        <input id="business" name="business" type="text" placeholder="Restaurante, barbería, estudio...">
+      </div>
+      <div class="form__row">
+        <label for="message">Cuéntame</label>
+        <textarea id="message" name="message" rows="4" required placeholder="¿Qué necesitas?"></textarea>
+      </div>
+      <button type="submit" class="form__submit">
+        <span>Enviar mensaje</span>
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 7h16M11 1l6 6-6 6" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </form>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <a href="#top" class="footer__brand">SHOUIT<span class="dot">.</span></a>
+  <div class="footer__meta">
+    <a href="mailto:hola@shouit.es">hola@shouit.es</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+    <span>Barcelona, España</span>
+  </div>
+  <p class="footer__copy">© <span id="year"></span> SHOUIT. Todos los derechos reservados.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
