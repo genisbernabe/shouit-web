@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pf) {
     const track = document.getElementById('pfTrack');
     const pfPanels = [...track.querySelectorAll('.pf__panel')];
-    const pfMedia = pfPanels.map(p => p.querySelector('.pf__media, .pf__feed'));
+    const pfMedia = pfPanels.map(p => p.querySelector('.pf__shot, .pf__feed'));
     const pfCount = document.getElementById('pfCount');
     const pfBar = document.getElementById('pfBar');
     const total = String(pfPanels.length).padStart(2, '0');
