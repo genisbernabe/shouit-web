@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Port de Mataró — Proyectos SHOUIT</title>
+<meta name="description" content="Rediseño web, contenido y gestión de redes sociales para el Port de Mataró.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ============ CUSTOM CURSOR ============ -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+</div>
+
+<header class="nav" id="nav">
+  <a href="/index.html" class="nav__logo">SHOUIT<span class="dot">.</span></a>
+
+  <nav class="nav__links" id="navLinks">
+    <a href="/index.html#servicios"><span>01</span> Servicios</a>
+    <a href="/index.html#portfolio"><span>02</span> Portfolio</a>
+    <a href="/index.html#sobre-mi"><span>03</span> Sobre mí</a>
+    <a href="/index.html#contacto" class="nav__cta">Hablemos</a>
+  </nav>
+
+  <button class="nav__burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</header>
+<main id="top">
+
+  <!-- ============ PROYECTO HERO ============ -->
+  <header class="proyecto-hero on-light">
+    <p class="proyecto-hero__eyebrow">Web + Contenido + Redes</p>
+    <img class="proyecto-hero__logo" src="/img/proyectos/port%20de%20mataro/mataro-hero.jpg" alt="Logotipo de Port de Mataró">
+    <h1 class="proyecto-hero__title">Port de Mataró</h1>
+    <p class="proyecto-hero__desc">Rediseño web completo, fotografía y vídeo, y gestión activa de redes sociales para el Port de Mataró: náutica, gastronomía y sostenibilidad en un mismo espacio frente al mar.</p>
+    <div class="proyecto-hero__links">
+      <a href="https://portmataro.org/" target="_blank" rel="noopener" class="proyecto-hero__link">Visitar portmataro.org →</a>
+    </div>
+  </header>
+
+  <!-- ============ PORTADA ============ -->
+  <section class="proyecto-cover">
+    <img src="/img/proyectos/port%20de%20mataro/mataro-01.jpg.png" alt="Portada de la web del Port de Mataró — Viu el batec del Port" loading="lazy">
+  </section>
+
+  <!-- ============ GALERÍA ============ -->
+  <section class="proyecto-gallery">
+      <img src="/img/proyectos/port%20de%20mataro/mataro-02.jpg.png" alt="Port de Mataró — servicios del puerto" loading="lazy">
+  </section>
+
+  <!-- ============ SIGUIENTE PROYECTO ============ -->
+  <nav class="proyecto-next">
+    <a href="/index.html#portfolio">← Volver al portfolio</a>
+    <a href="/proyectos/cenema.html">Siguiente: CENEMA →</a>
+  </nav>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <a href="/index.html" class="footer__brand">SHOUIT<span class="dot">.</span></a>
+  <div class="footer__meta">
+    <a href="mailto:hola@shouit.es">hola@shouit.es</a>
+    <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+    <span>Barcelona, España</span>
+  </div>
+  <p class="footer__copy">© <span id="year"></span> SHOUIT. Todos los derechos reservados.</p>
+</footer>
+
+<script src="/script.js"></script>
+</body>
+</html>
