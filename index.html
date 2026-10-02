@@ -76,35 +76,6 @@
     </a>
   </section>
 
-  <!-- ============ VITRINA ============ -->
-  <section class="vitrina" id="vitrina">
-    <p class="vitrina__eyebrow">Proyectos destacados</p>
-
-    <div class="vitrina__grid">
-
-      <a class="vitrina__item" href="/proyectos/cenema.html">
-        <span class="vitrina__frame">
-          <img class="vitrina__img" src="/img/proyectos/cenema/cenema-hero.jpg" alt="CENEMA — vista del proyecto" loading="lazy">
-        </span>
-        <span class="vitrina__cap">
-          <span class="vitrina__name">CENEMA</span>
-          <span class="vitrina__tag">Web + Contenido + Redes</span>
-        </span>
-      </a>
-
-      <a class="vitrina__item" href="/proyectos/mataro.html">
-        <span class="vitrina__frame">
-          <img class="vitrina__img" src="/img/proyectos/port%20de%20mataro/mataro-hero.jpg" alt="Port de Mataró — vista del proyecto" loading="lazy">
-        </span>
-        <span class="vitrina__cap">
-          <span class="vitrina__name">Port de Mataró</span>
-          <span class="vitrina__tag">Web + Contenido + Redes</span>
-        </span>
-      </a>
-
-    </div>
-  </section>
-
   <!-- ============ MARQUEE ============ -->
   <div class="marquee">
     <div class="marquee__track">
@@ -186,63 +157,91 @@
       <h2 class="section-head__title">Proyectos<br>reales.</h2>
     </div>
 
-    <div class="grid" id="grid">
+    <div class="pf" id="pf">
+      <div class="pf__sticky">
+        <div class="pf__track" id="pfTrack">
 
-      <button class="tile tile--lg" data-modal="cenema">
-        <span class="tile__tag">Diseño web + Contenido</span>
-        <span class="tile__title">CENEMA</span>
-        <span class="tile__view">Ver proyecto</span>
-      </button>
+          <a class="pf__panel" href="/proyectos/cenema.html">
+            <div class="pf__media"><img src="/img/proyectos/cenema/cenema-03.jpg.png" alt="Web de CENEMA — coworking en Barcelona" decoding="async"></div>
+            <div class="pf__scrim"></div>
+            <div class="pf__cap">
+              <div>
+                <div class="pf__title"><span class="pf__num">01</span><span class="pf__name">CENEMA</span></div>
+                <p class="pf__tag">Web + Contenido + Redes</p>
+              </div>
+              <span class="pf__view">Ver proyecto →</span>
+            </div>
+          </a>
 
-      <button class="tile tile--lg" data-modal="mataro">
-        <span class="tile__tag">Diseño web + Contenido</span>
-        <span class="tile__title">Port de Mataró</span>
-        <span class="tile__view">Ver proyecto</span>
-      </button>
+          <a class="pf__panel" href="/proyectos/mataro.html">
+            <div class="pf__media"><img src="/img/proyectos/port%20de%20mataro/mataro-portfolio.jpg" alt="Web del Port de Mataró — vista aérea del puerto" decoding="async"></div>
+            <div class="pf__scrim"></div>
+            <div class="pf__cap">
+              <div>
+                <div class="pf__title"><span class="pf__num">02</span><span class="pf__name">Port de Mataró</span></div>
+                <p class="pf__tag">Web + Contenido + Redes</p>
+              </div>
+              <span class="pf__view">Ver proyecto →</span>
+            </div>
+          </a>
 
-      <button class="tile" data-modal="shouit">
-        <span class="tile__tag">Marca propia</span>
-        <span class="tile__title">SHOUIT</span>
-        <span class="tile__view">Ver proyecto</span>
-      </button>
+          <a class="pf__panel" href="/proyectos/olimfit.html">
+            <div class="pf__feed">
+              <img src="/img/proyectos/olimfit/olimfit-01.jpg" alt="Post de Olimfit — overnight oats de chocolate y plátano" decoding="async">
+              <img src="/img/proyectos/olimfit/olimfit-04.jpg" alt="Post de Olimfit — ceviche fresco" decoding="async">
+              <img src="/img/proyectos/olimfit/olimfit-06.jpg" alt="Post de Olimfit — menú de cenas saludables" decoding="async">
+            </div>
+            <div class="pf__scrim"></div>
+            <div class="pf__cap">
+              <div>
+                <div class="pf__title"><span class="pf__num">03</span><span class="pf__name">Olimfit</span></div>
+                <p class="pf__tag">Contenido + Redes</p>
+              </div>
+              <span class="pf__view">Ver proyecto →</span>
+            </div>
+          </a>
 
-      <a href="#contacto" class="tile tile--cta">
-        <span class="tile__tag">¿El siguiente?</span>
-        <span class="tile__title">Tu proyecto<br>aquí</span>
-        <span class="tile__view">Hablemos →</span>
-      </a>
+          <!-- TODO: imagen de Eurofitness -->
+          <a class="pf__panel" href="/proyectos/eurofitness.html">
+            <div class="pf__pending"><span>Imagen pendiente</span></div>
+            <div class="pf__scrim"></div>
+            <div class="pf__cap">
+              <div>
+                <div class="pf__title"><span class="pf__num">04</span><span class="pf__name">Eurofitness</span></div>
+                <p class="pf__tag">Contenido + Redes</p>
+              </div>
+              <span class="pf__view">Ver proyecto →</span>
+            </div>
+          </a>
 
+          <!-- TODO: imagen de Eurofitness EDU -->
+          <a class="pf__panel" href="/proyectos/eurofitness-edu.html">
+            <div class="pf__pending"><span>Imagen pendiente</span></div>
+            <div class="pf__scrim"></div>
+            <div class="pf__cap">
+              <div>
+                <div class="pf__title"><span class="pf__num">05</span><span class="pf__name">Eurofitness EDU</span></div>
+                <p class="pf__tag">Contenido + Redes</p>
+              </div>
+              <span class="pf__view">Ver proyecto →</span>
+            </div>
+          </a>
+
+          <a class="pf__panel pf__panel--cta" href="#contacto">
+            <span class="pf__num">¿El siguiente?</span>
+            <span class="pf__name">Tu proyecto<br>aquí</span>
+            <span class="pf__go">Hablemos →</span>
+          </a>
+
+        </div>
+
+        <div class="pf__meta" aria-hidden="true">
+          <span class="pf__count" id="pfCount">01 / 06</span>
+          <span class="pf__bar"><i id="pfBar"></i></span>
+        </div>
+      </div>
     </div>
   </section>
-
-  <!-- ============ MODALS ============ -->
-  <div class="modal-layer" id="modalLayer">
-
-    <div class="modal" data-modal-panel="cenema">
-      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
-      <p class="modal__tag">Web · Coworking · Contenido — Barcelona</p>
-      <h3 class="modal__title">CENEMA</h3>
-      <p class="modal__desc">Diseño web completo, fotografía y vídeo, y gestión de redes sociales para CENEMA: un espacio de coworking en Barcelona pensado para autónomos, startups y equipos que buscan flexibilidad y comunidad.</p>
-      <a href="https://cenemabc.com" target="_blank" rel="noopener" class="modal__link">Visitar cenemabc.com →</a>
-      <a href="https://www.instagram.com/cenemabc" target="_blank" rel="noopener" class="modal__link">Ver en Instagram →</a>
-    </div>
-
-    <div class="modal" data-modal-panel="mataro">
-      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
-      <p class="modal__tag">Web · Contenido — Mataró</p>
-      <h3 class="modal__title">Port de Mataró</h3>
-      <p class="modal__desc">Rediseño web completo, fotografía y vídeo, y gestión activa de redes sociales para el Port de Mataró: náutica, gastronomía y sostenibilidad en un mismo espacio frente al mar.</p>
-      <a href="https://portmataro.org/" target="_blank" rel="noopener" class="modal__link">Visitar portmataro.org →</a>
-    </div>
-
-    <div class="modal" data-modal-panel="shouit">
-      <button class="modal__close" data-close aria-label="Cerrar">✕</button>
-      <p class="modal__tag">Marca propia — Barcelona</p>
-      <h3 class="modal__title">SHOUIT</h3>
-      <p class="modal__desc">La web que estás viendo ahora mismo. Diseñada, escrita y programada a medida como carta de presentación del estudio: identidad, movimiento y una idea clara de a quién quiere ayudar.</p>
-    </div>
-
-  </div>
 
   <!-- ============ SOBRE MÍ ============ -->
   <section class="about" id="sobre-mi">

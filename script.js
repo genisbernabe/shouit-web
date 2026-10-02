@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- SHOUIT letter explosion ---------- */
   const brand = document.getElementById('heroBrand');
   const word = 'SHOUIT';
-  const colors = ['var(--black)', 'var(--white)'];
+  const colors = ['var(--white)', 'var(--green)'];
 
   if (brand) {
     [...word].forEach((ch, i) => {
@@ -103,28 +103,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Portfolio modal ---------- */
-  const layer = document.getElementById('modalLayer');
-  if (layer) {
-    const openers = document.querySelectorAll('[data-modal]');
-    const panels = document.querySelectorAll('[data-modal-panel]');
+  /* ---------- Portfolio: galería horizontal que avanza con el scroll ----------
+     La sección .pf es tan alta como el recorrido horizontal + una pantalla.
+     Mientras su contenido está fijo (sticky), el scroll vertical se traduce
+     en desplazamiento horizontal del carril, suavizado en cada frame. */
+  const pf = document.getElementById('pf');
+  if (pf) {
+    const track = document.getElementById('pfTrack');
+    const pfPanels = [...track.querySelectorAll('.pf__panel')];
+    const pfMedia = pfPanels.map(p => p.querySelector('.pf__media, .pf__feed'));
+    const pfCount = document.getElementById('pfCount');
+    const pfBar = document.getElementById('pfBar');
+    const total = String(pfPanels.length).padStart(2, '0');
 
-    const openModal = (key) => {
-      panels.forEach(p => p.classList.toggle('is-active', p.dataset.modalPanel === key));
-      layer.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    };
-    const closeModal = () => {
-      layer.classList.remove('is-open');
-      document.body.style.overflow = '';
+    let distance = 0, target = 0, current = 0, last = performance.now();
+
+    const read = () => {
+      const top = pf.getBoundingClientRect().top;
+      const p = distance ? Math.min(1, Math.max(0, -top / distance)) : 0;
+      target = p * distance;
     };
 
-    openers.forEach(btn => {
-      btn.addEventListener('click', () => openModal(btn.dataset.modal));
+    const measure = () => {
+      distance = Math.max(0, track.scrollWidth - window.innerWidth);
+      pf.style.height = `${window.innerHeight + distance}px`;
+      read();
+      current = target;
+    };
+
+    const render = (now) => {
+      const dt = Math.min(64, now - last); last = now;
+      const k = reduceMotion ? 1 : 1 - Math.pow(1 - 0.085, dt / 16.67);
+      current += (target - current) * k;
+      if (Math.abs(target - current) < 0.05) current = target;
+
+      track.style.transform = `translate3d(${(-current).toFixed(2)}px,0,0)`;
+
+      const vw = window.innerWidth;
+      let active = 0, best = Infinity;
+      pfPanels.forEach((panel, i) => {
+        const r = panel.getBoundingClientRect();
+        const off = (r.left + r.width / 2 - vw / 2) / vw;
+        if (!reduceMotion && pfMedia[i]) pfMedia[i].style.transform = `translate3d(${(off * -5).toFixed(3)}%,0,0)`;
+        if (Math.abs(off) < best) { best = Math.abs(off); active = i; }
+      });
+
+      pfCount.textContent = `${String(active + 1).padStart(2, '0')} / ${total}`;
+      pfBar.style.transform = `scaleX(${(distance ? current / distance : 0).toFixed(4)})`;
+
+      requestAnimationFrame(render);
+    };
+
+    // Teclado: al tabular a un panel fuera de pantalla, la página se desplaza hasta él.
+    pfPanels.forEach(panel => {
+      panel.addEventListener('focus', () => {
+        const pfTop = pf.getBoundingClientRect().top + window.scrollY;
+        const x = Math.min(distance, Math.max(0, panel.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft)));
+        window.scrollTo({ top: pfTop + x, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
     });
-    layer.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', closeModal));
-    layer.addEventListener('click', (e) => { if (e.target === layer) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    window.addEventListener('scroll', read, { passive: true });
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    measure();
+    requestAnimationFrame(render);
   }
 
 });
