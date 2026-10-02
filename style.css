@@ -269,11 +269,14 @@ img{max-width:100%;display:block;}
 
 .hero__brand{
   font-family:var(--font-display);
-  font-size:clamp(3.2rem,15vw,11rem);
+  font-size:clamp(3rem,11vw,8.5rem);
   line-height:.9;
   letter-spacing:.01em;
-  display:flex;
+  color:var(--white);
+  display:flex;flex-wrap:wrap;justify-content:center;
+  column-gap:.32em;row-gap:.12em; /* row-gap leaves room for the accents on Í and É */
 }
+.hero__word{display:inline-flex;white-space:nowrap;}
 .hero__brand .l{
   display:inline-block;
   opacity:0;

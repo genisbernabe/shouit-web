@@ -13,21 +13,28 @@ document.addEventListener('DOMContentLoaded', () => {
   words.forEach((w, i) => { w.style.animationDelay = `${HERO_START + i * 0.18}s`; });
   const wordsEnd = HERO_START + words.length * 0.18 + 0.6; // last word finishes
 
-  /* ---------- SHOUIT letter explosion ---------- */
+  /* ---------- Name letter explosion ----------
+     Each word goes in its own group so the name can wrap onto two lines
+     on narrow screens without splitting a word. */
   const brand = document.getElementById('heroBrand');
-  const word = 'SHOUIT';
-  const colors = ['var(--white)', 'var(--green)'];
+  const name = 'GENÍS BERNABÉ';
 
   if (brand) {
-    [...word].forEach((ch, i) => {
-      const span = document.createElement('span');
-      span.className = 'l';
-      span.textContent = ch;
-      span.style.color = colors[i % 2];
-      const randomRot = (Math.random() * 40 - 20).toFixed(1);
-      span.style.setProperty('--r', `${randomRot}deg`);
-      span.style.animationDelay = reduceMotion ? '0s' : `${wordsEnd + i * 0.07}s`;
-      brand.appendChild(span);
+    let i = 0;
+    name.split(' ').forEach(part => {
+      const wordEl = document.createElement('span');
+      wordEl.className = 'hero__word';
+      [...part].forEach(ch => {
+        const span = document.createElement('span');
+        span.className = 'l';
+        span.textContent = ch;
+        const randomRot = (Math.random() * 40 - 20).toFixed(1);
+        span.style.setProperty('--r', `${randomRot}deg`);
+        span.style.animationDelay = reduceMotion ? '0s' : `${wordsEnd + i * 0.07}s`;
+        wordEl.appendChild(span);
+        i++;
+      });
+      brand.appendChild(wordEl);
     });
   }
 
