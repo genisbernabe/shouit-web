@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Hero word-by-word timing ----------
      Starts after the intro overlay has faded out (~3.2s, matching the
-     new curtain-wipe + dot loading animation). */
+     curtain-wipe + dot loading animation). */
   const HERO_START = reduceMotion ? 0 : 3.2;
   const words = document.querySelectorAll('.hero__prompt .w');
   words.forEach((w, i) => { w.style.animationDelay = `${HERO_START + i * 0.18}s`; });
