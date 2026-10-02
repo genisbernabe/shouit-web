@@ -18,16 +18,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const word = 'SHOUIT';
   const colors = ['var(--black)', 'var(--white)'];
 
-  [...word].forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'l';
-    span.textContent = ch;
-    span.style.color = colors[i % 2];
-    const randomRot = (Math.random() * 40 - 20).toFixed(1);
-    span.style.setProperty('--r', `${randomRot}deg`);
-    span.style.animationDelay = reduceMotion ? '0s' : `${wordsEnd + i * 0.07}s`;
-    brand.appendChild(span);
-  });
+  if (brand) {
+    [...word].forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'l';
+      span.textContent = ch;
+      span.style.color = colors[i % 2];
+      const randomRot = (Math.random() * 40 - 20).toFixed(1);
+      span.style.setProperty('--r', `${randomRot}deg`);
+      span.style.animationDelay = reduceMotion ? '0s' : `${wordsEnd + i * 0.07}s`;
+      brand.appendChild(span);
+    });
+  }
 
   /* ---------- Custom cursor ---------- */
   const cursor = document.getElementById('cursor');
@@ -103,24 +105,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Portfolio modal ---------- */
   const layer = document.getElementById('modalLayer');
-  const openers = document.querySelectorAll('[data-modal]');
-  const panels = document.querySelectorAll('[data-modal-panel]');
+  if (layer) {
+    const openers = document.querySelectorAll('[data-modal]');
+    const panels = document.querySelectorAll('[data-modal-panel]');
 
-  const openModal = (key) => {
-    panels.forEach(p => p.classList.toggle('is-active', p.dataset.modalPanel === key));
-    layer.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  };
-  const closeModal = () => {
-    layer.classList.remove('is-open');
-    document.body.style.overflow = '';
-  };
+    const openModal = (key) => {
+      panels.forEach(p => p.classList.toggle('is-active', p.dataset.modalPanel === key));
+      layer.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+      layer.classList.remove('is-open');
+      document.body.style.overflow = '';
+    };
 
-  openers.forEach(btn => {
-    btn.addEventListener('click', () => openModal(btn.dataset.modal));
-  });
-  layer.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', closeModal));
-  layer.addEventListener('click', (e) => { if (e.target === layer) closeModal(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    openers.forEach(btn => {
+      btn.addEventListener('click', () => openModal(btn.dataset.modal));
+    });
+    layer.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', closeModal));
+    layer.addEventListener('click', (e) => { if (e.target === layer) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  }
 
 });

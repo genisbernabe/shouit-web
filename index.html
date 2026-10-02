@@ -50,7 +50,13 @@
 <main id="top">
 
   <!-- ============ HERO ============ -->
-  <section class="hero on-light" id="hero">
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__blob hero__blob--1"></span>
+      <span class="hero__blob hero__blob--2"></span>
+      <span class="hero__blob hero__blob--3"></span>
+    </div>
+
     <p class="hero__eyebrow">ESTUDIO CREATIVO — BARCELONA</p>
 
     <h1 class="hero__prompt" id="heroPrompt" aria-label="SHOW YOUR POTENTIAL">
@@ -68,6 +74,35 @@
       <span>Scroll</span>
       <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1v17M1 12l6 6 6-6" stroke="currentColor" stroke-width="1.5"/></svg>
     </a>
+  </section>
+
+  <!-- ============ VITRINA ============ -->
+  <section class="vitrina" id="vitrina">
+    <p class="vitrina__eyebrow">Proyectos destacados</p>
+
+    <div class="vitrina__grid">
+
+      <a class="vitrina__item" href="/proyectos/cenema.html">
+        <span class="vitrina__frame">
+          <img class="vitrina__img" src="/img/proyectos/cenema/cenema-hero.jpg" alt="CENEMA — vista del proyecto" loading="lazy">
+        </span>
+        <span class="vitrina__cap">
+          <span class="vitrina__name">CENEMA</span>
+          <span class="vitrina__tag">Web + Contenido + Redes</span>
+        </span>
+      </a>
+
+      <a class="vitrina__item" href="/proyectos/mataro.html">
+        <span class="vitrina__frame">
+          <img class="vitrina__img" src="/img/proyectos/port%20de%20mataro/mataro-hero.jpg" alt="Port de Mataró — vista del proyecto" loading="lazy">
+        </span>
+        <span class="vitrina__cap">
+          <span class="vitrina__name">Port de Mataró</span>
+          <span class="vitrina__tag">Web + Contenido + Redes</span>
+        </span>
+      </a>
+
+    </div>
   </section>
 
   <!-- ============ MARQUEE ============ -->
