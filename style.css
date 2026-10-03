@@ -52,53 +52,6 @@ img{max-width:100%;display:block;}
 }
 
 /* ==========================================================
-   Intro
-   ========================================================== */
-.intro{
-  position:fixed;inset:0;z-index:200;
-  background:var(--black);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
-  animation:introOut .6s var(--ease) 2.6s forwards;
-}
-.intro__mark{
-  display:flex;align-items:baseline;gap:.06em;
-  font-family:var(--font-display);
-  font-size:clamp(1.6rem,7vw,6rem);
-  letter-spacing:.02em;
-  color:var(--white);
-  white-space:nowrap;
-}
-/* El nombre sube desde detrás de una línea invisible */
-.intro__mask{display:inline-block;overflow:hidden;line-height:1.1;}
-.intro__text{
-  display:inline-block;
-  transform:translateY(105%);
-  animation:nameUp 1s var(--ease) .25s forwards;
-}
-@keyframes nameUp{to{transform:translateY(0);}}
-/* El punto final verde: entra desde la derecha y se posa sobre la línea del texto */
-.intro__dot{
-  width:.2em;height:.2em;
-  background:var(--green);
-  flex:none;
-  opacity:0;
-  transform:translateX(5em);
-  animation:dotIn .9s cubic-bezier(.22,1,.36,1) 1.15s forwards;
-}
-@keyframes dotIn{
-  0%{opacity:0;transform:translateX(5em);}
-  20%{opacity:1;}
-  100%{opacity:1;transform:translateX(0);}
-}
-@keyframes introOut{
-  to{opacity:0;visibility:hidden;pointer-events:none;}
-}
-@media (prefers-reduced-motion:reduce){
-  .intro{display:none;}
-}
-
-/* ==========================================================
    Custom cursor
    ========================================================== */
 .cursor{position:fixed;top:0;left:0;z-index:300;pointer-events:none;}
@@ -193,6 +146,17 @@ img{max-width:100%;display:block;}
   z-index:0;
   filter:blur(60px);
   pointer-events:none;
+  /* Entrada: la página arranca en negro y las manchas se van encendiendo */
+  opacity:0;
+  animation:heroWake 1.6s ease-out .1s forwards;
+}
+@keyframes heroWake{to{opacity:1;}}
+
+/* En la portada, el menú aparece cuando termina la entrada del nombre
+   (script.js ajusta el momento exacto con --nav-d) */
+.home .nav{
+  opacity:0;
+  animation:fadeUp .6s var(--ease) var(--nav-d, 1.9s) forwards;
 }
 .hero__blob{
   position:absolute;
@@ -236,6 +200,8 @@ img{max-width:100%;display:block;}
 .hero__eyebrow{
   font-size:.75rem;letter-spacing:.25em;
   color:var(--accent);
+  opacity:0;
+  animation:fadeUp .6s var(--ease) var(--d, 1.8s) forwards;
 }
 .hero__prompt{
   font-family:var(--font-mono);
@@ -260,7 +226,19 @@ img{max-width:100%;display:block;}
   display:flex;flex-wrap:wrap;justify-content:center;
   column-gap:.32em;row-gap:.12em; /* row-gap leaves room for the accents on Í and É */
 }
-.hero__word{display:inline-flex;white-space:nowrap;}
+.hero__word{display:inline-flex;align-items:baseline;white-space:nowrap;}
+/* Punto final verde: entra desde la derecha y se posa en la línea del texto */
+.hero__dot{
+  width:.2em;height:.2em;margin-left:.06em;flex:none;
+  background:var(--green);
+  opacity:0;transform:translateX(5em);
+  animation:dotIn .9s cubic-bezier(.22,1,.36,1) var(--d, 1.4s) forwards;
+}
+@keyframes dotIn{
+  0%{opacity:0;transform:translateX(5em);}
+  20%{opacity:1;}
+  100%{opacity:1;transform:translateX(0);}
+}
 .hero__brand .l{
   display:inline-block;
   opacity:0;
@@ -277,8 +255,7 @@ img{max-width:100%;display:block;}
   line-height:1.6;
   color:color-mix(in srgb, var(--ink) 65%, transparent);
   opacity:0;
-  animation:fadeUp .6s var(--ease) forwards;
-  animation-delay:4.6s;
+  animation:fadeUp .6s var(--ease) var(--d, 2.4s) forwards;
 }
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(12px);}
@@ -290,14 +267,13 @@ img{max-width:100%;display:block;}
   color:color-mix(in srgb, var(--ink) 50%, transparent);
   margin-top:1rem;
   opacity:0;
-  animation:fadeUp .6s var(--ease) forwards;
-  animation-delay:5s;
+  animation:fadeUp .6s var(--ease) var(--d, 2.6s) forwards;
 }
 .hero__scroll svg{animation:bob 1.6s ease-in-out infinite;}
 @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
 
 @media (prefers-reduced-motion:reduce){
-  .hero__prompt .w,.hero__brand .l,.hero__sub,.hero__scroll{
+  .hero__prompt .w,.hero__brand .l,.hero__dot,.hero__eyebrow,.hero__sub,.hero__scroll,.hero__bg,.home .nav{
     animation:none !important;opacity:1 !important;transform:none !important;
   }
   .hero__blob{animation:none !important;}

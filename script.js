@@ -5,23 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ---------- Footer year ---------- */
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  /* ---------- Hero word-by-word timing ----------
-     Starts after the intro overlay has faded out (~3.2s, matching the
-     curtain-wipe + dot loading animation). */
-  const HERO_START = reduceMotion ? 0 : 3.2;
-  const words = document.querySelectorAll('.hero__prompt .w');
-  words.forEach((w, i) => { w.style.animationDelay = `${HERO_START + i * 0.18}s`; });
-  const wordsEnd = HERO_START + words.length * 0.18 + 0.6; // last word finishes
-
-  /* ---------- Name letter explosion ----------
-     Each word goes in its own group so the name can wrap onto two lines
-     on narrow screens without splitting a word. */
+  /* ---------- Entrada de la portada ----------
+     Todo en una sola pieza: las manchas del fondo se encienden (CSS),
+     el nombre cae letra a letra, el punto verde se posa al final y,
+     cuando aterriza, aparece el resto del hero y el menú. */
   const brand = document.getElementById('heroBrand');
   const name = 'GENÍS BERNABÉ';
+  const NAME_START = 0.3;   // s — cuándo empieza a caer la primera letra
+  const LETTER_GAP = 0.07;  // s — entre letra y letra
+  const t = (s) => (reduceMotion ? '0s' : `${s.toFixed(2)}s`);
 
   if (brand) {
+    const words = name.split(' ');
     let i = 0;
-    name.split(' ').forEach(part => {
+    words.forEach((part, wi) => {
       const wordEl = document.createElement('span');
       wordEl.className = 'hero__word';
       [...part].forEach(ch => {
@@ -30,12 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
         span.textContent = ch;
         const randomRot = (Math.random() * 40 - 20).toFixed(1);
         span.style.setProperty('--r', `${randomRot}deg`);
-        span.style.animationDelay = reduceMotion ? '0s' : `${wordsEnd + i * 0.07}s`;
+        span.style.animationDelay = t(NAME_START + i * LETTER_GAP);
         wordEl.appendChild(span);
         i++;
       });
+      if (wi === words.length - 1) {
+        const dot = document.createElement('span');
+        dot.className = 'hero__dot';
+        dot.setAttribute('aria-hidden', 'true');
+        dot.style.setProperty('--d', t(NAME_START + i * LETTER_GAP + 0.25));
+        wordEl.appendChild(dot);
+      }
       brand.appendChild(wordEl);
     });
+
+    // El resto entra justo cuando el punto está aterrizando.
+    const rest = NAME_START + i * LETTER_GAP + 0.25 + 0.4;
+    const eyebrow = document.querySelector('.hero__eyebrow');
+    const sub = document.querySelector('.hero__sub');
+    const scrollCue = document.querySelector('.hero__scroll');
+    if (eyebrow) eyebrow.style.setProperty('--d', t(rest));
+    document.querySelectorAll('.hero__prompt .w').forEach((w, k) => {
+      w.style.animationDelay = t(rest + 0.15 + k * 0.12);
+    });
+    if (sub) sub.style.setProperty('--d', t(rest + 0.6));
+    if (scrollCue) scrollCue.style.setProperty('--d', t(rest + 0.8));
+    document.documentElement.style.setProperty('--nav-d', t(rest + 0.1));
   }
 
   /* ---------- Custom cursor ---------- */
