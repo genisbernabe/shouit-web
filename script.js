@@ -7,17 +7,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Entrada de la portada ----------
      Todo en una sola pieza: las manchas del fondo se encienden (CSS),
-     el nombre cae letra a letra, el punto verde se posa al final y,
-     cuando aterriza, aparece el resto del hero y el menú. */
+     "GENÍS" sube desde una línea invisible y un instante después "BERNABÉ",
+     el punto verde se posa al final y, cuando aterriza, aparece el resto
+     del hero y el menú. */
   const brand = document.getElementById('heroBrand');
   const name = 'GENÍS BERNABÉ';
-  const NAME_START = 0.3;   // s — cuándo empieza a caer la primera letra
-  const LETTER_GAP = 0.07;  // s — entre letra y letra
+  const NAME_START = 0.3;  // s — cuándo empieza a subir la primera palabra
+  const WORD_GAP = 0.12;   // s — retraso de la segunda palabra
+  const RISE = 0.6;        // s — momento en que el nombre ya está prácticamente arriba
   const t = (s) => (reduceMotion ? '0s' : `${s.toFixed(2)}s`);
 
   if (brand) {
     const words = name.split(' ');
-    let i = 0;
     words.forEach((part, wi) => {
       const wordEl = document.createElement('span');
       wordEl.className = 'hero__word';
@@ -25,24 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const span = document.createElement('span');
         span.className = 'l';
         span.textContent = ch;
-        const randomRot = (Math.random() * 40 - 20).toFixed(1);
-        span.style.setProperty('--r', `${randomRot}deg`);
-        span.style.animationDelay = t(NAME_START + i * LETTER_GAP);
+        span.style.animationDelay = t(NAME_START + wi * WORD_GAP);
         wordEl.appendChild(span);
-        i++;
       });
       if (wi === words.length - 1) {
         const dot = document.createElement('span');
         dot.className = 'hero__dot';
         dot.setAttribute('aria-hidden', 'true');
-        dot.style.setProperty('--d', t(NAME_START + i * LETTER_GAP + 0.25));
+        dot.style.setProperty('--d', t(NAME_START + wi * WORD_GAP + RISE));
         wordEl.appendChild(dot);
       }
       brand.appendChild(wordEl);
     });
 
     // El resto entra justo cuando el punto está aterrizando.
-    const rest = NAME_START + i * LETTER_GAP + 0.25 + 0.4;
+    const rest = NAME_START + (words.length - 1) * WORD_GAP + RISE + 0.4;
     const eyebrow = document.querySelector('.hero__eyebrow');
     const sub = document.querySelector('.hero__sub');
     const scrollCue = document.querySelector('.hero__scroll');

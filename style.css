@@ -226,7 +226,12 @@ img{max-width:100%;display:block;}
   display:flex;flex-wrap:wrap;justify-content:center;
   column-gap:.32em;row-gap:.12em; /* row-gap leaves room for the accents on Í and É */
 }
-.hero__word{display:inline-flex;align-items:baseline;white-space:nowrap;}
+.hero__word{
+  display:inline-flex;align-items:baseline;white-space:nowrap;
+  /* Recorta solo lo que queda por debajo de la línea del texto
+     (por arriba y a los lados no, para las tildes y el punto) */
+  clip-path:inset(-1em -100vw 0 -100vw);
+}
 /* Punto final verde: entra desde la derecha y se posa en la línea del texto */
 .hero__dot{
   width:.2em;height:.2em;margin-left:.06em;flex:none;
@@ -239,16 +244,13 @@ img{max-width:100%;display:block;}
   20%{opacity:1;}
   100%{opacity:1;transform:translateX(0);}
 }
+/* El nombre sube desde detrás de una línea invisible, palabra a palabra */
 .hero__brand .l{
   display:inline-block;
-  opacity:0;
-  transform:translateY(.4em) rotate(var(--r,0deg)) scale(.6);
-  animation:letterIn .55s var(--ease) forwards;
+  transform:translateY(135%); /* 135% para que tampoco asomen las tildes antes de tiempo */
+  animation:nameUp .9s var(--ease) forwards;
 }
-@keyframes letterIn{
-  60%{opacity:1;}
-  100%{opacity:1;transform:translateY(0) rotate(0) scale(1);}
-}
+@keyframes nameUp{to{transform:translateY(0);}}
 .hero__sub{
   max-width:34ch;
   font-size:.9rem;
