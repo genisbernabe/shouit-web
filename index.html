@@ -25,7 +25,7 @@
   <a href="#top" class="nav__logo">GENÍS BERNABÉ<span class="dot">.</span></a>
 
   <nav class="nav__links" id="navLinks">
-    <a href="#servicios"><span>01</span> Servicios</a>
+    <a href="#quien-soy"><span>01</span> Quién soy</a>
     <a href="#portfolio"><span>02</span> Portfolio</a>
     <a href="#sobre-mi"><span>03</span> Sobre mí</a>
     <a href="#contacto" class="nav__cta">Hablemos</a>
@@ -59,7 +59,7 @@
       para negocios que quieren hacerse notar en Barcelona.
     </p>
 
-    <a href="#servicios" class="hero__scroll">
+    <a href="#quien-soy" class="hero__scroll">
       <span>Scroll</span>
       <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1v17M1 12l6 6 6-6" stroke="currentColor" stroke-width="1.5"/></svg>
     </a>
@@ -73,69 +73,48 @@
     </div>
   </div>
 
-  <!-- ============ SERVICIOS ============ -->
-  <section class="servicios" id="servicios">
-    <div class="section-head">
-      <p class="section-head__eyebrow">Qué hago</p>
-      <h2 class="section-head__title">Tres formas de<br>hacer ruido.</h2>
+  <!-- ============ QUIÉN SOY ============ -->
+  <!-- TODO: datos de EJEMPLO (edad, idiomas, stack, disponibilidad, email). Los textos de la terminal y la fecha de nacimiento están en script.js, objeto QS. -->
+  <section class="qs" id="quien-soy">
+    <div class="section-head qs__head">
+      <div>
+        <p class="section-head__eyebrow">Quién soy</p>
+        <h2 class="section-head__title">Genís<br>Bernabé<span class="dot">.</span></h2>
+      </div>
+      <p class="qs__hint"><span aria-hidden="true">→</span> Pulsa un dato del carnet</p>
     </div>
 
-    <div class="accordion" id="accordion">
-
-      <div class="acc-item is-open" data-item>
-        <button class="acc-item__head" data-trigger>
-          <span class="acc-item__num">01</span>
-          <span class="acc-item__title">Diseño web</span>
-          <span class="acc-item__plus" aria-hidden="true"></span>
-        </button>
-        <div class="acc-item__body" data-body>
-          <div class="acc-item__body-inner">
-            <p>Webs a medida en código real — rápidas, responsive y hechas para convertir visitas en clientes. Nada de plantillas genéricas: cada proyecto se diseña desde el negocio que lo necesita.</p>
-            <ul>
-              <li>Diseño y desarrollo a medida</li>
-              <li>Sitios rápidos, sin plugins de sobra</li>
-              <li>Pensadas para SEO local</li>
-            </ul>
+    <div class="qs__wrap">
+      <div class="qs-scene" id="qsScene">
+        <div class="qs-card" id="qsCard">
+          <div class="qs-face">
+            <div class="qs-stripe"><span>Carnet creativo</span><span>BCN</span></div>
+            <!-- TODO: sustituir por tu foto (formato 4:5) -->
+            <div class="qs-pic">Tu foto aquí</div>
+            <div class="qs-name">Genís<br>Bernabé<i aria-hidden="true"></i></div>
+            <div class="qs-fields">
+              <button type="button" class="qs-fld is-hint" data-cmd="edad"><small>Edad</small><b data-v="edad"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="donde"><small>Vivo en</small><b data-v="donde"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="idiomas"><small>Idiomas</small><b data-v="idiomas"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="stack"><small>Stack</small><b data-v="stack"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="proyectos"><small>Proyectos</small><b data-v="proyectos"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="disponible"><small>Estado</small><b data-v="disponible"></b><em aria-hidden="true">→</em></button>
+              <button type="button" class="qs-fld" data-cmd="contacto"><small>Contacto</small><b data-v="contacto"></b><em aria-hidden="true">→</em></button>
+            </div>
+            <div class="qs-foil" aria-hidden="true"></div>
+            <div class="qs-glare" aria-hidden="true"></div>
           </div>
         </div>
       </div>
 
-      <div class="acc-item" data-item>
-        <button class="acc-item__head" data-trigger>
-          <span class="acc-item__num">02</span>
-          <span class="acc-item__title">Fotografía &amp; contenido</span>
-          <span class="acc-item__plus" aria-hidden="true"></span>
-        </button>
-        <div class="acc-item__body" data-body>
-          <div class="acc-item__body-inner">
-            <p>Producto, local, equipo, ambiente — contenido visual que tu marca puede usar en la web, redes y publicidad. Sesiones pensadas para durar, no para un solo post.</p>
-            <ul>
-              <li>Fotografía de producto y local</li>
-              <li>Contenido para redes (foto + vídeo)</li>
-              <li>Entrega editada, lista para publicar</li>
-            </ul>
-          </div>
-        </div>
+      <div class="qs-term">
+        <div class="qs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>genis@bcn ~</span></div>
+        <div class="qs-out" id="qsOut" role="log" aria-live="polite"></div>
+        <form class="qs-in" id="qsForm" autocomplete="off">
+          <label for="qsCmd">$</label>
+          <input id="qsCmd" type="text" placeholder="o escribe: edad, donde, stack, help…" spellcheck="false" autocapitalize="off">
+        </form>
       </div>
-
-      <div class="acc-item" data-item>
-        <button class="acc-item__head" data-trigger>
-          <span class="acc-item__num">03</span>
-          <span class="acc-item__title">Gestión de redes</span>
-          <span class="acc-item__plus" aria-hidden="true"></span>
-        </button>
-        <div class="acc-item__body" data-body>
-          <div class="acc-item__body-inner">
-            <p>Gestión continua de Instagram y Facebook: calendario de contenido, publicación, y una estrategia pensada para que un negocio local se convierta en una referencia de su barrio.</p>
-            <ul>
-              <li>Estrategia y calendario mensual</li>
-              <li>Creación y publicación de contenido</li>
-              <li>Seguimiento de resultados</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
