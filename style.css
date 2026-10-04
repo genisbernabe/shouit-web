@@ -410,10 +410,7 @@ img{max-width:100%;display:block;}
 /* Fondo de los paneles: oscuro con un brillo del color de la marca del cliente (--tint) */
 .pf__panel--stage{
   --tint:#3a3a36;
-  background:
-    radial-gradient(60% 80% at 72% 42%, color-mix(in srgb, var(--tint) 34%, transparent), transparent 70%),
-    radial-gradient(40% 50% at 95% 100%, color-mix(in srgb, var(--tint) 18%, transparent), transparent 70%),
-    #121211;
+  background:#121211;
 }
 
 /* Proyectos web: la captura dentro de un navegador, a la derecha */
@@ -446,6 +443,19 @@ img{max-width:100%;display:block;}
   color:#8a857c;white-space:nowrap;overflow:hidden;
 }
 .pf__browser img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:left top;}
+
+/* Logo del proyecto (PNG sin fondo, a color) sobre el fondo oscuro */
+.pf__shot.pf__shot--logo{
+  justify-content:center;
+  padding:0 5cqw 14cqh 38cqw;
+}
+.pf__logo{
+  display:block;
+  width:var(--lw,32cqw);max-width:100%;max-height:56cqh;
+  height:auto;object-fit:contain;
+  transition:transform 1.1s var(--ease);
+}
+.pf__panel:hover .pf__logo{transform:translateY(-1cqh) scale(1.025);}
 
 /* Proyectos de redes: posts en fila que se salen del panel, como un feed que sigue */
 .pf__feed{
@@ -539,6 +549,8 @@ img{max-width:100%;display:block;}
   .pf__browser{width:86cqw;border-radius:2cqw;}
   .pf__browser-bar span{display:none;}
   .pf__browser img{aspect-ratio:4/3;}
+  .pf__shot.pf__shot--logo{align-items:center;justify-content:center;padding:9cqh 8cqw 38cqh;}
+  .pf__logo{width:calc(var(--lw,32cqw) * 1.9);max-width:100%;max-height:100%;}
   .pf__feed{align-items:flex-start;padding:8cqh 0 0 8cqw;gap:4cqw;}
   .pf__feed img{height:52cqh;}
   .pf__cap{flex-direction:column;align-items:flex-start;}
