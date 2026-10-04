@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CENEMA — Proyectos SHOUIT</title>
+<title>CENEMA — Genís Bernabé</title>
 <meta name="description" content="Diseño web, fotografía y gestión de redes sociales para CENEMA, un espacio de coworking en Barcelona.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,36 +34,77 @@
     <span></span><span></span>
   </button>
 </header>
-<main id="top">
+<main id="top" class="proyecto" style="--tint:#a5bd3c;--tint-ink:#1a1a18">
 
-  <!-- ============ PROYECTO HERO ============ -->
-  <header class="proyecto-hero on-light">
-    <p class="proyecto-hero__eyebrow">Web + Contenido + Redes</p>
-    <img class="proyecto-hero__logo" src="/img/proyectos/cenema/cenema-hero.jpg" alt="Logotipo de CENEMA">
-    <h1 class="proyecto-hero__title">CENEMA</h1>
-    <p class="proyecto-hero__desc">Diseño web completo, fotografía y vídeo, y gestión de redes sociales para CENEMA: un espacio de coworking en Barcelona pensado para autónomos, startups y equipos que buscan flexibilidad y comunidad.</p>
-    <div class="proyecto-hero__links">
-      <a href="https://cenemabc.com" target="_blank" rel="noopener" class="proyecto-hero__link">Visitar cenemabc.com →</a>
-      <a href="https://www.instagram.com/cenemabc" target="_blank" rel="noopener" class="proyecto-hero__link">Ver en Instagram →</a>
-    </div>
+  <!-- ============ CABECERA ============ -->
+  <header class="proyecto-head">
+    <a class="proyecto-back" href="/index.html#portfolio">← Portfolio</a>
+    <p class="proyecto-tag">Web + Contenido + Redes</p>
+    <h1 class="proyecto-title">CENEMA<span class="proyecto-dot"></span></h1>
+    <dl class="proyecto-meta">
+      <div><dt>Cliente</dt><dd>CENEMA</dd></div>
+      <div><dt>Sector</dt><dd>Coworking · Barcelona</dd></div>
+      <div><dt>Web</dt><dd><a href="https://cenemabc.com" target="_blank" rel="noopener">cenemabc.com</a> · <a href="https://www.instagram.com/cenemabc" target="_blank" rel="noopener">Instagram</a></dd></div>
+    </dl>
   </header>
 
   <!-- ============ PORTADA ============ -->
   <section class="proyecto-cover">
-    <img src="/img/proyectos/cenema/cenema-03.jpg.png" alt="Portada de la web de CENEMA — Coworking en Barcelona" loading="lazy">
+      <figure class="proyecto-shot">
+        <div class="proyecto-shot__frame">
+          <div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>cenemabc.com</span></div>
+          <img src="/img/proyectos/cenema/cenema-03.jpg.png" width="956" height="465" alt="Portada de la web de CENEMA — Coworking en Barcelona" loading="lazy">
+        </div>
+        <figcaption>Portada de la web</figcaption>
+      </figure>
+  </section>
+
+  <!-- ============ EL PROYECTO ============ -->
+  <section class="proyecto-row">
+    <h2 class="proyecto-lbl">El proyecto</h2>
+    <div>
+      <p class="proyecto-text">Diseño web completo, fotografía y vídeo, y gestión de redes sociales para CENEMA: un espacio de coworking en Barcelona pensado para autónomos, startups y equipos que buscan flexibilidad y comunidad.</p>
+        <div class="proyecto-btns">
+          <a href="https://cenemabc.com" target="_blank" rel="noopener" class="proyecto-btn proyecto-btn--solid">Visitar cenemabc.com ↗</a>
+          <a href="https://www.instagram.com/cenemabc" target="_blank" rel="noopener" class="proyecto-btn">Ver en Instagram ↗</a>
+        </div>
+    </div>
+  </section>
+
+  <!-- ============ QUÉ HICE ============ -->
+  <section class="proyecto-row">
+    <h2 class="proyecto-lbl">Qué hice</h2>
+    <ul class="proyecto-works">
+      <li>Diseño web</li>
+      <li>Fotografía y vídeo</li>
+      <li>Redes sociales</li>
+    </ul>
   </section>
 
   <!-- ============ GALERÍA ============ -->
-  <section class="proyecto-gallery">
-      <img src="/img/proyectos/cenema/cenema-01.jpg.png" alt="CENEMA — zona chillout exterior" loading="lazy">
-      <img src="/img/proyectos/cenema/cenema-02.jpg.png" alt="CENEMA — alquiler de salas por horas" loading="lazy">
+  <section class="proyecto-gallery" data-n="2">
+      <figure class="proyecto-shot">
+        <div class="proyecto-shot__frame">
+          <div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>cenemabc.com</span></div>
+          <img src="/img/proyectos/cenema/cenema-01.jpg.png" width="961" height="509" alt="CENEMA — zona chillout exterior" loading="lazy">
+        </div>
+        <figcaption>Zona chillout exterior</figcaption>
+      </figure>
+      <figure class="proyecto-shot">
+        <div class="proyecto-shot__frame">
+          <div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>cenemabc.com</span></div>
+          <img src="/img/proyectos/cenema/cenema-02.jpg.png" width="941" height="497" alt="CENEMA — alquiler de salas por horas" loading="lazy">
+        </div>
+        <figcaption>Alquiler de salas por horas</figcaption>
+      </figure>
   </section>
 
   <!-- ============ SIGUIENTE PROYECTO ============ -->
-  <nav class="proyecto-next">
-    <a href="/index.html#portfolio">← Volver al portfolio</a>
-    <a href="/proyectos/mataro.html">Siguiente: Port de Mataró →</a>
-  </nav>
+  <a class="proyecto-next" href="/proyectos/mataro.html" style="--tint:#2f6fd8;--tint-ink:#f0ede8">
+    <span class="proyecto-next__lbl">Siguiente proyecto</span>
+    <span class="proyecto-next__name">Port de Mataró →</span>
+    <span class="proyecto-next__row"><span>Web + Contenido + Redes</span><span>Ver caso</span></span>
+  </a>
 
 </main>
 
