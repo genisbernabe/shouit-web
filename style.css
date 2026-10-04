@@ -841,6 +841,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .proyecto-posts{grid-template-columns:repeat(3,1fr);gap:1.25rem;}
   .proyecto-gallery{grid-template-columns:1fr 1fr;gap:1.75rem;}
   .proyecto-gallery[data-n="1"]{grid-template-columns:minmax(0,48rem);justify-content:center;}
+  .proyecto-gallery[data-n="3"] > :last-child{grid-column:1 / -1;}
   .proyecto-btn{font-size:.8rem;}
 }
 
