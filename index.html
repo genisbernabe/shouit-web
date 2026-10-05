@@ -81,10 +81,11 @@
         <p class="section-head__eyebrow">Quién soy</p>
         <h2 class="section-head__title">Genís<br>Bernabé<span class="dot">.</span></h2>
       </div>
-      <p class="qs__hint"><span aria-hidden="true">→</span> Pulsa un dato del carnet</p>
     </div>
 
     <div class="qs__wrap">
+      <div class="qs__left">
+      <p class="qs__hint"><span aria-hidden="true">↓</span> Pulsa un dato del carnet</p>
       <div class="qs-scene" id="qsScene">
         <div class="qs-card" id="qsCard">
           <div class="qs-face">
@@ -106,13 +107,14 @@
           </div>
         </div>
       </div>
+      </div>
 
       <div class="qs-term">
         <div class="qs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>genis@bcn ~</span></div>
         <div class="qs-out" id="qsOut" role="log" aria-live="polite"></div>
         <form class="qs-in" id="qsForm" autocomplete="off">
-          <label for="qsCmd">$</label>
-          <input id="qsCmd" type="text" placeholder="o escribe: edad, donde, stack, help…" spellcheck="false" autocapitalize="off">
+          <span class="qs-in__mark" aria-hidden="true"></span>
+          <input id="qsCmd" type="text" aria-label="Escribe un comando" placeholder="o escribe: edad, donde, stack, help…" spellcheck="false" autocapitalize="off">
         </form>
       </div>
     </div>

@@ -328,12 +328,13 @@ img{max-width:100%;display:block;}
    Quién soy — carnet que habla (tilt 3D + terminal)
    ========================================================== */
 .qs__head{display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:flex-end;}
+.qs__left{width:min(100%,22rem);display:grid;gap:1.1rem;justify-items:start;}
 .qs__hint{
-  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
-  color:color-mix(in srgb, var(--ink) 62%, transparent);
+  font-family:var(--font-display);font-size:clamp(1.15rem,2.4vw,1.5rem);line-height:1.15;
+  color:var(--white);
 }
-.qs__hint span{display:inline-block;color:var(--green);margin-right:.5rem;animation:qsNudge 1.4s ease-in-out infinite;}
-@keyframes qsNudge{50%{transform:translateX(6px);}}
+.qs__hint span{display:inline-block;color:var(--green);margin-right:.55rem;animation:qsNudge 1.4s ease-in-out infinite;}
+@keyframes qsNudge{50%{transform:translateY(6px);}}
 
 .qs__wrap{
   display:grid;grid-template-columns:minmax(0,22rem) minmax(0,1fr);
@@ -351,44 +352,46 @@ img{max-width:100%;display:block;}
 .qs-face{
   position:absolute;inset:0;border-radius:14px;overflow:hidden;
   padding:1.1rem;display:flex;flex-direction:column;gap:.85rem;
-  background:var(--white);color:var(--black);
+  background:linear-gradient(165deg,#2b2b28 0%,#1f1f1d 100%);color:var(--white);
+  border:1px solid color-mix(in srgb, var(--white) 14%, transparent);
 }
 .qs-glare{
-  position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;
-  background:radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.95), transparent 55%);
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,30%), rgba(255,255,255,.13), transparent 55%);
 }
 .qs-foil{
-  position:absolute;inset:0;pointer-events:none;mix-blend-mode:color-dodge;opacity:.5;
+  position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:.14;
   background:linear-gradient(115deg, transparent 28%, rgba(0,255,135,.55) 40%, rgba(224,128,95,.55) 50%, rgba(120,160,255,.5) 60%, transparent 72%) var(--gx,50%) 0/260% 100%;
 }
 .qs-stripe{
   display:flex;justify-content:space-between;gap:.5rem;
   font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
-  background:var(--black);color:var(--green);margin:-1.1rem -1.1rem 0;padding:.55rem 1.1rem;
+  background:var(--green);color:var(--black);margin:-1.1rem -1.1rem 0;padding:.55rem 1.1rem;
 }
 .qs-pic{
   flex:1;min-height:5.5rem;display:grid;place-items:center;text-align:center;
-  border:1px dashed color-mix(in srgb, var(--black) 40%, transparent);
-  background:repeating-linear-gradient(135deg, transparent 0 12px, color-mix(in srgb, var(--black) 6%, transparent) 12px 13px);
+  border:1px dashed color-mix(in srgb, var(--white) 28%, transparent);
+  background:repeating-linear-gradient(135deg, transparent 0 12px, color-mix(in srgb, var(--white) 4%, transparent) 12px 13px);
   font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
-  color:color-mix(in srgb, var(--black) 60%, transparent);
+  color:color-mix(in srgb, var(--white) 55%, transparent);
 }
 .qs-name{font-family:var(--font-display);font-size:clamp(1.5rem,6.4vw,2rem);line-height:.98;}
-.qs-name i{display:inline-block;width:.18em;height:.18em;background:#00b85f;margin-left:.05em;}
+.qs-name i{display:inline-block;width:.18em;height:.18em;background:var(--green);margin-left:.05em;}
 .qs-fields{display:grid;gap:.35rem;}
 .qs-fld{
   position:relative;z-index:2;
   display:grid;grid-template-columns:4.6rem minmax(0,1fr) auto;gap:.6rem;align-items:center;
-  border:1px solid color-mix(in srgb, var(--black) 22%, transparent);padding:.38rem .6rem;
-  font-size:.74rem;color:var(--black);text-align:left;
+  border:1px solid color-mix(in srgb, var(--white) 22%, transparent);padding:.38rem .6rem;
+  font-size:.74rem;color:var(--white);text-align:left;
   transition:background .2s, color .2s, border-color .2s;
 }
 .qs-fld small{font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;opacity:.6;}
 .qs-fld b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.qs-fld em{font-style:normal;font-size:.9rem;}
-.qs-fld:hover,.qs-fld.is-on{background:var(--black);color:var(--green);border-color:var(--black);}
-.qs-fld.is-hint{border-color:var(--black);animation:qsRing 1.6s ease-out infinite;}
-@keyframes qsRing{0%{box-shadow:0 0 0 0 rgba(0,255,135,.7);}100%{box-shadow:0 0 0 12px rgba(0,255,135,0);}}
+.qs-fld em{font-style:normal;font-size:.9rem;color:var(--green);transition:color .2s;}
+.qs-fld:hover,.qs-fld.is-on{background:var(--green);color:var(--black);border-color:var(--green);}
+.qs-fld:hover em,.qs-fld.is-on em{color:var(--black);}
+.qs-fld.is-hint{border-color:var(--green);animation:qsRing 1.6s ease-out infinite;}
+@keyframes qsRing{0%{box-shadow:0 0 0 0 rgba(0,255,135,.6);}100%{box-shadow:0 0 0 12px rgba(0,255,135,0);}}
 
 .qs-term{
   width:100%;min-width:0;border:1px solid color-mix(in srgb, var(--ink) 16%, transparent);
@@ -403,7 +406,8 @@ img{max-width:100%;display:block;}
 .qs-term__bar span{margin-left:.4rem;letter-spacing:.1em;}
 .qs-out{height:clamp(300px,52vh,440px);overflow:auto;padding:1rem;font-size:.86rem;line-height:1.65;}
 .qs-out div{white-space:pre-wrap;overflow-wrap:anywhere;}
-.qs-out .c{color:var(--green);margin-top:.5rem;}
+.qs-out .c{color:var(--green);margin-top:.5rem;display:flex;align-items:baseline;gap:.6rem;}
+.qs-out .c::before{content:"";width:.5rem;height:.5rem;background:var(--green);flex:none;}
 .qs-out .d{color:color-mix(in srgb, var(--ink) 62%, transparent);}
 .qs-out .b{font-family:var(--font-display);font-size:clamp(1.4rem,3.6vw,2.2rem);line-height:1.1;margin:.2rem 0;}
 .qs-out .ok{color:var(--green);}
@@ -411,7 +415,7 @@ img{max-width:100%;display:block;}
   display:flex;gap:.6rem;align-items:center;padding:.7rem 1rem;
   border-top:1px solid color-mix(in srgb, var(--ink) 16%, transparent);
 }
-.qs-in label{color:var(--green);}
+.qs-in__mark{width:.5rem;height:.5rem;background:var(--green);flex:none;}
 .qs-in input{flex:1;min-width:0;background:none;border:0;color:var(--white);font:inherit;font-size:.9rem;caret-color:var(--green);}
 .qs-in input:focus{outline:none;}
 .qs-in:focus-within{box-shadow:inset 0 0 0 1px var(--green);}

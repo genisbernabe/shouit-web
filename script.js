@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!c || busy) return;
       busy = true;
       if (!instant) { hist.push(c); hi = hist.length; }
-      await line('c', `$ ${c}`, true);
+      await line('c', c, true);
       if (c === 'clear') qsOut.textContent = '';
       else if (c === 'help') await line('d', `Prueba: ${NAMES.join(' · ')}`, instant);
       else if (CMDS[c]) { for (const [cls, t] of CMDS[c]()) await line(cls, t, instant); }
