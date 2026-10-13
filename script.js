@@ -25,7 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
       [...part].forEach(ch => {
         const span = document.createElement('span');
         span.className = 'l';
-        span.textContent = ch;
+        const inner = document.createElement('span'); // capa interior: recibe el efecto del cursor sin chocar con la animación de entrada
+        inner.className = 'lf';
+        inner.textContent = ch;
+        span.appendChild(inner);
         span.style.animationDelay = t(NAME_START + wi * WORD_GAP);
         wordEl.appendChild(span);
       });
@@ -51,6 +54,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sub) sub.style.setProperty('--d', t(rest + 0.6));
     if (scrollCue) scrollCue.style.setProperty('--d', t(rest + 0.8));
     document.documentElement.style.setProperty('--nav-d', t(rest + 0.1));
+
+    /* ---------- Nombre elástico (solo al pasar el cursor) ----------
+       Cada letra se alza un poco, se inclina y se tiñe de verde según lo cerca que esté
+       el cursor, y vuelve a su sitio con un muelle. Sin cursor encima no se mueve nada.
+       Solo con ratón: en pantallas táctiles no hay "pasar por encima". */
+    const heroEl = document.getElementById('hero');
+    if (heroEl && !reduceMotion && window.matchMedia('(hover:hover)').matches) {
+      const marks = [...brand.querySelectorAll('.lf')].map(el => ({ el, k: 0, sk: 0, sy: 1 }));
+      const enableAt = performance.now() + (rest + 0.3) * 1000;
+      let mx = 0, my = 0, over = false, running = false;
+
+      const step = () => {
+        const fs = parseFloat(getComputedStyle(brand).fontSize) || 80;
+        const R = Math.max(60, fs * 1.05);
+        let peak = 0;
+        marks.forEach(m => {
+          const r = m.el.getBoundingClientRect();
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          const dx = mx - cx, dy = my - cy;
+          const k = over ? Math.exp(-((dx * dx + dy * dy) / (R * R)) * 2.2) : 0;
+          const tsk = -Math.max(-1, Math.min(1, dx / R)) * k * 7;
+          const tsy = 1 + 0.1 * k;
+          m.k += (k - m.k) * 0.14;
+          m.sk += (tsk - m.sk) * 0.14;
+          m.sy += (tsy - m.sy) * 0.14;
+          peak = Math.max(peak, m.k, Math.abs(m.sy - 1), Math.abs(m.sk) / 7);
+          m.el.style.transform = `scale(${(1 - 0.02 * m.k).toFixed(3)}, ${m.sy.toFixed(3)}) skewX(${m.sk.toFixed(2)}deg)`;
+          m.el.style.color = `color-mix(in srgb, var(--green) ${Math.round(m.k * 40)}%, var(--white))`;
+        });
+        if (peak < 0.004) {
+          marks.forEach(m => { m.el.style.transform = ''; m.el.style.color = ''; m.k = 0; m.sk = 0; m.sy = 1; });
+          running = false;
+          return;
+        }
+        requestAnimationFrame(step);
+      };
+      const wake = () => { if (!running) { running = true; requestAnimationFrame(step); } };
+
+      heroEl.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch' || performance.now() < enableAt) return;
+        mx = e.clientX; my = e.clientY; over = true; wake();
+      });
+      heroEl.addEventListener('pointerleave', () => { over = false; wake(); });
+    }
   }
 
   /* ---------- Custom cursor ---------- */

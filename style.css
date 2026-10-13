@@ -251,6 +251,8 @@ img{max-width:100%;display:block;}
   animation:nameUp .9s var(--ease) forwards;
 }
 @keyframes nameUp{to{transform:translateY(0);}}
+/* Capa interior de cada letra: el efecto del cursor se aplica aquí, desde la base de la letra */
+.hero__brand .lf{display:inline-block;transform-origin:50% 100%;}
 .hero__sub{
   max-width:34ch;
   font-size:.9rem;
