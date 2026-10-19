@@ -344,7 +344,7 @@ img{max-width:100%;display:block;}
   padding:0 clamp(1.5rem,5vw,3.5rem) 6rem;
 }
 
-.qs-scene{perspective:1100px;width:min(100%,22rem);aspect-ratio:11/17.5;user-select:none;-webkit-user-select:none;}
+.qs-scene{perspective:1100px;width:min(100%,22rem);aspect-ratio:11/18;user-select:none;-webkit-user-select:none;}
 .qs-card{
   position:relative;width:100%;height:100%;transform-style:preserve-3d;
   transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
@@ -382,14 +382,13 @@ img{max-width:100%;display:block;}
 .qs-fields{display:grid;gap:.35rem;}
 .qs-fld{
   position:relative;z-index:2;
-  display:grid;grid-template-columns:4.6rem minmax(0,1fr) auto;gap:.6rem;align-items:center;
-  border:1px solid color-mix(in srgb, var(--white) 22%, transparent);padding:.38rem .6rem;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.6rem;align-items:center;
+  border:1px solid color-mix(in srgb, var(--white) 22%, transparent);padding:.52rem .85rem;
   font-size:.74rem;color:var(--white);text-align:left;
   transition:background .2s, color .2s, border-color .2s;
 }
-.qs-fld small{font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;opacity:.6;}
-.qs-fld b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.qs-fld em{font-style:normal;font-size:.9rem;color:var(--green);transition:color .2s;}
+.qs-fld small{font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;}
+.qs-fld em{font-style:normal;font-size:.95rem;color:var(--green);transition:color .2s;}
 .qs-fld:hover,.qs-fld.is-on{background:var(--green);color:var(--black);border-color:var(--green);}
 .qs-fld:hover em,.qs-fld.is-on em{color:var(--black);}
 .qs-fld.is-hint{border-color:var(--green);animation:qsRing 1.6s ease-out infinite;}
@@ -608,7 +607,18 @@ img{max-width:100%;display:block;}
 .pf__bar i{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0);}
 
 @media (max-width:700px){
-  .pf__panel{width:86vw;height:min(68vh, 560px);}
+  /* Móvil: sin scroll fijo; el carril se desliza a mano hacia los lados */
+  .portfolio .section-head{padding-bottom:1.5rem;}
+  .pf{height:auto !important;}
+  .pf__sticky{position:static;height:auto;overflow:visible;display:block;padding-top:0;}
+  .pf__track{
+    width:auto;overflow-x:auto;transform:none !important;
+    scroll-snap-type:x mandatory;scroll-padding-inline:clamp(1.5rem,5vw,3.5rem);
+    overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .pf__track::-webkit-scrollbar{display:none;}
+  .pf__panel{width:86vw;height:min(68vh, 560px);scroll-snap-align:start;}
   /* En móvil el panel es vertical: el trabajo va arriba y el título abajo */
   .pf__shot{align-items:flex-start;justify-content:center;padding:9cqh 7cqw 0;}
   .pf__browser{width:86cqw;border-radius:2cqw;}

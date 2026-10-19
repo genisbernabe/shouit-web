@@ -147,16 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------- Quién soy: carnet 3D + terminal ----------
-     Los datos personales están aquí arriba. Son de EJEMPLO: cámbialos por los reales. */
+     Datos personales: edítalos aquí. */
   const QS = {
-    nacimiento: new Date(1997, 2, 14),      // EJEMPLO: 14/03/1997
     zona: 'Europe/Madrid',
-    ciudad: 'Barcelona',
-    idiomas: 'Castellano · Català · English',
+    edad: '24 años',
+    ciudad: 'Arenys de Mar, Barcelona',
+    idiomas: ['Catalán y castellano: nivel nativo.', 'Inglés: nivel First Certificate.'],
     stack: ['HTML · CSS · JS', 'WordPress · Elementor', 'Photoshop · Lightroom · Premiere', 'LearnWorlds · Instagram'],
     proyectos: ['CENEMA · Port de Mataró · Olimfit', 'Eurofitness · Eurofitness EDU'],
     estado: 'Abierto a nuevas ofertas',
-    email: 'tu@email.com'
+    email: 'genisbernstan@gmail.com'
   };
 
   const qsCard = document.getElementById('qsCard');
@@ -167,14 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const qsCmd = document.getElementById('qsCmd');
     const fields = [...document.querySelectorAll('.qs-fld')];
 
-    const edad = () => {
-      const n = new Date();
-      let a = n.getFullYear() - QS.nacimiento.getFullYear();
-      const m = n.getMonth() - QS.nacimiento.getMonth();
-      if (m < 0 || (m === 0 && n.getDate() < QS.nacimiento.getDate())) a--;
-      return a;
-    };
-    const dias = () => Math.floor((Date.now() - QS.nacimiento) / 864e5).toLocaleString('es-ES');
     const hora = () => {
       try {
         return new Intl.DateTimeFormat('es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
@@ -184,22 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Respuestas de la terminal: [clase, texto]
     const CMDS = {
       whoami:     () => [['b', 'Genís Bernabé.'], ['', 'Creativo digital en Barcelona. Diseño web, contenido y redes sociales.']],
-      edad:       () => [['', `${edad()} años. Llevo ${dias()} días en el mundo.`]],
-      donde:      () => [['', `Vivo en ${QS.ciudad}, España.`], ['d', `Allí son las ${hora()}.`]],
-      idiomas:    () => [['', QS.idiomas]],
+      edad:       () => [['', `${QS.edad}.`]],
+      donde:      () => [['', `Vivo en ${QS.ciudad}.`], ['d', `Allí son las ${hora()}.`]],
+      idiomas:    () => QS.idiomas.map(t => ['', t]),
       stack:      () => QS.stack.map(t => ['', t]),
       proyectos:  () => QS.proyectos.map(t => ['', t]),
       disponible: () => [['ok', `● ${QS.estado}.`]],
       contacto:   () => [['', QS.email]]
     };
     const NAMES = [...Object.keys(CMDS), 'help', 'clear'];
-
-    // Resumen que se ve en cada fila del carnet
-    const PREVIEW = {
-      edad: () => `${edad()} años`, donde: () => QS.ciudad, idiomas: () => 'ES · CA · EN',
-      stack: () => 'HTML · WP · Adobe', proyectos: () => '5 casos', disponible: () => 'Abierto', contacto: () => QS.email
-    };
-    document.querySelectorAll('[data-v]').forEach(el => { el.textContent = PREVIEW[el.dataset.v](); });
 
     /* --- terminal --- */
     let busy = false, interacted = false;
@@ -294,10 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ---------- Portfolio: galería horizontal que avanza con el scroll ----------
-     La sección .pf es tan alta como el recorrido horizontal + una pantalla.
+  /* ---------- Portfolio: galería horizontal ----------
+     Escritorio: la sección .pf es tan alta como el recorrido horizontal + una pantalla.
      Mientras su contenido está fijo (sticky), el scroll vertical se traduce
-     en desplazamiento horizontal del carril, suavizado en cada frame. */
+     en desplazamiento horizontal del carril, suavizado en cada frame.
+     Móvil: sin sticky; el carril es una tira que se desliza a mano hacia los lados. */
   const pf = document.getElementById('pf');
   if (pf) {
     const track = document.getElementById('pfTrack');
@@ -306,16 +292,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const pfCount = document.getElementById('pfCount');
     const pfBar = document.getElementById('pfBar');
     const total = String(pfPanels.length).padStart(2, '0');
+    const mobileMq = window.matchMedia('(max-width:700px)');
 
-    let distance = 0, target = 0, current = 0, last = performance.now();
+    let mobile = mobileMq.matches;
+    let distance = 0, target = 0, current = 0, last = performance.now(), running = false;
+
+    const setCount = (active) => { pfCount.textContent = `${String(active + 1).padStart(2, '0')} / ${total}`; };
+
+    // Móvil: contador y barra siguen el deslizamiento manual
+    const updateManual = () => {
+      const max = Math.max(0, track.scrollWidth - track.clientWidth);
+      pfBar.style.transform = `scaleX(${(max ? track.scrollLeft / max : 0).toFixed(4)})`;
+      const left = track.getBoundingClientRect().left + parseFloat(getComputedStyle(track).paddingLeft);
+      let active = 0, best = Infinity;
+      pfPanels.forEach((panel, i) => {
+        const d = Math.abs(panel.getBoundingClientRect().left - left);
+        if (d < best) { best = d; active = i; }
+      });
+      setCount(active);
+    };
 
     const read = () => {
+      if (mobile) return;
       const top = pf.getBoundingClientRect().top;
       const p = distance ? Math.min(1, Math.max(0, -top / distance)) : 0;
       target = p * distance;
     };
 
     const measure = () => {
+      if (mobile) {
+        pf.style.height = '';
+        track.style.transform = '';
+        pfMedia.forEach(m => { if (m) m.style.transform = ''; });
+        updateManual();
+        return;
+      }
       distance = Math.max(0, track.scrollWidth - window.innerWidth);
       pf.style.height = `${window.innerHeight + distance}px`;
       read();
@@ -323,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const render = (now) => {
+      if (mobile) { running = false; return; }
       const dt = Math.min(64, now - last); last = now;
       const k = reduceMotion ? 1 : 1 - Math.pow(1 - 0.085, dt / 16.67);
       current += (target - current) * k;
@@ -339,26 +351,33 @@ document.addEventListener('DOMContentLoaded', () => {
         if (Math.abs(off) < best) { best = Math.abs(off); active = i; }
       });
 
-      pfCount.textContent = `${String(active + 1).padStart(2, '0')} / ${total}`;
+      setCount(active);
       pfBar.style.transform = `scaleX(${(distance ? current / distance : 0).toFixed(4)})`;
 
       requestAnimationFrame(render);
     };
 
-    // Teclado: al tabular a un panel fuera de pantalla, la página se desplaza hasta él.
+    const start = () => {
+      if (!mobile && !running) { running = true; last = performance.now(); requestAnimationFrame(render); }
+    };
+
+    // Teclado (escritorio): al tabular a un panel fuera de pantalla, la página se desplaza hasta él.
     pfPanels.forEach(panel => {
       panel.addEventListener('focus', () => {
+        if (mobile) return;
         const pfTop = pf.getBoundingClientRect().top + window.scrollY;
         const x = Math.min(distance, Math.max(0, panel.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft)));
         window.scrollTo({ top: pfTop + x, behavior: reduceMotion ? 'auto' : 'smooth' });
       });
     });
 
+    track.addEventListener('scroll', () => { if (mobile) updateManual(); }, { passive: true });
     window.addEventListener('scroll', read, { passive: true });
     window.addEventListener('resize', measure);
     window.addEventListener('load', measure);
+    mobileMq.addEventListener('change', () => { mobile = mobileMq.matches; measure(); start(); });
     measure();
-    requestAnimationFrame(render);
+    start();
   }
 
 });
