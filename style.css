@@ -982,10 +982,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .proyecto-chip a{border-bottom:1px solid currentColor;transition:color .25s var(--ease);}
 .proyecto-chip a:hover{color:var(--green);}
 .proyecto-chip > div{min-width:0;}
-.proyecto-chip--logo{background:var(--white);border-color:var(--white);color:var(--black);}
-.proyecto-chip--logo:hover{border-color:var(--tint);}
-.proyecto-chip--logo small{color:color-mix(in srgb, var(--black) 62%, transparent);}
-.proyecto-chip--logo img{display:block;height:var(--lh,2.6rem);width:auto;max-width:100%;object-fit:contain;margin-top:.4rem;}
+.proyecto-chip--logo{background:none;border-color:transparent;padding-inline:0;}
+.proyecto-chip--logo:hover{transform:none;border-color:transparent;}
+.proyecto-chip--logo small{color:color-mix(in srgb, var(--white) 60%, transparent);}
+.proyecto-chip--logo img{display:block;height:var(--lh,3.4rem);width:auto;max-width:100%;object-fit:contain;margin-top:.5rem;}
 @media (min-width:700px){.proyecto-chips{grid-template-columns:repeat(3,minmax(0,1fr));}}
 
 /* ---- Qué hice: servicios que cambian la vista ---- */
