@@ -633,22 +633,57 @@ img{max-width:100%;display:block;}
 }
 
 /* ==========================================================
-   About
+   Sobre mí — línea de tiempo
    ========================================================== */
-.about{
-  display:grid;grid-template-columns:1fr 1.2fr;gap:3rem;
-  padding:5rem clamp(1.5rem,5vw,3.5rem) 6rem;
+.tl{
+  padding-bottom:clamp(4rem,8vw,6.5rem);
   border-top:1px solid color-mix(in srgb, var(--ink) 12%, transparent);
 }
-.about__text p{font-size:.95rem;line-height:1.75;color:color-mix(in srgb, var(--ink) 75%, transparent);margin-bottom:1.2rem;}
-.about__link{
-  display:inline-block;margin-top:.5rem;
-  font-size:.85rem;color:var(--green);
-  border-bottom:1px solid var(--green);padding-bottom:.15rem;
+.tl__body{
+  display:flex;align-items:flex-end;flex-wrap:wrap;gap:1.5rem clamp(1.5rem,4vw,4rem);
+  padding:clamp(1rem,3vw,2.5rem) clamp(1.5rem,5vw,3.5rem) 0;
 }
-@media (max-width:800px){
-  .about{grid-template-columns:1fr;}
+.tl__year{
+  display:flex;height:1em;overflow:hidden;
+  font-family:var(--font-display);font-size:clamp(4rem,14vw,9rem);line-height:1;color:var(--green);
 }
+.tl__d{display:block;height:1em;width:.62em;overflow:hidden;}
+.tl__d span{display:flex;flex-direction:column;transition:transform .55s cubic-bezier(.2,.9,.2,1);}
+.tl__d i{font-style:normal;height:1em;line-height:1;text-align:center;flex:none;}
+.tl__txt{flex:1;min-width:min(100%,18rem);}
+.tl__txt small{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:color-mix(in srgb, var(--ink) 60%, transparent);}
+.tl__txt h3{font-family:var(--font-display);font-weight:400;font-size:clamp(1.25rem,2.8vw,1.9rem);line-height:1.15;margin:.35rem 0 .7rem;text-wrap:balance;}
+.tl__txt p{font-size:.92rem;line-height:1.7;max-width:56ch;color:color-mix(in srgb, var(--ink) 80%, transparent);}
+.tl__chips{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;margin-top:1rem;}
+.tl__chips li{border:1px solid color-mix(in srgb, var(--ink) 18%, transparent);padding:.3rem .7rem;font-size:.75rem;}
+
+.tl__scrub{padding:clamp(1.5rem,4vw,2.75rem) clamp(1.5rem,5vw,3.5rem) 0;}
+.tl__scrub input{
+  display:block;width:100%;height:44px;background:transparent;cursor:grab;
+  -webkit-appearance:none;appearance:none;
+}
+.tl__scrub input:active{cursor:grabbing;}
+.tl__scrub input::-webkit-slider-runnable-track{height:2px;background:color-mix(in srgb, var(--ink) 18%, transparent);}
+.tl__scrub input::-moz-range-track{height:2px;background:color-mix(in srgb, var(--ink) 18%, transparent);}
+.tl__scrub input::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-10px;background:var(--green);border:0;border-radius:0;}
+.tl__scrub input::-moz-range-thumb{width:22px;height:22px;background:var(--green);border:0;border-radius:0;}
+.tl__scrub input:focus-visible{outline:2px solid var(--green);outline-offset:4px;}
+.tl__ticks{position:relative;height:2rem;margin-inline:11px;}
+.tl__ticks button{
+  position:absolute;top:0;left:calc(var(--p) * 100%);transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:.78rem;padding:.35rem .2rem;
+  color:color-mix(in srgb, var(--ink) 60%, transparent);transition:color .2s;
+}
+.tl__ticks button:hover{color:var(--ink);}
+.tl__ticks button.is-on{color:var(--green);}
+
+.tl__foot{
+  display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:1rem;
+  padding:clamp(1rem,3vw,1.75rem) clamp(1.5rem,5vw,3.5rem) 0;
+}
+.tl__hint{font-size:.8rem;color:var(--green);display:flex;gap:.6rem;align-items:center;}
+.tl__link{font-size:.85rem;color:var(--green);border-bottom:1px solid var(--green);padding-bottom:.15rem;}
+@media (prefers-reduced-motion:reduce){.tl__d span{transition:none;}}
 
 /* ==========================================================
    Contact
@@ -742,7 +777,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .nav__burger.is-open span:first-child{transform:translateY(4px) rotate(45deg);}
   .nav__burger.is-open span:last-child{transform:translateY(-4px) rotate(-45deg);}
 
-  .about{gap:2rem;}
 }
 
 /* ==========================================================

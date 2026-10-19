@@ -380,4 +380,62 @@ document.addEventListener('DOMContentLoaded', () => {
     start();
   }
 
+  /* ---------- Sobre mí: línea de tiempo ---------- */
+  // TODO: años y etapas provisionales; sustituir por los reales.
+  const tlRange = document.getElementById('tlRange');
+  if (tlRange) {
+    const TL = [
+      { y: 2019, k: 'Etapa 01', h: 'Empiezo a hacer cosas con una cámara', p: 'Fotografía y diseño por curiosidad, y las primeras webs que nadie me pidió.', c: ['Fotografía', 'Diseño'] },
+      { y: 2022, k: 'Etapa 02', h: 'Primeros clientes y estudio propio', p: 'Nace SHOUIT. Webs a medida, contenido y redes para negocios de aquí.', c: ['SHOUIT', 'Webs', 'Contenido'] },
+      { y: 2024, k: 'Etapa 03', h: 'Agencia de comunicación en Barcelona', p: 'Creación de contenido y gestión de redes y de plataformas de formación, como Eurofitness EDU.', c: ['Eurofitness EDU', 'LearnWorlds', 'Redes'] },
+      { y: 2026, k: 'Hoy', h: 'Abierto a nuevas ofertas', p: 'Busco un equipo donde sumar web, contenido y criterio visual. Esta web es la prueba.', c: ['Disponible', 'Barcelona'] }
+    ];
+    const yearEl = document.getElementById('tlYear');
+    const kick = document.getElementById('tlKick'), title = document.getElementById('tlTitle');
+    const text = document.getElementById('tlText'), chips = document.getElementById('tlChips');
+    const tickBtns = [...document.querySelectorAll('#tlTicks button')];
+    const reduceTl = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const cols = [];
+    for (let i = 0; i < 4; i++) {
+      const d = document.createElement('span'); d.className = 'tl__d';
+      const s = document.createElement('span');
+      for (let n = 0; n < 10; n++) { const q = document.createElement('i'); q.textContent = n; s.appendChild(q); }
+      d.appendChild(s); yearEl.appendChild(d); cols.push(s);
+    }
+
+    let curStop = -1;
+    const setTl = v => {
+      const digits = String(Math.floor(v + 0.0001));
+      cols.forEach((el, i) => { el.style.transform = `translateY(-${digits[i]}em)`; });
+      let idx = 0;
+      TL.forEach((st, i) => { if (v >= st.y - 0.0001) idx = i; });
+      tickBtns.forEach((b, i) => b.classList.toggle('is-on', i === idx));
+      if (idx === curStop) return;
+      curStop = idx;
+      const d = TL[idx];
+      kick.textContent = d.k; title.textContent = d.h; text.textContent = d.p;
+      chips.innerHTML = '';
+      d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
+    };
+
+    let tlRaf;
+    const animTl = y => {
+      cancelAnimationFrame(tlRaf);
+      if (reduceTl) { tlRange.value = y; setTl(y); return; }
+      const from = +tlRange.value, t0 = performance.now(), dur = 550;
+      const f = t => {
+        const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        const v = from + (y - from) * e;
+        tlRange.value = v; setTl(v);
+        if (k < 1) tlRaf = requestAnimationFrame(f);
+      };
+      tlRaf = requestAnimationFrame(f);
+    };
+
+    tlRange.addEventListener('input', () => { cancelAnimationFrame(tlRaf); setTl(+tlRange.value); });
+    tickBtns.forEach(b => b.addEventListener('click', () => animTl(+b.dataset.y)));
+    setTl(+tlRange.value);
+  }
+
 });

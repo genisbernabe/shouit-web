@@ -218,15 +218,38 @@
   </section>
 
   <!-- ============ SOBRE MÍ ============ -->
-  <section class="about" id="sobre-mi">
-    <div class="about__col">
-      <p class="section-head__eyebrow">Quién hay detrás</p>
-      <h2 class="section-head__title">Genís<br>Bernabe.</h2>
+  <!-- TODO: años y etapas de la línea de tiempo provisionales (ver array TL en script.js y el texto inicial de aquí). Sustituir por los reales. -->
+  <section class="tl" id="sobre-mi">
+    <div class="section-head tl__head">
+      <div>
+        <p class="section-head__eyebrow">Quién hay detrás</p>
+        <h2 class="section-head__title">Sobre mí<span class="dot">.</span></h2>
+      </div>
     </div>
-    <div class="about__col about__text">
-      <p>Fundé SHOUIT en Barcelona porque vi a demasiados negocios locales — restaurantes, barberías, estudios — con webs a medio hacer o directamente sin ella, dependiendo solo de un perfil de Instagram para existir.</p>
-      <p>Vengo de construir webs sobre WordPress y Elementor, pero hoy trabajo con código a medida: HTML, CSS y JS, sin plugins de sobra, para que cada sitio cargue rápido y se vea exactamente como se diseñó. El objetivo siempre es el mismo: que un negocio de barrio compita, en digital, como uno grande.</p>
-      <a href="#contacto" class="about__link">Cuéntame tu proyecto →</a>
+
+    <div class="tl__body">
+      <div class="tl__year" id="tlYear" aria-hidden="true"></div>
+      <div class="tl__txt" aria-live="polite">
+        <small id="tlKick">Etapa 01</small>
+        <h3 id="tlTitle">Empiezo a hacer cosas con una cámara</h3>
+        <p id="tlText">Fotografía y diseño por curiosidad, y las primeras webs que nadie me pidió.</p>
+        <ul class="tl__chips" id="tlChips"><li>Fotografía</li><li>Diseño</li></ul>
+      </div>
+    </div>
+
+    <div class="tl__scrub">
+      <input type="range" id="tlRange" min="2019" max="2026" step="0.02" value="2019" aria-label="Año de mi trayectoria">
+      <div class="tl__ticks" id="tlTicks">
+        <button type="button" data-y="2019" style="--p:0">2019</button>
+        <button type="button" data-y="2022" style="--p:.4286">2022</button>
+        <button type="button" data-y="2024" style="--p:.7143">2024</button>
+        <button type="button" data-y="2026" style="--p:1">Hoy</button>
+      </div>
+    </div>
+
+    <div class="tl__foot">
+      <p class="tl__hint"><span aria-hidden="true">↔</span> Arrastra el cursor o pulsa un año</p>
+      <a href="#contacto" class="tl__link">Hablemos →</a>
     </div>
   </section>
 
