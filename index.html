@@ -238,7 +238,12 @@
     </div>
 
     <div class="tl__scrub">
-      <input type="range" id="tlRange" min="2019" max="2026" step="0.02" value="2019" aria-label="Año de mi trayectoria">
+      <div class="tl__track" id="tlTrack">
+        <div class="tl__line"><i id="tlFill"></i></div>
+        <button type="button" class="tl__pill is-hint" id="tlPill" role="slider" aria-label="Año de mi trayectoria" aria-valuemin="2019" aria-valuemax="2026" aria-valuenow="2019">
+          <span class="tl__arr" aria-hidden="true">◀</span><span class="tl__lab">ARRASTRA</span><span class="tl__arr" aria-hidden="true">▶</span>
+        </button>
+      </div>
       <div class="tl__ticks" id="tlTicks">
         <button type="button" data-y="2019" style="--p:0">2019</button>
         <button type="button" data-y="2022" style="--p:.4286">2022</button>
@@ -248,7 +253,7 @@
     </div>
 
     <div class="tl__foot">
-      <p class="tl__hint"><span aria-hidden="true">↔</span> Arrastra el cursor o pulsa un año</p>
+      <p class="tl__hint">Pulsa la pastilla verde y arrástrala, o pulsa un año</p>
       <a href="#contacto" class="tl__link">Hablemos →</a>
     </div>
   </section>

@@ -382,8 +382,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- Sobre mí: línea de tiempo ---------- */
   // TODO: años y etapas provisionales; sustituir por los reales.
-  const tlRange = document.getElementById('tlRange');
-  if (tlRange) {
+  const tlTrackEl = document.getElementById('tlTrack');
+  if (tlTrackEl) {
     const TL = [
       { y: 2019, k: 'Etapa 01', h: 'Empiezo a hacer cosas con una cámara', p: 'Fotografía y diseño por curiosidad, y las primeras webs que nadie me pidió.', c: ['Fotografía', 'Diseño'] },
       { y: 2022, k: 'Etapa 02', h: 'Primeros clientes y estudio propio', p: 'Nace SHOUIT. Webs a medida, contenido y redes para negocios de aquí.', c: ['SHOUIT', 'Webs', 'Contenido'] },
@@ -419,23 +419,66 @@ document.addEventListener('DOMContentLoaded', () => {
       d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
     };
 
-    let tlRaf;
-    const animTl = y => {
+    let tlRaf, tlVal = TL[0].y, tlDrag = false;
+    const Y0 = TL[0].y, Y1 = TL[TL.length - 1].y;
+    const track = document.getElementById('tlTrack'), pill = document.getElementById('tlPill');
+    const fill = document.getElementById('tlFill'), line = track.querySelector('.tl__line');
+    const clampTl = v => Math.max(Y0, Math.min(Y1, v));
+
+    const paint = v => {
+      tlVal = clampTl(v);
+      const p = (tlVal - Y0) / (Y1 - Y0) * 100;
+      pill.style.left = p + '%'; fill.style.width = p + '%';
+      pill.setAttribute('aria-valuenow', Math.floor(tlVal));
+      setTl(tlVal);
+    };
+    const markUsed = () => { pill.classList.remove('is-hint'); pill.classList.add('is-used'); };
+    const animTl = (to, dur = 550, done) => {
       cancelAnimationFrame(tlRaf);
-      if (reduceTl) { tlRange.value = y; setTl(y); return; }
-      const from = +tlRange.value, t0 = performance.now(), dur = 550;
+      if (reduceTl) { paint(to); if (done) done(); return; }
+      const from = tlVal, t0 = performance.now();
       const f = t => {
-        const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
-        const v = from + (y - from) * e;
-        tlRange.value = v; setTl(v);
-        if (k < 1) tlRaf = requestAnimationFrame(f);
+        const k = Math.min(1, (t - t0) / dur), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        paint(from + (to - from) * e);
+        if (k < 1) tlRaf = requestAnimationFrame(f); else if (done) done();
       };
       tlRaf = requestAnimationFrame(f);
     };
+    const fromX = e => {
+      const r = line.getBoundingClientRect();
+      return Y0 + (Y1 - Y0) * Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    };
 
-    tlRange.addEventListener('input', () => { cancelAnimationFrame(tlRaf); setTl(+tlRange.value); });
-    tickBtns.forEach(b => b.addEventListener('click', () => animTl(+b.dataset.y)));
-    setTl(+tlRange.value);
+    track.addEventListener('pointerdown', e => {
+      tlDrag = true; track.setPointerCapture(e.pointerId);
+      cancelAnimationFrame(tlRaf); markUsed(); paint(fromX(e));
+    });
+    track.addEventListener('pointermove', e => { if (tlDrag) paint(fromX(e)); });
+    const endDrag = () => { tlDrag = false; };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    pill.addEventListener('keydown', e => {
+      const n = e.key === 'ArrowRight' ? .25 : e.key === 'ArrowLeft' ? -.25 : 0;
+      if (n) { e.preventDefault(); cancelAnimationFrame(tlRaf); markUsed(); paint(tlVal + n); }
+    });
+    tickBtns.forEach(b => b.addEventListener('click', () => { markUsed(); animTl(+b.dataset.y); }));
+
+    paint(Y0);
+
+    // Al llegar a la sección, la pastilla se mueve sola hacia 2021 y vuelve, para enseñar el gesto.
+    if (!reduceTl && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(([en]) => {
+        if (!en.isIntersecting) return;
+        io.disconnect();
+        setTimeout(() => {
+          if (tlDrag || pill.classList.contains('is-used')) return;
+          animTl(2021.3, 700, () => setTimeout(() => {
+            if (!tlDrag && !pill.classList.contains('is-used')) animTl(Y0, 700);
+          }, 250));
+        }, 500);
+      }, { threshold: .55 });
+      io.observe(document.getElementById('sobre-mi'));
+    }
   }
 
 });
