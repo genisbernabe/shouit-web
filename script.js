@@ -481,4 +481,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /* ---------- Páginas de proyecto: "Qué hice", los servicios cambian la vista ---------- */
+  const svcTabs = [...document.querySelectorAll('.svcs .svc')];
+  if (svcTabs.length) {
+    const panels = svcTabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+    const selectSvc = (i, focus) => {
+      svcTabs.forEach((t, j) => {
+        const on = j === i;
+        t.setAttribute('aria-selected', on);
+        t.tabIndex = on ? 0 : -1;
+        panels[j].hidden = !on;
+      });
+      if (focus) svcTabs[i].focus();
+    };
+    svcTabs.forEach((t, i) => {
+      t.addEventListener('click', () => selectSvc(i));
+      t.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') selectSvc(i); });
+      t.addEventListener('keydown', e => {
+        const n = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!n) return;
+        e.preventDefault();
+        selectSvc((i + n + svcTabs.length) % svcTabs.length, true);
+      });
+    });
+    selectSvc(Math.max(0, svcTabs.findIndex(t => t.getAttribute('aria-selected') === 'true')));
+
+    // Miniaturas: cambian la captura visible dentro del mismo servicio
+    document.querySelectorAll('.svc-view').forEach(view => {
+      const shots = [...view.querySelectorAll('.svc-stage .proyecto-shot')];
+      const thumbs = [...view.querySelectorAll('.svc-thumbs button')];
+      thumbs.forEach((b, i) => b.addEventListener('click', () => {
+        shots.forEach((s, j) => { s.hidden = j !== i; });
+        thumbs.forEach((t, j) => t.setAttribute('aria-pressed', j === i));
+      }));
+    });
+  }
+
 });

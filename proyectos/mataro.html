@@ -14,6 +14,17 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17" cy="7" r=".6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-10a6 6 0 0112 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4 11-11 3 3L8 19z"/><path d="M14 7l3 3"/></symbol>
+  <symbol id="i-learn" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></symbol>
+</svg>
+
 <!-- ============ CUSTOM CURSOR ============ -->
 <div class="cursor" id="cursor" aria-hidden="true">
   <div class="cursor__dot"></div>
@@ -42,23 +53,12 @@
     <a class="proyecto-back" href="/index.html#portfolio">← Portfolio</a>
     <p class="proyecto-tag">Web + Contenido + Redes</p>
     <h1 class="proyecto-title">Port de Mataró<span class="proyecto-dot"></span></h1>
-    <dl class="proyecto-meta">
-      <div><dt>Cliente</dt><dd>Port de Mataró</dd></div>
-      <div><dt>Sector</dt><dd>Puerto · Mataró</dd></div>
-      <div><dt>Web</dt><dd><a href="https://portmataro.org/" target="_blank" rel="noopener">portmataro.org</a></dd></div>
-    </dl>
+    <div class="proyecto-chips">
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span><div><small>Cliente</small><span>Port de Mataró</span></div></div>
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg></span><div><small>Sector</small><span>Puerto · Mataró</span></div></div>
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-out"/></svg></span><div><small>Web</small><span><a href="https://portmataro.org/" target="_blank" rel="noopener">portmataro.org</a></span></div></div>
+    </div>
   </header>
-
-  <!-- ============ PORTADA ============ -->
-  <section class="proyecto-cover">
-      <figure class="proyecto-shot">
-        <div class="proyecto-shot__frame">
-          <div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>portmataro.org</span></div>
-          <img src="/img/proyectos/port%20de%20mataro/mataro-01.jpg.png" width="1328" height="486" alt="Portada de la web del Port de Mataró — Viu el batec del Port" loading="lazy">
-        </div>
-        <figcaption>Portada de la web</figcaption>
-      </figure>
-  </section>
 
   <!-- ============ EL PROYECTO ============ -->
   <section class="proyecto-row">
@@ -72,24 +72,28 @@
   </section>
 
   <!-- ============ QUÉ HICE ============ -->
-  <section class="proyecto-row">
+  <section class="proyecto-row proyecto-svc">
     <h2 class="proyecto-lbl">Qué hice</h2>
-    <ul class="proyecto-works">
-      <li>Rediseño web</li>
-      <li>Fotografía y vídeo</li>
-      <li>Redes sociales</li>
-    </ul>
-  </section>
-
-  <!-- ============ GALERÍA ============ -->
-  <section class="proyecto-gallery" data-n="1">
-      <figure class="proyecto-shot">
-        <div class="proyecto-shot__frame">
-          <div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>portmataro.org</span></div>
-          <img src="/img/proyectos/port%20de%20mataro/mataro-02.jpg.png" width="706" height="493" alt="Port de Mataró — servicios del puerto" loading="lazy">
-        </div>
-        <figcaption>Servicios del puerto</figcaption>
-      </figure>
+    <div>
+    <!-- TODO: textos de cada servicio provisionales, revisar con Genís -->
+    <div class="svcs" role="tablist" aria-label="Qué hice">
+      <button type="button" class="svc" role="tab" id="svc-1" aria-controls="svp-1" aria-selected="true"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-web"/></svg></span><b>Rediseño web</b><em>Nueva web del puerto.</em></button>
+      <button type="button" class="svc" role="tab" id="svc-2" aria-controls="svp-2" aria-selected="false"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg></span><b>Fotografía y vídeo</b><em>Imágenes del puerto.</em></button>
+      <button type="button" class="svc" role="tab" id="svc-3" aria-controls="svp-3" aria-selected="false"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></span><b>Redes sociales</b><em>Gestión activa.</em></button>
+    </div>
+    <div class="svc-view" id="svp-1" role="tabpanel" aria-labelledby="svc-1">
+      <div class="svc-media"><div class="svc-stage"><figure class="proyecto-shot"><div class="proyecto-shot__frame"><div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>portmataro.org</span></div><img src="/img/proyectos/port%20de%20mataro/mataro-01.jpg.png" width="1328" height="486" alt="Portada de la web del Port de Mataró — Viu el batec del Port" loading="lazy"></div><figcaption>Portada de la web</figcaption></figure><figure class="proyecto-shot" hidden><div class="proyecto-shot__frame"><div class="proyecto-shot__bar" aria-hidden="true"><i></i><i></i><i></i><span>portmataro.org</span></div><img src="/img/proyectos/port%20de%20mataro/mataro-02.jpg.png" width="706" height="493" alt="Port de Mataró — servicios del puerto" loading="lazy"></div><figcaption>Servicios del puerto</figcaption></figure></div><div class="svc-thumbs"><button type="button" aria-label="Portada de la web" aria-pressed="true"><img src="/img/proyectos/port%20de%20mataro/mataro-01.jpg.png" alt="" loading="lazy"></button><button type="button" aria-label="Servicios del puerto" aria-pressed="false"><img src="/img/proyectos/port%20de%20mataro/mataro-02.jpg.png" alt="" loading="lazy"></button></div></div>
+      <div class="svc-side"><h3>Una web para el puerto</h3><p>Rediseño completo de la web del Port de Mataró: náutica, gastronomía y sostenibilidad en un mismo espacio frente al mar.</p></div>
+    </div>
+    <div class="svc-view" id="svp-2" role="tabpanel" aria-labelledby="svc-2" hidden>
+      <div class="svc-media"><div class="svc-tile" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-cam"/></svg></div></div>
+      <div class="svc-side"><h3>El puerto, en imagen</h3><p>Fotografía y vídeo del Port de Mataró y de su actividad.</p></div>
+    </div>
+    <div class="svc-view" id="svp-3" role="tabpanel" aria-labelledby="svc-3" hidden>
+      <div class="svc-media"><div class="svc-tile" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></div></div>
+      <div class="svc-side"><h3>Gestión activa de redes</h3><p>Gestión activa de las redes sociales del Port de Mataró.</p></div>
+    </div>
+    </div>
   </section>
 
   <!-- ============ SIGUIENTE PROYECTO ============ -->

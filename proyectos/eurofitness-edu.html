@@ -14,6 +14,17 @@
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17" cy="7" r=".6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-10a6 6 0 0112 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4 11-11 3 3L8 19z"/><path d="M14 7l3 3"/></symbol>
+  <symbol id="i-learn" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/></symbol>
+</svg>
+
 <!-- ============ CUSTOM CURSOR ============ -->
 <div class="cursor" id="cursor" aria-hidden="true">
   <div class="cursor__dot"></div>
@@ -42,11 +53,11 @@
     <a class="proyecto-back" href="/index.html#portfolio">← Portfolio</a>
     <p class="proyecto-tag">Contenido + Redes</p>
     <h1 class="proyecto-title">Eurofitness EDU<span class="proyecto-dot"></span></h1>
-    <dl class="proyecto-meta">
-      <div><dt>Cliente</dt><dd>Eurofitness EDU</dd></div>
-      <div><dt>Sector</dt><dd>Formación deportiva · Barcelona</dd></div>
-      <div><dt>Web</dt><dd><a href="https://eurofitnessedu.com/ca/" target="_blank" rel="noopener">eurofitnessedu.com</a> · <a href="https://www.instagram.com/eurofitnessedu/" target="_blank" rel="noopener">Instagram</a></dd></div>
-    </dl>
+    <div class="proyecto-chips">
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span><div><small>Cliente</small><span>Eurofitness EDU</span></div></div>
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-pin"/></svg></span><div><small>Sector</small><span>Formación deportiva · Barcelona</span></div></div>
+      <div class="proyecto-chip"><span class="proyecto-chip__ic"><svg class="i" aria-hidden="true"><use href="#i-out"/></svg></span><div><small>Web</small><span><a href="https://eurofitnessedu.com/ca/" target="_blank" rel="noopener">eurofitnessedu.com</a> · <a href="https://www.instagram.com/eurofitnessedu/" target="_blank" rel="noopener">Instagram</a></span></div></div>
+    </div>
   </header>
 
   <!-- ============ EL PROYECTO ============ -->
@@ -62,17 +73,32 @@
   </section>
 
   <!-- ============ QUÉ HICE ============ -->
-  <section class="proyecto-row">
+  <section class="proyecto-row proyecto-svc">
     <h2 class="proyecto-lbl">Qué hice</h2>
-    <ul class="proyecto-works">
-      <li>Creación de contenido</li>
-      <li>Redes sociales</li>
-      <li>Gestión de la plataforma de formación online</li>
-    </ul>
+    <div>
+    <!-- TODO: textos de cada servicio provisionales, revisar con Genís -->
+    <div class="svcs" role="tablist" aria-label="Qué hice">
+      <button type="button" class="svc" role="tab" id="svc-1" aria-controls="svp-1" aria-selected="true"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg></span><b>Creación de contenido</b><em>Contenido para la escuela.</em></button>
+      <button type="button" class="svc" role="tab" id="svc-2" aria-controls="svp-2" aria-selected="false"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></span><b>Redes sociales</b><em>Gestión de las redes.</em></button>
+      <button type="button" class="svc" role="tab" id="svc-3" aria-controls="svp-3" aria-selected="false"><span class="svc__ic"><svg class="i" aria-hidden="true"><use href="#i-learn"/></svg></span><b>Plataforma de formación online</b><em>Gestión de LearnWorlds.</em></button>
+    </div>
+    <div class="svc-view" id="svp-1" role="tabpanel" aria-labelledby="svc-1">
+      <div class="svc-media"><div class="svc-tile" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg></div></div>
+      <div class="svc-side"><h3>Contenido para la escuela</h3><p>Creación de contenido para Eurofitness EDU y sus ciclos formativos.</p></div>
+    </div>
+    <div class="svc-view" id="svp-2" role="tabpanel" aria-labelledby="svc-2" hidden>
+      <div class="svc-media"><div class="svc-tile" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg></div></div>
+      <div class="svc-side"><h3>Gestión de redes</h3><p>Gestión de las redes sociales de Eurofitness EDU.</p></div>
+    </div>
+    <div class="svc-view" id="svp-3" role="tabpanel" aria-labelledby="svc-3" hidden>
+      <div class="svc-media"><div class="svc-tile" aria-hidden="true"><svg class="i" aria-hidden="true"><use href="#i-learn"/></svg></div></div>
+      <div class="svc-side"><h3>La plataforma e-learning</h3><p>Gestión de LearnWorlds como plataforma de formación online de la escuela: cursos, inscripciones y automatizaciones.</p><a class="svc-more" href="#plataforma">Ver el detalle más abajo ↓</a></div>
+    </div>
+    </div>
   </section>
 
   <!-- ============ LEARNWORLDS ============ -->
-  <section class="proyecto-row proyecto-lw">
+  <section class="proyecto-row proyecto-lw" id="plataforma">
     <h2 class="proyecto-lbl">Plataforma e-learning</h2>
     <div>
       <h3 class="proyecto-sub">Gestión y desarrollo de Eurofitness EDU con LearnWorlds</h3>
