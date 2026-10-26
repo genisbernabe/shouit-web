@@ -118,6 +118,20 @@
         </form>
       </div>
     </div>
+
+    <!-- Móvil (≤820px): baraja de cartas. En escritorio se oculta y se ve el carnet + terminal de arriba. -->
+    <div class="qd" id="qd">
+      <p class="qd__hint"><span aria-hidden="true">→</span> Desliza el carnet</p>
+      <div class="qd-deck" id="qdDeck" tabindex="0" aria-label="Baraja de datos. Usa las flechas del teclado para cambiar de carta."></div>
+      <div class="qd-bar">
+        <button type="button" class="qd-arrow" id="qdPrev" aria-label="Carta anterior">←</button>
+        <div class="qd-mid">
+          <div class="qd-dots" id="qdDots" aria-hidden="true"></div>
+          <div class="qd-count" id="qdCount" aria-live="polite"></div>
+        </div>
+        <button type="button" class="qd-arrow" id="qdNext" aria-label="Carta siguiente">→</button>
+      </div>
+    </div>
   </section>
 
   <!-- ============ PORTFOLIO ============ -->

@@ -441,6 +441,72 @@ img{max-width:100%;display:block;}
 }
 
 /* ==========================================================
+   Quién soy — MÓVIL: baraja de cartas (≤820px). Escritorio no cambia.
+   ========================================================== */
+.qd{display:none;}
+@media (max-width:820px){
+  .qs__wrap{display:none;}
+  .qd{display:block;padding:0 clamp(1.5rem,5vw,3.5rem) 6rem;}
+}
+.qd__hint{display:flex;align-items:center;gap:.55rem;font-family:var(--font-display);font-size:1.1rem;line-height:1.15;color:var(--white);margin-bottom:1.1rem;transition:opacity .4s;}
+.qd__hint span{color:var(--green);display:inline-block;animation:qdNudgeX 1.4s ease-in-out infinite;}
+.qd__hint.is-seen{opacity:.5;}
+.qd__hint.is-seen span{animation:none;}
+@keyframes qdNudgeX{50%{transform:translateX(6px);}}
+.qd-deck{position:relative;height:min(30rem,calc(100svh - 11rem));min-height:24rem;margin-bottom:2.2rem;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
+.qd-card{
+  position:absolute;inset:0;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;
+  background:linear-gradient(165deg,#2c2c29,#1f1f1d);color:var(--white);
+  border:1px solid color-mix(in srgb, var(--white) 16%, transparent);
+  transform-origin:50% 100%;transition:transform .5s var(--ease),opacity .4s;will-change:transform;touch-action:pan-y;
+}
+.qd-card.is-top{cursor:grab;}
+.qd-card.is-drag{transition:none;cursor:grabbing;}
+.qd-card__stripe{
+  display:flex;justify-content:space-between;gap:.5rem;
+  font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  background:var(--c,var(--green));color:var(--black);padding:.55rem 1.1rem;
+}
+.qd-card__body{flex:1;min-height:0;padding:1.1rem;display:flex;flex-direction:column;gap:.9rem;}
+.qd-card__pic{
+  flex:1;min-height:0;display:grid;place-items:center;text-align:center;
+  border:1px dashed color-mix(in srgb, var(--white) 28%, transparent);
+  background:repeating-linear-gradient(135deg, transparent 0 12px, color-mix(in srgb, var(--white) 4%, transparent) 12px 13px);
+  font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb, var(--white) 55%, transparent);
+}
+.qd-card__name{font-family:var(--font-display);font-size:clamp(1.7rem,8vw,2.1rem);line-height:.98;}
+.qd-card__name i{display:inline-block;width:.18em;height:.18em;background:var(--green);margin-left:.05em;}
+.qd-card__go{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb, var(--white) 62%, transparent);}
+.qd-card__go b{font-weight:400;color:var(--green);display:inline-block;animation:qdNudgeX 1.3s ease-in-out infinite;}
+.qd-card__big{font-family:var(--font-display);line-height:.92;font-size:var(--fs,4.6rem);color:var(--c,var(--green));overflow-wrap:anywhere;}
+.qd-card__big small{display:block;font-family:var(--font-mono);font-size:.85rem;color:var(--white);letter-spacing:.14em;text-transform:uppercase;margin-top:.5rem;}
+.qd-card__lines{display:grid;gap:.3rem;font-size:.9rem;margin-top:auto;}
+.qd-card__lines .d{color:color-mix(in srgb, var(--white) 62%, transparent);}
+.qd-card__lines .ok{color:var(--green);}
+.qd-copy{
+  align-self:flex-start;border:1px solid var(--green);color:var(--green);padding:.55rem .85rem;
+  font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;transition:background .2s,color .2s;
+}
+.qd-copy:hover,.qd-copy.is-ok{background:var(--green);color:var(--black);}
+.qd-card__glare{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(0,255,135,.09) 45%,rgba(224,128,95,.09) 55%,transparent 70%);}
+.qd-bar{display:flex;align-items:center;justify-content:space-between;gap:.8rem;}
+.qd-arrow{
+  width:3rem;height:3rem;flex:none;border:1px solid color-mix(in srgb, var(--white) 22%, transparent);
+  display:grid;place-items:center;font-size:1.1rem;color:var(--green);transition:background .2s,color .2s;
+}
+.qd-arrow:hover,.qd-arrow:active{background:var(--green);color:var(--black);}
+.qd-arrow:focus-visible,.qd-deck:focus-visible .qd-card.is-top{outline:2px solid var(--green);outline-offset:2px;}
+.qd-mid{display:grid;gap:.5rem;justify-items:center;min-width:0;}
+.qd-dots{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;}
+.qd-dots i{width:7px;height:7px;background:color-mix(in srgb, var(--white) 22%, transparent);transition:background .25s,width .3s var(--ease);}
+.qd-dots i.on{background:var(--green);width:22px;}
+.qd-count{font-size:.7rem;letter-spacing:.14em;color:color-mix(in srgb, var(--white) 62%, transparent);text-align:center;}
+@media (prefers-reduced-motion:reduce){
+  .qd__hint span,.qd-card__go b{animation:none;}
+  .qd-card{transition:none;}
+}
+
+/* ==========================================================
    Portfolio — galería horizontal que avanza con el scroll vertical
    ========================================================== */
 .pf{position:relative;}

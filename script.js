@@ -517,4 +517,148 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+  /* ---------- Quién soy · baraja de cartas (solo móvil, CSS la oculta en escritorio) ---------- */
+  const qdDeck = document.getElementById('qdDeck');
+  if (qdDeck) {
+    const horaQd = () => {
+      try {
+        return new Intl.DateTimeFormat('es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+      } catch (e) { return new Date().toLocaleTimeString().slice(0, 5); }
+    };
+    const edadNum = parseInt(QS.edad, 10) || QS.edad;
+    const edadUnit = String(QS.edad).replace(/^\d+\s*/, '');
+    const ciudad = QS.ciudad.split(',');
+    const nProy = QS.proyectos.join('·').split('·').length;
+
+    // [etiqueta, color, grande, unidad, tamaño de letra, líneas [clase, texto], copiar]
+    const CARDS = [
+      { id: true },
+      { k: 'Edad', c: 'var(--green)', big: String(edadNum), unit: edadUnit, lines: [['', `${QS.edad}.`]] },
+      { k: 'Vivo en', c: 'var(--accent)', big: ciudad[0], unit: (ciudad[1] || '').trim(), fs: '2.55rem', lines: [['', `Vivo en ${QS.ciudad}.`], ['d clock', '']] },
+      { k: 'Idiomas', c: 'var(--white)', big: 'CA · ES · EN', fs: '2.6rem', lines: QS.idiomas.map(t => ['', t]) },
+      { k: 'Stack', c: 'var(--green)', big: QS.stack[0], fs: '2.3rem', lines: QS.stack.slice(1).map(t => ['d', t]) },
+      { k: 'Proyectos', c: 'var(--accent)', big: String(nProy), unit: 'proyectos', lines: QS.proyectos.map(t => ['', t]) },
+      { k: 'Estado', c: 'var(--green)', big: 'Abierto', fs: '3.4rem', lines: [['ok', `● ${QS.estado}.`]] },
+      { k: 'Contacto', c: 'var(--white)', big: 'Escríbeme', fs: '2.5rem', lines: [['', QS.email]], copy: true }
+    ];
+    const n = CARDS.length;
+    const pad = (x) => String(x).padStart(2, '0');
+    const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+    const els = CARDS.map((c, i) => {
+      const card = mk('div', 'qd-card');
+      const stripe = mk('div', 'qd-card__stripe');
+      const body = mk('div', 'qd-card__body');
+      if (c.id) {
+        stripe.append(mk('span', '', 'Carnet'), mk('span', '', 'BCN'));
+        // TODO: sustituir por tu foto (formato 4:5)
+        const name = mk('div', 'qd-card__name'); name.append('Genís', document.createElement('br'), 'Bernabé', mk('i'));
+        const go = mk('div', 'qd-card__go'); go.append(mk('span', '', 'Creativo digital'));
+        const sw = mk('span', '', 'Desliza '); sw.append(mk('b', '', '→')); go.append(sw);
+        body.append(mk('div', 'qd-card__pic', 'Tu foto aquí'), name, go);
+      } else {
+        card.style.setProperty('--c', c.c);
+        if (c.fs) card.style.setProperty('--fs', c.fs);
+        stripe.append(mk('span', '', c.k), mk('span', '', `${pad(i + 1)} / ${pad(n)}`));
+        const big = mk('div', 'qd-card__big', c.big);
+        if (c.unit) big.append(mk('small', '', c.unit));
+        const lines = mk('div', 'qd-card__lines');
+        c.lines.forEach(([cls, t]) => { const l = mk('div', cls.replace('clock', '').trim(), t); if (cls.includes('clock')) l.dataset.clock = ''; lines.append(l); });
+        if (c.copy) {
+          const b = mk('button', 'qd-copy', 'Copiar email'); b.type = 'button';
+          b.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const ok = () => { b.classList.add('is-ok'); b.textContent = 'Copiado'; setTimeout(() => { b.classList.remove('is-ok'); b.textContent = 'Copiar email'; }, 1600); };
+            if (navigator.clipboard) navigator.clipboard.writeText(QS.email).then(ok, () => {});
+          });
+          lines.append(b);
+        }
+        body.append(big, lines);
+      }
+      card.append(stripe, body, mk('div', 'qd-card__glare'));
+      qdDeck.append(card);
+      return card;
+    });
+    const paintClock = () => qdDeck.querySelectorAll('[data-clock]').forEach(x => { x.textContent = `Allí son las ${horaQd()}.`; });
+    paintClock(); setInterval(paintClock, 20000);
+
+    const dotsEl = document.getElementById('qdDots');
+    CARDS.forEach(() => dotsEl.append(document.createElement('i')));
+    const countEl = document.getElementById('qdCount');
+    const hintEl = document.querySelector('.qd__hint');
+    const ROT = [0, -2.4, 2.2];
+    let cur = 0, busy = false, drag = null;
+
+    const place = (el, i) => {
+      const d = (i - cur + n) % n;
+      el.style.zIndex = n - d;
+      el.classList.toggle('is-top', d === 0);
+      el.inert = d !== 0;
+      if (d < 3) { el.style.opacity = 1; el.style.transform = `translateY(${d * 15}px) scale(${1 - d * 0.055}) rotate(${ROT[d]}deg)`; }
+      else { el.style.opacity = 0; el.style.transform = 'translateY(36px) scale(.84)'; }
+    };
+    const render = () => {
+      els.forEach(place);
+      dotsEl.querySelectorAll('i').forEach((x, i) => x.classList.toggle('on', i === cur));
+      countEl.textContent = `${pad(cur + 1)} / ${pad(n)} · ${cur === 0 ? 'Carnet' : CARDS[cur].k}`;
+    };
+    const seen = () => { if (hintEl) hintEl.classList.add('is-seen'); };
+
+    const fling = (dir) => {
+      if (busy) return; busy = true;
+      const el = els[cur];
+      el.classList.remove('is-drag');
+      el.style.transition = reduceMotion ? 'none' : 'transform .38s cubic-bezier(.4,0,.8,.5), opacity .38s';
+      el.style.transform = `translate(${dir * 135}%,-6%) rotate(${dir * 20}deg)`; el.style.opacity = 0;
+      setTimeout(() => {
+        el.style.transition = 'none'; cur = (cur + 1) % n; render(); void el.offsetWidth; el.style.transition = ''; busy = false;
+      }, reduceMotion ? 0 : 380);
+    };
+    const back = () => {
+      if (busy) return; busy = true;
+      const i = (cur - 1 + n) % n, el = els[i];
+      el.style.transition = 'none'; el.style.zIndex = n + 1; el.style.opacity = 0;
+      el.style.transform = 'translate(-135%,-6%) rotate(-20deg)';
+      void el.offsetWidth; el.style.transition = '';
+      cur = i; render();
+      setTimeout(() => { busy = false; }, reduceMotion ? 0 : 400);
+    };
+
+    qdDeck.addEventListener('pointerdown', (e) => {
+      if (busy || !els[cur].contains(e.target) || e.target.closest('button')) return;
+      drag = { x: e.clientX, y: e.clientY, dx: 0, t: Date.now(), moved: false, id: e.pointerId };
+    });
+    qdDeck.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if (!drag.moved) {
+        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) { drag = null; return; }  // es scroll vertical: no lo bloqueamos
+        if (Math.abs(dx) < 6) return;
+        drag.moved = true; els[cur].classList.add('is-drag');
+        try { qdDeck.setPointerCapture(e.pointerId); } catch (_) {}
+      }
+      drag.dx = dx;
+      els[cur].style.transform = `translate(${dx}px,${Math.abs(dx) * 0.06}px) rotate(${dx / 16}deg)`;
+    });
+    qdDeck.addEventListener('pointerup', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const d = drag; drag = null;
+      els[cur].classList.remove('is-drag');
+      if (!d.moved) { seen(); fling(1); return; }  // un toque también pasa de carta
+      const v = Math.abs(d.dx) / Math.max(1, Date.now() - d.t);
+      if (Math.abs(d.dx) > 90 || v > 0.5) { seen(); fling(d.dx > 0 ? 1 : -1); } else place(els[cur], cur);
+    });
+    qdDeck.addEventListener('pointercancel', () => {
+      if (!drag) return; drag = null; els[cur].classList.remove('is-drag'); place(els[cur], cur);
+    });
+    qdDeck.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); seen(); fling(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); seen(); back(); }
+    });
+    document.getElementById('qdNext').addEventListener('click', () => { seen(); fling(1); });
+    document.getElementById('qdPrev').addEventListener('click', () => { seen(); back(); });
+    render();
+  }
+
 });
