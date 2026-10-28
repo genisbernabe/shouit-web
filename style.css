@@ -1125,6 +1125,61 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 @media (prefers-reduced-motion:reduce){.svc-view{animation:none;}}
 
+/* Portfolio (escritorio): menos aire arriba y abajo de "Proyectos reales" */
+@media (min-width:701px){
+  .portfolio .section-head{padding-top:3.25rem;padding-bottom:1rem;}
+  .portfolio{scroll-margin-top:var(--nav-h);}  /* al saltar desde el menú, el título queda bajo la barra, no detrás */
+  .pf{margin-top:calc(var(--nav-h) * -1);}  /* el hueco reservado bajo la barra al fijarse no se suma al espacio del título */
+  .tl__head{padding-top:4rem;}
+}
+
+/* ==========================================================
+   Visor de imágenes (páginas de detalle)
+   ========================================================== */
+.is-zoomable{cursor:zoom-in;}
+.is-zoomable:focus-visible{outline:2px solid var(--tint,var(--green));outline-offset:3px;}
+.lb{
+  position:fixed;inset:0;z-index:200;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;
+  background:rgba(18,18,17,.95);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility 0s .3s;
+  padding:max(1rem,env(safe-area-inset-top)) max(1rem,env(safe-area-inset-right)) max(1rem,env(safe-area-inset-bottom)) max(1rem,env(safe-area-inset-left));
+  gap:.9rem;touch-action:pan-y;
+}
+.lb.is-open{opacity:1;visibility:visible;transition-delay:0s;}
+.lb__stage{position:relative;min-width:0;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;}
+.lb__img{
+  max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  border:1px solid color-mix(in srgb,var(--white) 14%,transparent);
+  transition:opacity .25s,transform .45s var(--ease);user-select:none;-webkit-user-select:none;-webkit-user-drag:none;
+}
+.lb__img.is-swap{opacity:0;transform:scale(.985);}
+.lb__bar{display:flex;align-items:center;justify-content:space-between;gap:1rem;color:var(--white);font-size:.74rem;letter-spacing:.1em;}
+.lb__cap{min-width:0;color:color-mix(in srgb,var(--white) 62%,transparent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.04em;}
+.lb__count{font-variant-numeric:tabular-nums;flex:none;color:var(--tint,var(--green));}
+.lb__btn{
+  position:absolute;width:3rem;height:3rem;display:grid;place-items:center;font-size:1.15rem;line-height:1;
+  color:var(--white);background:rgba(26,26,24,.7);border:1px solid color-mix(in srgb,var(--white) 28%,transparent);
+  transition:background .2s,color .2s,border-color .2s;
+}
+.lb__btn:hover,.lb__btn:focus-visible{background:var(--tint,var(--green));color:var(--tint-ink,var(--black));border-color:var(--tint,var(--green));outline:none;}
+.lb__prev{left:0;top:50%;margin-top:-1.5rem;}
+.lb__next{right:0;top:50%;margin-top:-1.5rem;}
+.lb__close{right:0;top:0;}
+.lb[data-single] .lb__prev,.lb[data-single] .lb__next{display:none;}
+@media (max-width:719px){
+  /* Móvil: los botones salen del visor y se anclan a la pantalla; la leyenda queda encima */
+  .lb__stage{position:static;}
+  .lb__prev,.lb__next{top:auto;margin-top:0;bottom:max(1rem,env(safe-area-inset-bottom));}
+  .lb__prev{left:max(1rem,env(safe-area-inset-left));}
+  .lb__next{right:max(1rem,env(safe-area-inset-right));}
+  .lb__close{top:max(1rem,env(safe-area-inset-top));right:max(1rem,env(safe-area-inset-right));}
+  .lb__img{margin-top:3.5rem;max-height:calc(100% - 3.5rem);}
+  .lb__bar{padding-bottom:3.8rem;flex-direction:column;align-items:flex-start;gap:.3rem;}
+  .lb__cap{max-width:100%;}
+}
+@media (prefers-reduced-motion:reduce){.lb,.lb__img{transition:none;}}
+
+
 /* Fotografía: mosaico (1 grande + 5). Móvil: grande a todo ancho y el resto de 2 en 2. */
 /* Publicaciones: 4 en fila (escritorio) / 2×2 (móvil), recortadas a 4:5 */
 .svc-media .proyecto-posts--4{grid-template-columns:repeat(2,minmax(0,1fr));}

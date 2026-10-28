@@ -405,6 +405,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let curStop = -1;
+    const showStage = idx => {
+      const d = TL[idx];
+      kick.textContent = d.k; title.textContent = d.h; text.textContent = d.p;
+      chips.innerHTML = '';
+      d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
+    };
+    // La caja de texto mide siempre lo que la etapa más larga: así la barra de arrastre no se mueve al cambiar de año.
+    const txtBox = document.querySelector('.tl__txt');
+    const lockHeight = () => {
+      if (!txtBox) return;
+      txtBox.style.minHeight = '';
+      let max = 0;
+      TL.forEach((_, i) => { showStage(i); max = Math.max(max, txtBox.offsetHeight); });
+      showStage(Math.max(0, curStop));
+      txtBox.style.minHeight = `${max}px`;
+    };
+    let lockT;
+    window.addEventListener('resize', () => { clearTimeout(lockT); lockT = setTimeout(lockHeight, 120); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(lockHeight);
+    window.addEventListener('load', lockHeight);
     const setTl = v => {
       const digits = String(Math.floor(v + 0.0001));
       cols.forEach((el, i) => { el.style.transform = `translateY(-${digits[i]}em)`; });
@@ -413,10 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tickBtns.forEach((b, i) => b.classList.toggle('is-on', i === idx));
       if (idx === curStop) return;
       curStop = idx;
-      const d = TL[idx];
-      kick.textContent = d.k; title.textContent = d.h; text.textContent = d.p;
-      chips.innerHTML = '';
-      d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
+      showStage(idx);
     };
 
     let tlRaf, tlVal = TL[0].y, tlDrag = false;
@@ -464,6 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tickBtns.forEach(b => b.addEventListener('click', () => { markUsed(); animTl(+b.dataset.y); }));
 
     paint(Y0);
+    lockHeight();
 
     // Al llegar a la sección, la pastilla se mueve sola hacia 2021 y vuelve, para enseñar el gesto.
     if (!reduceTl && 'IntersectionObserver' in window) {
@@ -659,6 +677,91 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('qdNext').addEventListener('click', () => { seen(); fling(1); });
     document.getElementById('qdPrev').addEventListener('click', () => { seen(); back(); });
     render();
+  }
+
+
+  /* ---------- Visor de imágenes (páginas de detalle) ----------
+     Cada imagen de "Qué hice" se amplía al pulsarla; dentro del visor se pasa con flechas, teclado o deslizando. */
+  const lbImgs = [...document.querySelectorAll('.svc-view .proyecto-shot img, .svc-view .proyecto-posts img, .svc-view .proyecto-photos img')];
+  if (lbImgs.length) {
+    const lb = document.createElement('div');
+    lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Imagen ampliada');
+    lb.innerHTML = '<div class="lb__stage"><img class="lb__img" alt="" draggable="false">' +
+      '<button type="button" class="lb__btn lb__prev" aria-label="Imagen anterior">←</button>' +
+      '<button type="button" class="lb__btn lb__next" aria-label="Imagen siguiente">→</button>' +
+      '<button type="button" class="lb__btn lb__close" aria-label="Cerrar">✕</button></div>' +
+      '<div class="lb__bar"><span class="lb__cap"></span><span class="lb__count"></span></div>';
+    document.body.appendChild(lb);
+    const lbImg = lb.querySelector('.lb__img'), lbCap = lb.querySelector('.lb__cap'), lbCount = lb.querySelector('.lb__count');
+    const lbPrev = lb.querySelector('.lb__prev'), lbNext = lb.querySelector('.lb__next'), lbClose = lb.querySelector('.lb__close');
+    let lbSet = [], lbI = 0, lbFrom = null;
+
+    // El cursor personalizado también reacciona a los botones del visor y a las imágenes
+    [lbPrev, lbNext, lbClose, ...lbImgs].forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-active'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
+    });
+
+    const pad2 = n => String(n).padStart(2, '0');
+    const lbShow = (i, instant) => {
+      lbI = (i + lbSet.length) % lbSet.length;
+      const src = lbSet[lbI];
+      const apply = () => {
+        lbImg.src = src.currentSrc || src.src; lbImg.alt = src.alt;
+        lbCap.textContent = src.alt; lbCount.textContent = `${pad2(lbI + 1)} / ${pad2(lbSet.length)}`;
+        lbImg.classList.remove('is-swap');
+      };
+      if (instant || reduceMotion) apply();
+      else { lbImg.classList.add('is-swap'); setTimeout(apply, 160); }
+      // precarga de las vecinas
+      [lbI - 1, lbI + 1].forEach(j => { const s = lbSet[(j + lbSet.length) % lbSet.length]; if (s) new Image().src = s.src; });
+    };
+    const lbOpen = (img) => {
+      const view = img.closest('.svc-view');
+      lbSet = lbImgs.filter(x => x.closest('.svc-view') === view);
+      lbFrom = img;
+      lb.toggleAttribute('data-single', lbSet.length < 2);
+      lbShow(lbSet.indexOf(img), true);
+      lb.classList.add('is-open');
+      document.documentElement.style.overflow = 'hidden';
+      lbClose.focus({ preventScroll: true });
+    };
+    const lbHide = () => {
+      lb.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+      if (lbFrom) lbFrom.focus({ preventScroll: true });
+    };
+
+    lbImgs.forEach(img => {
+      img.classList.add('is-zoomable'); img.tabIndex = 0; img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', `Ampliar: ${img.alt}`);
+      img.addEventListener('click', () => lbOpen(img));
+      img.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); lbOpen(img); } });
+    });
+    lbPrev.addEventListener('click', () => lbShow(lbI - 1));
+    lbNext.addEventListener('click', () => lbShow(lbI + 1));
+    lbClose.addEventListener('click', lbHide);
+    lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb__stage')) lbHide(); });
+    document.addEventListener('keydown', e => {
+      if (!lb.classList.contains('is-open')) return;
+      if (e.key === 'Escape') lbHide();
+      else if (e.key === 'ArrowRight') { e.preventDefault(); lbShow(lbI + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); lbShow(lbI - 1); }
+      else if (e.key === 'Tab') {  // el foco se queda dentro del visor
+        const f = [lbClose, lbPrev, lbNext].filter(b => b.offsetParent !== null);
+        const i = f.indexOf(document.activeElement);
+        e.preventDefault(); f[(i + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+      }
+    });
+    // Deslizar con el dedo (o arrastrar con el ratón) para pasar de imagen
+    let sx = null, sy = 0;
+    lb.addEventListener('pointerdown', e => { if (e.target.closest('.lb__btn')) return; sx = e.clientX; sy = e.clientY; });
+    lb.addEventListener('pointerup', e => {
+      if (sx === null) return;
+      const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) lbShow(lbI + (dx < 0 ? 1 : -1));
+    });
+    lb.addEventListener('pointercancel', () => { sx = null; });
   }
 
 });
