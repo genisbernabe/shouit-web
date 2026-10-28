@@ -146,138 +146,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  /* ---------- Quién soy: carnet 3D + terminal ----------
-     Datos personales: edítalos aquí. */
+  /* ---------- Quién soy: datos de las cartas ----------
+     Datos personales: edítalos aquí; las cartas se construyen solas más abajo. */
   const QS = {
     zona: 'Europe/Madrid',
-    edad: '24 años',
-    ciudad: 'Arenys de Mar, Barcelona',
-    idiomas: ['Catalán y castellano: nivel nativo.', 'Inglés: nivel First Certificate.'],
-    stack: ['HTML · CSS · JS', 'WordPress · Elementor', 'Photoshop · Lightroom · Premiere', 'LearnWorlds · Instagram'],
-    proyectos: ['CENEMA · Port de Mataró · Olimfit', 'Eurofitness · Eurofitness EDU'],
+    edad: 24,
+    ciudad: 'Arenys de Mar',
+    provincia: 'Barcelona',
+    // v = nivel de 1 a 6 (6 = nativo, 4 = B2 / First Certificate)
+    idiomas: [
+      { n: 'Catalán', l: 'nativo', v: 6 },
+      { n: 'Castellano', l: 'nativo', v: 6 },
+      { n: 'Inglés', l: 'First Certificate', v: 4 }
+    ],
+    // g = web (verde) · c = contenido y producción (naranja) · m = marketing y redes (blanco) · f = relleno
+    stack: [
+      ['HTML', 'g', 1], ['CSS', 'g', 1], ['JS', 'g', 1], ['WordPress', 'g'], ['Elementor', 'g'],
+      ['Photoshop', 'c'], ['Lightroom', 'c'], ['Premiere', 'c'], ['Organización y gestión de podcast', 'c'],
+      ['LearnWorlds', 'm'], ['Instagram', 'm'], ['Google Analytics', 'm'], ['Meta Ads', 'm'], ['Google Ads', 'm']
+    ],
+    proyectos: [
+      ['CENEMA', '/proyectos/cenema.html'], ['Port de Mataró', '/proyectos/mataro.html'], ['Olimfit', '/proyectos/olimfit.html'],
+      ['Eurofitness', '/proyectos/eurofitness.html'], ['Eurofitness EDU', '/proyectos/eurofitness-edu.html']
+    ],
     estado: 'Abierto a nuevas ofertas',
     email: 'genisbernstan@gmail.com'
   };
-
-  const qsCard = document.getElementById('qsCard');
-  if (qsCard) {
-    const qsScene = document.getElementById('qsScene');
-    const qsOut = document.getElementById('qsOut');
-    const qsForm = document.getElementById('qsForm');
-    const qsCmd = document.getElementById('qsCmd');
-    const fields = [...document.querySelectorAll('.qs-fld')];
-
-    const hora = () => {
-      try {
-        return new Intl.DateTimeFormat('es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
-      } catch (e) { return new Date().toLocaleTimeString(); }
-    };
-
-    // Respuestas de la terminal: [clase, texto]
-    const CMDS = {
-      whoami:     () => [['b', 'Genís Bernabé.'], ['', 'Creativo digital en Barcelona. Diseño web, contenido y redes sociales.']],
-      edad:       () => [['', `${QS.edad}.`]],
-      donde:      () => [['', `Vivo en ${QS.ciudad}.`], ['d', `Allí son las ${hora()}.`]],
-      idiomas:    () => QS.idiomas.map(t => ['', t]),
-      stack:      () => QS.stack.map(t => ['', t]),
-      proyectos:  () => QS.proyectos.map(t => ['', t]),
-      disponible: () => [['ok', `● ${QS.estado}.`]],
-      contacto:   () => [['', QS.email]]
-    };
-    const NAMES = [...Object.keys(CMDS), 'help', 'clear'];
-
-    /* --- terminal --- */
-    let busy = false, interacted = false;
-    const hist = []; let hi = 0;
-
-    const line = (cls, text, instant) => {
-      const d = document.createElement('div');
-      if (cls) d.className = cls;
-      qsOut.appendChild(d);
-      if (instant || reduceMotion) { d.textContent = text; qsOut.scrollTop = qsOut.scrollHeight; return Promise.resolve(); }
-      return new Promise(res => {
-        let i = 0;
-        const step = Math.max(1, Math.ceil(text.length / 36));
-        (function go() {
-          i = Math.min(text.length, i + step);
-          d.textContent = text.slice(0, i);
-          qsOut.scrollTop = qsOut.scrollHeight;
-          if (i < text.length) setTimeout(go, 16); else res();
-        })();
-      });
-    };
-
-    const run = async (raw, instant) => {
-      const c = raw.trim().toLowerCase();
-      if (!c || busy) return;
-      busy = true;
-      if (!instant) { hist.push(c); hi = hist.length; }
-      await line('c', c, true);
-      if (c === 'clear') qsOut.textContent = '';
-      else if (c === 'help') await line('d', `Prueba: ${NAMES.join(' · ')}`, instant);
-      else if (CMDS[c]) { for (const [cls, t] of CMDS[c]()) await line(cls, t, instant); }
-      else await line('d', `No conozco "${c}". Escribe help.`, instant);
-      busy = false;
-    };
-
-    const intro = document.createElement('div');
-    intro.className = 'd';
-    intro.textContent = 'Pulsa cualquier dato del carnet y te cuento más.';
-    qsOut.appendChild(intro);
-    run('whoami', true);
-
-    fields.forEach(f => {
-      f.addEventListener('click', () => {
-        interacted = true;
-        fields.forEach(x => x.classList.remove('is-hint', 'is-on'));
-        f.classList.add('is-on');
-        run(f.dataset.cmd);
-        // En móvil la terminal queda debajo del carnet: la traemos a la vista.
-        if (window.matchMedia('(max-width:820px)').matches) {
-          qsOut.closest('.qs-term').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
-        }
-      });
-    });
-
-    qsForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      interacted = true;
-      const v = qsCmd.value; qsCmd.value = '';
-      fields.forEach(x => x.classList.remove('is-hint', 'is-on'));
-      run(v);
-    });
-    qsCmd.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowUp' && hist.length) { hi = Math.max(0, hi - 1); qsCmd.value = hist[hi]; e.preventDefault(); }
-      if (e.key === 'ArrowDown' && hist.length) { hi = Math.min(hist.length, hi + 1); qsCmd.value = hist[hi] || ''; e.preventDefault(); }
-    });
-
-    // Demostración: si nadie toca nada, la terminal responde sola al entrar en pantalla.
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-        io.disconnect();
-        setTimeout(() => { if (!interacted) run('donde'); }, 1600);
-      }, { threshold: 0.5 });
-      io.observe(qsCard);
-    }
-
-    /* --- inclinación 3D + brillo --- */
-    if (!reduceMotion) {
-      qsScene.addEventListener('pointermove', (e) => {
-        const r = qsScene.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-        qsCard.classList.remove('is-rest'); qsCard.classList.add('is-live');
-        qsCard.style.setProperty('--rx', `${((0.5 - y) * 16).toFixed(2)}deg`);
-        qsCard.style.setProperty('--ry', `${((x - 0.5) * 20).toFixed(2)}deg`);
-        qsCard.style.setProperty('--gx', `${(x * 100).toFixed(1)}%`);
-        qsCard.style.setProperty('--gy', `${(y * 100).toFixed(1)}%`);
-      });
-      qsScene.addEventListener('pointerleave', () => {
-        qsCard.classList.remove('is-live'); qsCard.classList.add('is-rest');
-        qsCard.style.setProperty('--rx', '0deg'); qsCard.style.setProperty('--ry', '0deg');
-      });
-    }
-  }
 
   /* ---------- Portfolio: galería horizontal ----------
      Escritorio: la sección .pf es tan alta como el recorrido horizontal + una pantalla.
@@ -536,7 +430,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  /* ---------- Quién soy · baraja de cartas (solo móvil, CSS la oculta en escritorio) ---------- */
+  /* ---------- Quién soy · cartas ----------
+     Móvil (≤820px): baraja que se desliza. Escritorio: todas las tarjetas a la vista en rejilla. */
   const qdDeck = document.getElementById('qdDeck');
   if (qdDeck) {
     const horaQd = () => {
@@ -544,25 +439,57 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Intl.DateTimeFormat('es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
       } catch (e) { return new Date().toLocaleTimeString().slice(0, 5); }
     };
-    const edadNum = parseInt(QS.edad, 10) || QS.edad;
-    const edadUnit = String(QS.edad).replace(/^\d+\s*/, '');
-    const ciudad = QS.ciudad.split(',');
-    const nProy = QS.proyectos.join('·').split('·').length;
-
-    // [etiqueta, color, grande, unidad, tamaño de letra, líneas [clase, texto], copiar]
-    const CARDS = [
-      { id: true },
-      { k: 'Edad', c: 'var(--green)', big: String(edadNum), unit: edadUnit, lines: [['', `${QS.edad}.`]] },
-      { k: 'Vivo en', c: 'var(--accent)', big: ciudad[0], unit: (ciudad[1] || '').trim(), fs: '2.55rem', lines: [['', `Vivo en ${QS.ciudad}.`], ['d clock', '']] },
-      { k: 'Idiomas', c: 'var(--white)', big: 'CA · ES · EN', fs: '2.6rem', lines: QS.idiomas.map(t => ['', t]) },
-      { k: 'Stack', c: 'var(--green)', big: QS.stack[0], fs: '2.3rem', lines: QS.stack.slice(1).map(t => ['d', t]) },
-      { k: 'Proyectos', c: 'var(--accent)', big: String(nProy), unit: 'proyectos', lines: QS.proyectos.map(t => ['', t]) },
-      { k: 'Estado', c: 'var(--green)', big: 'Abierto', fs: '3.4rem', lines: [['ok', `● ${QS.estado}.`]] },
-      { k: 'Contacto', c: 'var(--white)', big: 'Escríbeme', fs: '2.5rem', lines: [['', QS.email]], copy: true }
-    ];
-    const n = CARDS.length;
     const pad = (x) => String(x).padStart(2, '0');
     const mk = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+    const COL = { g: '#00ff87', c: '#e0805f', m: '#f0ede8' };
+
+    /* --- dibujos de cada carta (HTML/SVG propio, sin datos externos) --- */
+    const visEdad = () => {
+      const tens = Math.floor(QS.edad / 10), ones = QS.edad % 10;
+      const strip = (n) => Array.from({ length: n }, (_, i) => `<i>${i % 10}</i>`).join('');
+      let ticks = '';
+      for (let i = 0; i <= 30; i++) {
+        const x = 6 + i * 9.6, big = i % 5 === 0, cls = i <= QS.edad ? 'on' : 'off';
+        ticks += `<line class="${cls}" x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${big ? 2 : 8}" y2="14"/>`;
+        if (big) ticks += `<text x="${x.toFixed(1)}" y="26">${i}</text>`;
+      }
+      const mx = (QS.edad * 9.6).toFixed(1);
+      return `<div class="qd-age"><div class="qd-odo" role="img" aria-label="${QS.edad} años">` +
+        `<span class="qd-odo__d" style="--v:${tens}"><span>${strip(10)}</span></span>` +
+        `<span class="qd-odo__d" style="--v:${10 + ones}"><span>${strip(20)}</span></span></div>` +
+        `<div class="qd-age__u">años</div>` +
+        `<svg class="qd-ruler" viewBox="0 0 300 30" aria-hidden="true">${ticks}<g class="mk" style="--mx:${mx}px"><line x1="6" x2="6" y1="0" y2="14"/><path d="M6,14 l-4.5,7 h9z"/></g></svg></div>`;
+    };
+    const visMapa = () =>
+      `<svg class="qd-map" viewBox="0 0 330 240" role="img" aria-label="Silueta de Catalunya con Barcelona y ${QS.ciudad} señaladas">` +
+      `<path class="qd-map__land" d="M26,240 L20,237 L20,234 L17,231 L8,229 L7,226 L9,223 L7,221 L5,222 L4,218 L0,218 L0,216 L4,215 L8,209 L5,203 L9,195 L7,189 L8,189 L2,182 L2,178 L3,177 L6,178 L6,176 L10,174 L12,168 L15,168 L16,162 L14,157 L16,155 L11,150 L14,145 L13,141 L17,141 L21,135 L20,129 L14,129 L14,126 L12,123 L12,121 L16,115 L17,116 L18,113 L23,112 L24,109 L26,107 L28,107 L30,103 L31,104 L33,102 L32,100 L33,96 L30,95 L32,91 L33,92 L35,89 L38,87 L37,86 L40,78 L40,73 L42,72 L40,71 L42,65 L45,55 L44,54 L46,52 L42,51 L44,49 L40,38 L43,37 L42,36 L46,26 L40,24 L40,21 L37,18 L39,16 L37,10 L38,6 L37,2 L39,1 L41,0 L53,4 L58,7 L60,6 L62,8 L69,8 L72,9 L76,16 L81,14 L83,15 L91,15 L90,16 L93,18 L97,27 L96,29 L98,30 L95,33 L98,33 L99,36 L96,39 L97,40 L98,44 L106,44 L106,42 L114,40 L114,38 L117,38 L119,37 L119,38 L128,39 L131,42 L135,42 L138,50 L141,53 L147,51 L150,46 L153,45 L156,46 L160,43 L173,48 L177,54 L182,54 L183,52 L192,53 L190,49 L192,49 L192,47 L198,45 L199,46 L203,43 L204,41 L206,42 L207,40 L210,42 L213,39 L214,41 L220,40 L223,45 L226,43 L229,44 L229,51 L232,54 L234,52 L236,55 L237,54 L240,55 L238,62 L234,63 L233,64 L230,61 L227,63 L225,67 L226,75 L230,77 L233,81 L232,86 L234,93 L230,102 L225,104 L220,111 L215,113 L212,118 L203,120 L199,125 L176,135 L169,140 L161,144 L153,153 L151,160 L115,171 L105,172 L94,178 L86,178 L81,182 L80,180 L79,181 L77,185 L73,183 L62,187 L40,211 L43,215 L45,215 L47,214 L43,212 L46,212 L50,218 L54,219 L53,222 L45,228 L39,236 L35,237 L32,234 L34,234 L37,235 L37,233 L41,233 L44,228 L33,230 L28,235Z"/>` +
+      `<path class="qd-map__lead" d="M153,151 L176,172 M182,131 L202,112"/>` +
+      `<circle class="qd-map__ring" cx="182" cy="131" r="7"/>` +
+      `<circle class="qd-map__pin" cx="153" cy="151" r="5"/><circle class="qd-map__pin" cx="182" cy="131" r="5"/>` +
+      `<text x="180" y="184">Barcelona</text><text x="206" y="109">${QS.ciudad}</text></svg>`;
+    const visIdiomas = () => '<div class="qd-lang">' + QS.idiomas.map(l => {
+      let s = ''; for (let i = 0; i < 6; i++) s += `<i class="${i < l.v ? 'on' : ''}" style="--n:${i}"></i>`;
+      return `<div><b>${l.n}<span>${l.l}</span></b><div class="qd-seg">${s}</div></div>`;
+    }).join('') + '</div>';
+    const visStack = () => '<div class="qd-tags">' + QS.stack.map((t, i) =>
+      `<span class="${t[2] ? 'f' : ''}" style="--tc:${COL[t[1]]};--n:${i}">${t[0]}</span>`).join('') + '</div>';
+    const visProyectos = () => '<div class="qd-list">' + QS.proyectos.map((p, i) =>
+      `<a href="${p[1]}" draggable="false" style="--n:${i}"><em>${pad(i + 1)}</em>${p[0]}<b aria-hidden="true">→</b></a>`).join('') + '</div>';
+    const visEstado = () =>
+      `<div class="qd-sign-wrap"><div class="qd-sign" role="img" aria-label="${QS.estado}"><b>ABIERTO</b><small>a nuevas ofertas</small></div></div>`;
+    const visArroba = () => '<div class="qd-at" aria-hidden="true">@</div>';
+
+    const CARDS = [
+      { id: true },
+      { k: 'Edad', c: 'var(--green)', vis: visEdad },
+      { k: 'Vivo en', c: 'var(--accent)', head: [QS.ciudad, '2rem'], vis: visMapa, lines: [['', `Vivo en ${QS.ciudad}, ${QS.provincia}.`], ['d clock', '']] },
+      { k: 'Idiomas', c: 'var(--white)', head: ['CA · ES · EN', '2rem'], vis: visIdiomas },
+      { k: 'Stack', c: 'var(--green)', vis: visStack },
+      { k: 'Proyectos', c: 'var(--accent)', head: [String(QS.proyectos.length), '3rem', 'proyectos'], vis: visProyectos },
+      { k: 'Estado', c: 'var(--green)', vis: visEstado, lines: [['ok', `● ${QS.estado}.`]] },
+      { k: 'Contacto', c: 'var(--white)', head: ['Escríbeme', '2.1rem'], vis: visArroba, lines: [['', QS.email]], copy: true }
+    ];
+    const n = CARDS.length;
 
     const els = CARDS.map((c, i) => {
       const card = mk('div', 'qd-card');
@@ -577,22 +504,27 @@ document.addEventListener('DOMContentLoaded', () => {
         body.append(mk('div', 'qd-card__pic', 'Tu foto aquí'), name, go);
       } else {
         card.style.setProperty('--c', c.c);
-        if (c.fs) card.style.setProperty('--fs', c.fs);
         stripe.append(mk('span', '', c.k), mk('span', '', `${pad(i + 1)} / ${pad(n)}`));
-        const big = mk('div', 'qd-card__big', c.big);
-        if (c.unit) big.append(mk('small', '', c.unit));
-        const lines = mk('div', 'qd-card__lines');
-        c.lines.forEach(([cls, t]) => { const l = mk('div', cls.replace('clock', '').trim(), t); if (cls.includes('clock')) l.dataset.clock = ''; lines.append(l); });
-        if (c.copy) {
-          const b = mk('button', 'qd-copy', 'Copiar email'); b.type = 'button';
-          b.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const ok = () => { b.classList.add('is-ok'); b.textContent = 'Copiado'; setTimeout(() => { b.classList.remove('is-ok'); b.textContent = 'Copiar email'; }, 1600); };
-            if (navigator.clipboard) navigator.clipboard.writeText(QS.email).then(ok, () => {});
-          });
-          lines.append(b);
+        if (c.head) {
+          const h = mk('div', 'qd-head', c.head[0]); h.style.setProperty('--fs', c.head[1]);
+          if (c.head[2]) h.append(mk('small', '', c.head[2]));
+          body.append(h);
         }
-        body.append(big, lines);
+        const vis = mk('div', 'qd-vis'); vis.innerHTML = c.vis(); body.append(vis);
+        if (c.lines || c.copy) {
+          const lines = mk('div', 'qd-lines');
+          (c.lines || []).forEach(([cls, t]) => { const l = mk('div', cls.replace('clock', '').trim(), t); if (cls.includes('clock')) l.dataset.clock = ''; lines.append(l); });
+          if (c.copy) {
+            const b = mk('button', 'qd-copy', 'Copiar email'); b.type = 'button';
+            b.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const ok = () => { b.classList.add('is-ok'); b.textContent = 'Copiado'; setTimeout(() => { b.classList.remove('is-ok'); b.textContent = 'Copiar email'; }, 1600); };
+              if (navigator.clipboard) navigator.clipboard.writeText(QS.email).then(ok, () => {});
+            });
+            lines.append(b);
+          }
+          body.append(lines);
+        }
       }
       card.append(stripe, body, mk('div', 'qd-card__glare'));
       qdDeck.append(card);
@@ -601,17 +533,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const paintClock = () => qdDeck.querySelectorAll('[data-clock]').forEach(x => { x.textContent = `Allí son las ${horaQd()}.`; });
     paintClock(); setInterval(paintClock, 20000);
 
+    // El cursor personalizado también reacciona a los enlaces y botones de las cartas
+    qdDeck.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-active'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
+    });
+
     const dotsEl = document.getElementById('qdDots');
     CARDS.forEach(() => dotsEl.append(document.createElement('i')));
     const countEl = document.getElementById('qdCount');
     const hintEl = document.querySelector('.qd__hint');
     const ROT = [0, -2.4, 2.2];
-    let cur = 0, busy = false, drag = null;
+    const mq = window.matchMedia('(max-width:820px)');
+    let mobile = mq.matches, cur = 0, busy = false, drag = null, suppress = false, io = null;
 
+    /* ---- Móvil: baraja ---- */
     const place = (el, i) => {
       const d = (i - cur + n) % n;
       el.style.zIndex = n - d;
       el.classList.toggle('is-top', d === 0);
+      el.classList.toggle('is-in', d === 0);   // los dibujos se animan cuando la carta llega al frente
       el.inert = d !== 0;
       if (d < 3) { el.style.opacity = 1; el.style.transform = `translateY(${d * 15}px) scale(${1 - d * 0.055}) rotate(${ROT[d]}deg)`; }
       else { el.style.opacity = 0; el.style.transform = 'translateY(36px) scale(.84)'; }
@@ -622,7 +563,6 @@ document.addEventListener('DOMContentLoaded', () => {
       countEl.textContent = `${pad(cur + 1)} / ${pad(n)} · ${cur === 0 ? 'Carnet' : CARDS[cur].k}`;
     };
     const seen = () => { if (hintEl) hintEl.classList.add('is-seen'); };
-
     const fling = (dir) => {
       if (busy) return; busy = true;
       const el = els[cur];
@@ -644,14 +584,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     qdDeck.addEventListener('pointerdown', (e) => {
-      if (busy || !els[cur].contains(e.target) || e.target.closest('button')) return;
-      drag = { x: e.clientX, y: e.clientY, dx: 0, t: Date.now(), moved: false, id: e.pointerId };
+      if (!mobile || busy || !els[cur].contains(e.target) || e.target.closest('button')) return;
+      drag = { x: e.clientX, y: e.clientY, dx: 0, t: Date.now(), moved: false, id: e.pointerId, link: !!e.target.closest('a') };
     });
     qdDeck.addEventListener('pointermove', (e) => {
       if (!drag || e.pointerId !== drag.id) return;
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (!drag.moved) {
-        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) { drag = null; return; }  // es scroll vertical: no lo bloqueamos
+        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) { drag = null; return; }  // scroll vertical: no lo bloqueamos
         if (Math.abs(dx) < 6) return;
         drag.moved = true; els[cur].classList.add('is-drag');
         try { qdDeck.setPointerCapture(e.pointerId); } catch (_) {}
@@ -663,20 +603,47 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!drag || e.pointerId !== drag.id) return;
       const d = drag; drag = null;
       els[cur].classList.remove('is-drag');
-      if (!d.moved) { seen(); fling(1); return; }  // un toque también pasa de carta
+      if (!d.moved) { if (!d.link) { seen(); fling(1); } return; }  // un toque pasa de carta; un enlace se abre
+      suppress = true; setTimeout(() => { suppress = false; }, 60);  // al deslizar sobre un enlace, no lo abrimos
       const v = Math.abs(d.dx) / Math.max(1, Date.now() - d.t);
       if (Math.abs(d.dx) > 90 || v > 0.5) { seen(); fling(d.dx > 0 ? 1 : -1); } else place(els[cur], cur);
     });
+    qdDeck.addEventListener('click', (e) => { if (suppress) { e.preventDefault(); e.stopPropagation(); } }, true);
     qdDeck.addEventListener('pointercancel', () => {
       if (!drag) return; drag = null; els[cur].classList.remove('is-drag'); place(els[cur], cur);
     });
     qdDeck.addEventListener('keydown', (e) => {
+      if (!mobile) return;
       if (e.key === 'ArrowRight') { e.preventDefault(); seen(); fling(1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); seen(); back(); }
     });
     document.getElementById('qdNext').addEventListener('click', () => { seen(); fling(1); });
     document.getElementById('qdPrev').addEventListener('click', () => { seen(); back(); });
-    render();
+
+    /* ---- Escritorio: rejilla; cada tarjeta entra (y anima su dibujo) al verse ---- */
+    const setMode = () => {
+      mobile = mq.matches;
+      if (io) { io.disconnect(); io = null; }
+      els.forEach(el => {
+        el.style.transform = ''; el.style.opacity = ''; el.style.zIndex = ''; el.style.transition = '';
+        el.inert = false; el.classList.remove('is-top', 'is-in', 'is-drag');
+      });
+      if (mobile) {
+        qdDeck.tabIndex = 0;
+        render();
+      } else {
+        qdDeck.removeAttribute('tabindex');
+        els.forEach((el, i) => el.style.setProperty('--d', `${(i % 4) * 0.09}s`));
+        if ('IntersectionObserver' in window) {
+          io = new IntersectionObserver((entries) => {
+            entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+          }, { threshold: 0.2 });
+          els.forEach(el => io.observe(el));
+        } else els.forEach(el => el.classList.add('is-in'));
+      }
+    };
+    mq.addEventListener('change', setMode);
+    setMode();
   }
 
 

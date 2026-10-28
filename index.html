@@ -74,7 +74,7 @@
   </div>
 
   <!-- ============ QUIÉN SOY ============ -->
-  <!-- TODO: datos de EJEMPLO (edad, idiomas, stack, disponibilidad, email). Los textos de la terminal y la fecha de nacimiento están en script.js, objeto QS. -->
+  <!-- Los datos de las cartas (edad, ciudad, idiomas, stack, proyectos, estado, email) están en script.js, objeto QS. -->
   <section class="qs" id="quien-soy">
     <div class="section-head qs__head">
       <div>
@@ -83,46 +83,10 @@
       </div>
     </div>
 
-    <div class="qs__wrap">
-      <div class="qs__left">
-      <p class="qs__hint"><span aria-hidden="true">↓</span> Pulsa un dato del carnet</p>
-      <div class="qs-scene" id="qsScene">
-        <div class="qs-card" id="qsCard">
-          <div class="qs-face">
-            <div class="qs-stripe"><span>Carnet</span><span>BCN</span></div>
-            <!-- TODO: sustituir por tu foto (formato 4:5) -->
-            <div class="qs-pic">Tu foto aquí</div>
-            <div class="qs-name">Genís<br>Bernabé<i aria-hidden="true"></i></div>
-            <div class="qs-fields">
-              <button type="button" class="qs-fld is-hint" data-cmd="edad"><small>Edad</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="donde"><small>Vivo en</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="idiomas"><small>Idiomas</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="stack"><small>Stack</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="proyectos"><small>Proyectos</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="disponible"><small>Estado</small><em aria-hidden="true">→</em></button>
-              <button type="button" class="qs-fld" data-cmd="contacto"><small>Contacto</small><em aria-hidden="true">→</em></button>
-            </div>
-            <div class="qs-foil" aria-hidden="true"></div>
-            <div class="qs-glare" aria-hidden="true"></div>
-          </div>
-        </div>
-      </div>
-      </div>
-
-      <div class="qs-term">
-        <div class="qs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>genis@bcn ~</span></div>
-        <div class="qs-out" id="qsOut" role="log" aria-live="polite"></div>
-        <form class="qs-in" id="qsForm" autocomplete="off">
-          <span class="qs-in__mark" aria-hidden="true"></span>
-          <input id="qsCmd" type="text" aria-label="Escribe un comando" placeholder="o escribe: edad, donde, stack, help…" spellcheck="false" autocapitalize="off">
-        </form>
-      </div>
-    </div>
-
-    <!-- Móvil (≤820px): baraja de cartas. En escritorio se oculta y se ve el carnet + terminal de arriba. -->
+    <!-- Cartas: baraja que se desliza en móvil (≤820px) y rejilla de tarjetas en escritorio. Se construyen en script.js a partir del objeto QS. -->
     <div class="qd" id="qd">
       <p class="qd__hint"><span aria-hidden="true">→</span> Desliza el carnet</p>
-      <div class="qd-deck" id="qdDeck" tabindex="0" aria-label="Baraja de datos. Usa las flechas del teclado para cambiar de carta."></div>
+      <div class="qd-deck" id="qdDeck" role="group" aria-label="Datos de Genís Bernabé. En móvil, usa las flechas del teclado para cambiar de carta."></div>
       <div class="qd-bar">
         <button type="button" class="qd-arrow" id="qdPrev" aria-label="Carta anterior">←</button>
         <div class="qd-mid">
