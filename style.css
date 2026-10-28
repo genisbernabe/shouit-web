@@ -1125,6 +1125,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 @media (prefers-reduced-motion:reduce){.svc-view{animation:none;}}
 
+/* Fotografía: mosaico (1 grande + 5). Móvil: grande a todo ancho y el resto de 2 en 2. */
+/* Publicaciones: 4 en fila (escritorio) / 2×2 (móvil), recortadas a 4:5 */
+.svc-media .proyecto-posts--4{grid-template-columns:repeat(2,minmax(0,1fr));}
+.proyecto-posts--4 img{aspect-ratio:4/5;object-fit:cover;}
+@media (min-width:720px){.svc-media .proyecto-posts--4{grid-template-columns:repeat(4,minmax(0,1fr));}}
+
+.proyecto-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;}
+.proyecto-photos img{display:block;width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--line);transition:transform .5s var(--ease),filter .3s;}
+.proyecto-photos img:first-child{grid-column:1/-1;aspect-ratio:3/2;}
+.proyecto-photos img:last-child{grid-column:1/-1;aspect-ratio:3/2;}
+.proyecto-photos img:hover{filter:brightness(1.08);}
+@media (min-width:720px){
+  .proyecto-photos{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(3,1fr);aspect-ratio:3/2;gap:.65rem;}
+  .proyecto-photos img,.proyecto-photos img:first-child{aspect-ratio:auto;min-height:0;}
+  .proyecto-photos img:first-child{grid-column:1/3;grid-row:1/3;}
+  .proyecto-photos img:last-child{grid-column:auto;}
+}
+
+
 /* ---- bloque de detalle con subtítulo, lista y nota (p. ej. LearnWorlds) ---- */
 .proyecto-sub{
   margin:0 0 1.1rem;
