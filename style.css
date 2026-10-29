@@ -349,12 +349,23 @@ img{max-width:100%;display:block;}
 .qd__hint.is-seen span{animation:none;}
 @keyframes qdNudgeX{50%{transform:translateX(6px);}}
 
-.qd-deck{position:relative;height:min(31rem,calc(100svh - 11rem));min-height:26rem;margin-bottom:2.2rem;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
+.qd-deck{perspective:1600px;position:relative;height:min(31rem,calc(100svh - 11rem));min-height:26rem;margin-bottom:2.2rem;touch-action:pan-y;outline:none;user-select:none;-webkit-user-select:none;}
 .qd-card{
   position:absolute;inset:0;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;container-type:inline-size;
   background:linear-gradient(165deg,#2c2c29,#1f1f1d);color:var(--white);
   border:1px solid color-mix(in srgb, var(--white) 16%, transparent);
   transform-origin:50% 100%;transition:transform .5s var(--ease),opacity .4s,border-color .25s;will-change:transform;touch-action:pan-y;
+}
+.qd-deck.is-wait .qd-card{visibility:hidden;}
+/* Dorso de la carta: se ve mientras se reparte (boca abajo) y desaparece al darse la vuelta */
+.qd-card__back{
+  position:absolute;inset:0;z-index:6;display:grid;place-items:center;pointer-events:none;opacity:0;transform:scaleX(-1);
+  background:#10100f repeating-linear-gradient(45deg,rgba(0,255,135,.09) 0 2px,transparent 2px 11px);
+}
+.qd-card__back::before{content:"";position:absolute;inset:8px;border:1px solid rgba(0,255,135,.35);border-radius:9px;}
+.qd-card__back b{
+  position:relative;font-family:var(--font-display);font-weight:400;font-size:min(22cqw,3.4rem);line-height:1;color:var(--green);
+  background:#10100f;border:1px solid rgba(0,255,135,.45);border-radius:50%;padding:.18em .3em;
 }
 .qd-card.is-top{cursor:grab;}
 .qd-card.is-drag{transition:none;cursor:grabbing;}
@@ -490,6 +501,9 @@ img{max-width:100%;display:block;}
   .qd-card.is-in{opacity:1;transform:none;transition:opacity .7s var(--ease) var(--d,0s),transform .8s var(--ease) var(--d,0s),border-color .25s;}
   .qd-card.is-in:hover{transform:translateY(-6px);border-color:color-mix(in srgb, var(--c,var(--green)) 70%, transparent);transition:transform .35s var(--ease),border-color .25s;}
   .qd-card:first-child{--c:var(--green);}
+  /* Tras el reparto: estado final fijo (la animación de entrada la hace script.js) */
+  .qd-card.is-dealt,.qd-card.is-dealt.is-in{opacity:1;transform:none;transition:border-color .25s;}
+  .qd-card.is-dealt:hover{transform:translateY(-6px);border-color:color-mix(in srgb, var(--c,var(--green)) 70%, transparent);transition:transform .35s var(--ease),border-color .25s;}
 }
 @media (min-width:1100px){
   .qd-deck{grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;}

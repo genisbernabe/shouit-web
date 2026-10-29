@@ -560,7 +560,8 @@ document.addEventListener('DOMContentLoaded', () => {
             body.append(lines);
           }
         }
-        card.append(stripe, body, mk('div', 'qd-card__glare'));
+        const back = mk('div', 'qd-card__back'); back.setAttribute('aria-hidden', 'true'); back.append(mk('b', '', 'G.'));
+        card.append(stripe, body, back, mk('div', 'qd-card__glare'));
         qdDeck.append(card);
         return card;
       });
@@ -656,26 +657,69 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('qdNext').addEventListener('click', () => { seen(); fling(1); });
     document.getElementById('qdPrev').addEventListener('click', () => { seen(); back(); });
 
-    /* ---- Escritorio: rejilla; cada tarjeta entra (y anima su dibujo) al verse ---- */
+    /* ---- Reparto: al verse la sección, las cartas salen de un montón boca abajo, vuelan a su sitio y se dan la vuelta ---- */
+    let dealt = false;
+    const RND = [.62, -.4, .9, -.75, .3, -.95, .55, -.2];
+    const deal = () => {
+      dealt = true;
+      const dr = qdDeck.getBoundingClientRect();
+      const rects = els.map(e => e.getBoundingClientRect());
+      const mid = r => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      const pile = mobile ? mid(rects[0]) : { x: dr.left + dr.width / 2, y: dr.top + dr.height / 2 };
+      const DUR = 900, STEP = mobile ? 190 : 150, START = 200;
+      const running = [];
+      busy = true;
+      els.forEach((el, i) => {
+        const order = mobile ? n - 1 - i : i, delay = START + order * STEP;
+        const p = mid(rects[i]), dx = pile.x - p.x, dy = pile.y - p.y;
+        const sx = mobile ? dx + window.innerWidth * 0.9 : dx, sy = mobile ? dy - 320 : dy;
+        const rs = mobile ? 32 : RND[i % 8] * 2;
+        const fin = el.style.transform && el.style.transform !== 'none' ? ' ' + el.style.transform : '';
+        const finOp = mobile && el.style.opacity === '0' ? 0 : 1;
+        const ease = 'cubic-bezier(.3,.7,.2,1)';
+        if (!mobile) { el.classList.add('is-dealt'); el.style.zIndex = n - order; setTimeout(() => { el.style.zIndex = 100 + order; }, delay); }
+        const opt = { duration: DUR, delay, fill: 'both', easing: 'linear' };
+        running.push(el.animate([
+          { transform: `translate(${sx}px,${sy}px) rotate(${rs}deg) scale(.97)${fin}`, opacity: 1, easing: ease },
+          { transform: `translate(${sx * .35}px,${sy * .35 - 70}px) rotate(${RND[i % 8] * 7}deg) scale(1.1)${fin}`, opacity: 1, offset: .5, easing: ease },
+          { transform: `translate(0px,0px) rotate(0deg) scale(1)${fin}`, opacity: finOp }
+        ], opt));
+        running.push(el.animate([
+          { rotate: 'y 180deg' },
+          { rotate: 'y 180deg', offset: .3, easing: 'ease-in-out' },
+          { rotate: 'y 0deg' }
+        ], opt));
+        running.push(el.querySelector('.qd-card__back').animate([
+          { opacity: 1 }, { opacity: 1, offset: .649 }, { opacity: 0, offset: .65 }, { opacity: 0 }
+        ], opt));
+        if (!mobile) setTimeout(() => el.classList.add('is-in'), delay + DUR * .6);   // el dibujo de la carta arranca al darse la vuelta
+      });
+      qdDeck.classList.remove('is-wait');
+      setTimeout(() => {
+        running.forEach(a => a.cancel());
+        if (!mobile) els.forEach(el => { el.style.zIndex = ''; });
+        busy = false;
+      }, START + (n - 1) * STEP + DUR + 60);
+    };
+
     const setMode = () => {
       mobile = mq.matches;
       if (io) { io.disconnect(); io = null; }
       els.forEach(el => {
         el.style.transform = ''; el.style.opacity = ''; el.style.zIndex = ''; el.style.transition = '';
-        el.inert = false; el.classList.remove('is-top', 'is-in', 'is-drag');
+        el.inert = false; el.classList.remove('is-top', 'is-in', 'is-drag', 'is-dealt');
       });
-      if (mobile) {
-        qdDeck.tabIndex = 0;
-        render();
+      qdDeck.classList.remove('is-wait');
+      if (mobile) { qdDeck.tabIndex = 0; render(); }
+      else qdDeck.removeAttribute('tabindex');
+      if (dealt || reduceMotion || !('IntersectionObserver' in window)) {
+        dealt = true;
+        if (!mobile) els.forEach(el => el.classList.add('is-dealt', 'is-in'));
       } else {
-        qdDeck.removeAttribute('tabindex');
-        els.forEach((el, i) => el.style.setProperty('--d', `${(i % 4) * 0.09}s`));
-        if ('IntersectionObserver' in window) {
-          io = new IntersectionObserver((entries) => {
-            entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
-          }, { threshold: 0.2 });
-          els.forEach(el => io.observe(el));
-        } else els.forEach(el => el.classList.add('is-in'));
+        // Las cartas esperan ocultas hasta que la sección se ve; entonces se reparten.
+        qdDeck.classList.add('is-wait');
+        io = new IntersectionObserver(([en]) => { if (en.isIntersecting) { io.disconnect(); io = null; deal(); } }, { threshold: mobile ? 0.5 : 0.3 });
+        io.observe(qdDeck);
       }
     };
     mq.addEventListener('change', setMode);
