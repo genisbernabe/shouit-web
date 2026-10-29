@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Idioma (ver i18n.js): t('texto en castellano') devuelve el texto en el idioma activo.
+  const t = (es, vars) => (window.I18N ? window.I18N.t(es, vars) : (vars ? es.replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m)) : es));
+  const onLang = fn => { if (window.I18N) window.I18N.onChange(fn); };
+
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- Footer year ---------- */
@@ -15,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const NAME_START = 0.3;  // s — cuándo empieza a subir la primera palabra
   const WORD_GAP = 0.12;   // s — retraso de la segunda palabra
   const RISE = 0.6;        // s — momento en que el nombre ya está prácticamente arriba
-  const t = (s) => (reduceMotion ? '0s' : `${s.toFixed(2)}s`);
+  const sec = (s) => (reduceMotion ? '0s' : `${s.toFixed(2)}s`);
 
   if (brand) {
     const words = name.split(' ');
@@ -29,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
         inner.className = 'lf';
         inner.textContent = ch;
         span.appendChild(inner);
-        span.style.animationDelay = t(NAME_START + wi * WORD_GAP);
+        span.style.animationDelay = sec(NAME_START + wi * WORD_GAP);
         wordEl.appendChild(span);
       });
       if (wi === words.length - 1) {
         const dot = document.createElement('span');
         dot.className = 'hero__dot';
         dot.setAttribute('aria-hidden', 'true');
-        dot.style.setProperty('--d', t(NAME_START + wi * WORD_GAP + RISE));
+        dot.style.setProperty('--d', sec(NAME_START + wi * WORD_GAP + RISE));
         wordEl.appendChild(dot);
       }
       brand.appendChild(wordEl);
@@ -47,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const eyebrow = document.querySelector('.hero__eyebrow');
     const sub = document.querySelector('.hero__sub');
     const scrollCue = document.querySelector('.hero__scroll');
-    if (eyebrow) eyebrow.style.setProperty('--d', t(rest));
+    if (eyebrow) eyebrow.style.setProperty('--d', sec(rest));
     document.querySelectorAll('.hero__prompt .w').forEach((w, k) => {
-      w.style.animationDelay = t(rest + 0.15 + k * 0.12);
+      w.style.animationDelay = sec(rest + 0.15 + k * 0.12);
     });
-    if (sub) sub.style.setProperty('--d', t(rest + 0.6));
-    if (scrollCue) scrollCue.style.setProperty('--d', t(rest + 0.8));
-    document.documentElement.style.setProperty('--nav-d', t(rest + 0.1));
+    if (sub) sub.style.setProperty('--d', sec(rest + 0.6));
+    if (scrollCue) scrollCue.style.setProperty('--d', sec(rest + 0.8));
+    document.documentElement.style.setProperty('--nav-d', sec(rest + 0.1));
 
     /* ---------- Nombre elástico (solo al pasar el cursor) ----------
        Cada letra se alza un poco, se inclina y se tiñe de verde según lo cerca que esté
@@ -323,9 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let curStop = -1;
     const showStage = idx => {
       const d = TL[idx];
-      kick.innerHTML = tlIcon(d.ic) + `<span>${d.k}</span>`; title.textContent = d.h; text.textContent = d.p;
+      kick.innerHTML = tlIcon(d.ic) + `<span>${t(d.k)}</span>`; title.textContent = t(d.h); text.textContent = t(d.p);
       chips.innerHTML = '';
-      d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
+      d.c.forEach(c => { const li = document.createElement('li'); li.textContent = t(c); chips.appendChild(li); });
     };
     // La caja de texto mide siempre lo que la etapa más larga: así la barra de arrastre no se mueve al cambiar de año.
     const txtBox = document.querySelector('.tl__txt');
@@ -399,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     paint(Y0);
     lockHeight();
+    onLang(lockHeight);   // al cambiar de idioma se vuelve a pintar la etapa y a medir la caja de texto
 
     // Al llegar a la sección, la pastilla se mueve sola hacia 2021 y vuelve, para enseñar el gesto.
     if (!reduceTl && 'IntersectionObserver' in window) {
@@ -459,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (qdDeck) {
     const horaQd = () => {
       try {
-        return new Intl.DateTimeFormat('es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+        return new Intl.DateTimeFormat(window.I18N && window.I18N.lang === 'ca' ? 'ca-ES' : 'es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
       } catch (e) { return new Date().toLocaleTimeString().slice(0, 5); }
     };
     const pad = (x) => String(x).padStart(2, '0');
@@ -477,14 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (big) ticks += `<text x="${x.toFixed(1)}" y="26">${i}</text>`;
       }
       const mx = (QS.edad * 9.6).toFixed(1);
-      return `<div class="qd-age"><div class="qd-odo" role="img" aria-label="${QS.edad} años">` +
+      return `<div class="qd-age"><div class="qd-odo" role="img" aria-label="${t('{n} años', { n: QS.edad })}">` +
         `<span class="qd-odo__d" style="--v:${tens}"><span>${strip(10)}</span></span>` +
         `<span class="qd-odo__d" style="--v:${10 + ones}"><span>${strip(20)}</span></span></div>` +
-        `<div class="qd-age__u">años</div>` +
+        `<div class="qd-age__u">${t('años')}</div>` +
         `<svg class="qd-ruler" viewBox="0 0 300 30" aria-hidden="true">${ticks}<g class="mk" style="--mx:${mx}px"><line x1="6" x2="6" y1="0" y2="14"/><path d="M6,14 l-4.5,7 h9z"/></g></svg></div>`;
     };
     const visMapa = () =>
-      `<svg class="qd-map" viewBox="0 0 330 240" role="img" aria-label="Silueta de Catalunya con Barcelona y ${QS.ciudad} señaladas">` +
+      `<svg class="qd-map" viewBox="0 0 330 240" role="img" aria-label="${t('Silueta de Catalunya con Barcelona y {ciudad} señaladas', { ciudad: QS.ciudad })}">` +
       `<path class="qd-map__land" d="M26,240 L20,237 L20,234 L17,231 L8,229 L7,226 L9,223 L7,221 L5,222 L4,218 L0,218 L0,216 L4,215 L8,209 L5,203 L9,195 L7,189 L8,189 L2,182 L2,178 L3,177 L6,178 L6,176 L10,174 L12,168 L15,168 L16,162 L14,157 L16,155 L11,150 L14,145 L13,141 L17,141 L21,135 L20,129 L14,129 L14,126 L12,123 L12,121 L16,115 L17,116 L18,113 L23,112 L24,109 L26,107 L28,107 L30,103 L31,104 L33,102 L32,100 L33,96 L30,95 L32,91 L33,92 L35,89 L38,87 L37,86 L40,78 L40,73 L42,72 L40,71 L42,65 L45,55 L44,54 L46,52 L42,51 L44,49 L40,38 L43,37 L42,36 L46,26 L40,24 L40,21 L37,18 L39,16 L37,10 L38,6 L37,2 L39,1 L41,0 L53,4 L58,7 L60,6 L62,8 L69,8 L72,9 L76,16 L81,14 L83,15 L91,15 L90,16 L93,18 L97,27 L96,29 L98,30 L95,33 L98,33 L99,36 L96,39 L97,40 L98,44 L106,44 L106,42 L114,40 L114,38 L117,38 L119,37 L119,38 L128,39 L131,42 L135,42 L138,50 L141,53 L147,51 L150,46 L153,45 L156,46 L160,43 L173,48 L177,54 L182,54 L183,52 L192,53 L190,49 L192,49 L192,47 L198,45 L199,46 L203,43 L204,41 L206,42 L207,40 L210,42 L213,39 L214,41 L220,40 L223,45 L226,43 L229,44 L229,51 L232,54 L234,52 L236,55 L237,54 L240,55 L238,62 L234,63 L233,64 L230,61 L227,63 L225,67 L226,75 L230,77 L233,81 L232,86 L234,93 L230,102 L225,104 L220,111 L215,113 L212,118 L203,120 L199,125 L176,135 L169,140 L161,144 L153,153 L151,160 L115,171 L105,172 L94,178 L86,178 L81,182 L80,180 L79,181 L77,185 L73,183 L62,187 L40,211 L43,215 L45,215 L47,214 L43,212 L46,212 L50,218 L54,219 L53,222 L45,228 L39,236 L35,237 L32,234 L34,234 L37,235 L37,233 L41,233 L44,228 L33,230 L28,235Z"/>` +
       `<path class="qd-map__lead" d="M153,151 L176,172 M182,131 L202,112"/>` +
       `<circle class="qd-map__ring" cx="182" cy="131" r="7"/>` +
@@ -492,75 +497,83 @@ document.addEventListener('DOMContentLoaded', () => {
       `<text x="180" y="184">Barcelona</text><text x="206" y="109">${QS.ciudad}</text></svg>`;
     const visIdiomas = () => '<div class="qd-lang">' + QS.idiomas.map(l => {
       let s = ''; for (let i = 0; i < 6; i++) s += `<i class="${i < l.v ? 'on' : ''}" style="--n:${i}"></i>`;
-      return `<div><b>${l.n}<span>${l.l}</span></b><div class="qd-seg">${s}</div></div>`;
+      return `<div><b>${t(l.n)}<span>${t(l.l)}</span></b><div class="qd-seg">${s}</div></div>`;
     }).join('') + '</div>';
-    const visStack = () => '<div class="qd-tags">' + QS.stack.map((t, i) =>
-      `<span class="${t[2] ? 'f' : ''}" style="--tc:${COL[t[1]]};--n:${i}">${t[0]}</span>`).join('') + '</div>';
+    const visStack = () => '<div class="qd-tags">' + QS.stack.map((it, i) =>
+      `<span class="${it[2] ? 'f' : ''}" style="--tc:${COL[it[1]]};--n:${i}">${t(it[0])}</span>`).join('') + '</div>';
     const visProyectos = () => '<div class="qd-list">' + QS.proyectos.map((p, i) =>
       `<a href="${p[1]}" draggable="false" style="--n:${i}"><em>${pad(i + 1)}</em>${p[0]}<b aria-hidden="true">→</b></a>`).join('') + '</div>';
     const visEstado = () =>
-      `<div class="qd-sign-wrap"><div class="qd-sign" role="img" aria-label="${QS.estado}"><b>ABIERTO</b><small>a nuevas ofertas</small></div></div>`;
+      `<div class="qd-sign-wrap"><div class="qd-sign" role="img" aria-label="${t(QS.estado)}"><b>${t('ABIERTO')}</b><small>${t('a nuevas ofertas')}</small></div></div>`;
     const visArroba = () => '<div class="qd-at" aria-hidden="true">@</div>';
 
-    const CARDS = [
+    const makeCards = () => [
       { id: true },
-      { k: 'Edad', c: 'var(--green)', vis: visEdad },
-      { k: 'Vivo en', c: 'var(--accent)', head: [QS.ciudad, '2rem'], vis: visMapa, lines: [['', `Vivo en ${QS.ciudad}, ${QS.provincia}.`], ['d clock', '']] },
-      { k: 'Idiomas', c: 'var(--white)', head: ['CA · ES · EN', '2rem'], vis: visIdiomas },
-      { k: 'Stack', c: 'var(--green)', vis: visStack },
-      { k: 'Proyectos', c: 'var(--accent)', head: [String(QS.proyectos.length), '3rem', 'proyectos'], vis: visProyectos },
-      { k: 'Estado', c: 'var(--green)', vis: visEstado, lines: [['ok', `● ${QS.estado}.`]] },
-      { k: 'Contacto', c: 'var(--white)', head: ['Escríbeme', '2.1rem'], vis: visArroba, lines: [['', QS.email]], copy: true }
+      { k: t('Edad'), c: 'var(--green)', vis: visEdad },
+      { k: t('Vivo en'), c: 'var(--accent)', head: [QS.ciudad, '2rem'], vis: visMapa, lines: [['', t('Vivo en {ciudad}, {provincia}.', { ciudad: QS.ciudad, provincia: QS.provincia })], ['d clock', '']] },
+      { k: t('Idiomas'), c: 'var(--white)', head: ['CA · ES · EN', '2rem'], vis: visIdiomas },
+      { k: t('Stack'), c: 'var(--green)', vis: visStack },
+      { k: t('Proyectos'), c: 'var(--accent)', head: [String(QS.proyectos.length), '3rem', t('proyectos')], vis: visProyectos },
+      { k: t('Estado'), c: 'var(--green)', vis: visEstado, lines: [['ok', `● ${t(QS.estado)}.`]] },
+      { k: t('Contacto'), c: 'var(--white)', head: [t('Escríbeme'), '2.1rem'], vis: visArroba, lines: [['', QS.email]], copy: true }
     ];
+    let CARDS = makeCards(), els = [];
     const n = CARDS.length;
+    const DECK_LABEL = qdDeck.getAttribute('aria-label');   // el visor de idioma no toca #qdDeck: su etiqueta se traduce aquí
 
-    const els = CARDS.map((c, i) => {
-      const card = mk('div', 'qd-card');
-      const stripe = mk('div', 'qd-card__stripe');
-      const body = mk('div', 'qd-card__body');
-      if (c.id) {
-        stripe.append(mk('span', '', 'Carnet'), mk('span', '', 'BCN'));
-        // TODO: sustituir por tu foto (formato 4:5)
-        const name = mk('div', 'qd-card__name'); name.append('Genís', document.createElement('br'), 'Bernabé', mk('i'));
-        const go = mk('div', 'qd-card__go'); go.append(mk('span', '', 'Creativo digital'));
-        const sw = mk('span', '', 'Desliza '); sw.append(mk('b', '', '→')); go.append(sw);
-        body.append(mk('div', 'qd-card__pic', 'Tu foto aquí'), name, go);
-      } else {
-        card.style.setProperty('--c', c.c);
-        stripe.append(mk('span', '', c.k), mk('span', '', `${pad(i + 1)} / ${pad(n)}`));
-        if (c.head) {
-          const h = mk('div', 'qd-head', c.head[0]); h.style.setProperty('--fs', c.head[1]);
-          if (c.head[2]) h.append(mk('small', '', c.head[2]));
-          body.append(h);
-        }
-        const vis = mk('div', 'qd-vis'); vis.innerHTML = c.vis(); body.append(vis);
-        if (c.lines || c.copy) {
-          const lines = mk('div', 'qd-lines');
-          (c.lines || []).forEach(([cls, t]) => { const l = mk('div', cls.replace('clock', '').trim(), t); if (cls.includes('clock')) l.dataset.clock = ''; lines.append(l); });
-          if (c.copy) {
-            const b = mk('button', 'qd-copy', 'Copiar email'); b.type = 'button';
-            b.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const ok = () => { b.classList.add('is-ok'); b.textContent = 'Copiado'; setTimeout(() => { b.classList.remove('is-ok'); b.textContent = 'Copiar email'; }, 1600); };
-              if (navigator.clipboard) navigator.clipboard.writeText(QS.email).then(ok, () => {});
-            });
-            lines.append(b);
+    const buildCards = () => {
+      CARDS = makeCards();
+      qdDeck.textContent = '';
+      qdDeck.setAttribute('aria-label', t(DECK_LABEL));
+      els = CARDS.map((c, i) => {
+        const card = mk('div', 'qd-card');
+        const stripe = mk('div', 'qd-card__stripe');
+        const body = mk('div', 'qd-card__body');
+        if (c.id) {
+          stripe.append(mk('span', '', t('Carnet')), mk('span', '', 'BCN'));
+          // TODO: sustituir por tu foto (formato 4:5)
+          const name = mk('div', 'qd-card__name'); name.append('Genís', document.createElement('br'), 'Bernabé', mk('i'));
+          const go = mk('div', 'qd-card__go'); go.append(mk('span', '', t('Creativo digital')));
+          const sw = mk('span', '', t('Desliza') + ' '); sw.append(mk('b', '', '→')); go.append(sw);
+          body.append(mk('div', 'qd-card__pic', t('Tu foto aquí')), name, go);
+        } else {
+          card.style.setProperty('--c', c.c);
+          stripe.append(mk('span', '', c.k), mk('span', '', `${pad(i + 1)} / ${pad(n)}`));
+          if (c.head) {
+            const h = mk('div', 'qd-head', c.head[0]); h.style.setProperty('--fs', c.head[1]);
+            if (c.head[2]) h.append(mk('small', '', c.head[2]));
+            body.append(h);
           }
-          body.append(lines);
+          const vis = mk('div', 'qd-vis'); vis.innerHTML = c.vis(); body.append(vis);
+          if (c.lines || c.copy) {
+            const lines = mk('div', 'qd-lines');
+            (c.lines || []).forEach(([cls, tx]) => { const l = mk('div', cls.replace('clock', '').trim(), tx); if (cls.includes('clock')) l.dataset.clock = ''; lines.append(l); });
+            if (c.copy) {
+              const b = mk('button', 'qd-copy', t('Copiar email')); b.type = 'button';
+              b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const ok = () => { b.classList.add('is-ok'); b.textContent = t('Copiado'); setTimeout(() => { b.classList.remove('is-ok'); b.textContent = t('Copiar email'); }, 1600); };
+                if (navigator.clipboard) navigator.clipboard.writeText(QS.email).then(ok, () => {});
+              });
+              lines.append(b);
+            }
+            body.append(lines);
+          }
         }
-      }
-      card.append(stripe, body, mk('div', 'qd-card__glare'));
-      qdDeck.append(card);
-      return card;
-    });
-    const paintClock = () => qdDeck.querySelectorAll('[data-clock]').forEach(x => { x.textContent = `Allí son las ${horaQd()}.`; });
-    paintClock(); setInterval(paintClock, 20000);
-
-    // El cursor personalizado también reacciona a los enlaces y botones de las cartas
-    qdDeck.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => cursor.classList.add('is-active'));
-      el.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
-    });
+        card.append(stripe, body, mk('div', 'qd-card__glare'));
+        qdDeck.append(card);
+        return card;
+      });
+      paintClock();
+      // El cursor personalizado también reacciona a los enlaces y botones de las cartas
+      qdDeck.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('is-active'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
+      });
+    };
+    const paintClock = () => qdDeck.querySelectorAll('[data-clock]').forEach(x => { x.textContent = t('Allí son las {h}.', { h: horaQd() }); });
+    buildCards();
+    setInterval(paintClock, 20000);
 
     const dotsEl = document.getElementById('qdDots');
     CARDS.forEach(() => dotsEl.append(document.createElement('i')));
@@ -583,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const render = () => {
       els.forEach(place);
       dotsEl.querySelectorAll('i').forEach((x, i) => x.classList.toggle('on', i === cur));
-      countEl.textContent = `${pad(cur + 1)} / ${pad(n)} · ${cur === 0 ? 'Carnet' : CARDS[cur].k}`;
+      countEl.textContent = `${pad(cur + 1)} / ${pad(n)} · ${cur === 0 ? t('Carnet') : CARDS[cur].k}`;
     };
     const seen = () => { if (hintEl) hintEl.classList.add('is-seen'); };
     const fling = (dir) => {
@@ -667,6 +680,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     mq.addEventListener('change', setMode);
     setMode();
+
+    // Al cambiar de idioma se reconstruyen las cartas (sin repetir la animación de entrada de las que ya se veían).
+    onLang(() => {
+      const seenBefore = els.map(el => el.classList.contains('is-in'));
+      buildCards();
+      setMode();
+      if (!mobile) seenBefore.forEach((w, i) => { if (w) els[i].classList.add('is-in'); });
+    });
   }
 
 
@@ -675,11 +696,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbImgs = [...document.querySelectorAll('.svc-view .proyecto-shot img, .svc-view .proyecto-posts img, .svc-view .proyecto-photos img')];
   if (lbImgs.length) {
     const lb = document.createElement('div');
-    lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Imagen ampliada');
+    lb.className = 'lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', t('Imagen ampliada'));
     lb.innerHTML = '<div class="lb__stage"><img class="lb__img" alt="" draggable="false">' +
-      '<button type="button" class="lb__btn lb__prev" aria-label="Imagen anterior">←</button>' +
-      '<button type="button" class="lb__btn lb__next" aria-label="Imagen siguiente">→</button>' +
-      '<button type="button" class="lb__btn lb__close" aria-label="Cerrar">✕</button></div>' +
+      '<button type="button" class="lb__btn lb__prev" aria-label="' + t('Imagen anterior') + '">←</button>' +
+      '<button type="button" class="lb__btn lb__next" aria-label="' + t('Imagen siguiente') + '">→</button>' +
+      '<button type="button" class="lb__btn lb__close" aria-label="' + t('Cerrar') + '">✕</button></div>' +
       '<div class="lb__bar"><span class="lb__cap"></span><span class="lb__count"></span></div>';
     document.body.appendChild(lb);
     const lbImg = lb.querySelector('.lb__img'), lbCap = lb.querySelector('.lb__cap'), lbCount = lb.querySelector('.lb__count');
@@ -724,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     lbImgs.forEach(img => {
       img.classList.add('is-zoomable'); img.tabIndex = 0; img.setAttribute('role', 'button');
-      img.setAttribute('aria-label', `Ampliar: ${img.alt}`);
+      img.setAttribute('aria-label', t('Ampliar: {alt}', { alt: img.alt }));
       img.addEventListener('click', () => lbOpen(img));
       img.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); lbOpen(img); } });
     });
@@ -752,6 +773,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) lbShow(lbI + (dx < 0 ? 1 : -1));
     });
     lb.addEventListener('pointercancel', () => { sx = null; });
+
+    // Cambio de idioma: etiquetas del visor y de cada imagen (los alt ya los ha traducido i18n.js)
+    onLang(() => {
+      lb.setAttribute('aria-label', t('Imagen ampliada'));
+      lbPrev.setAttribute('aria-label', t('Imagen anterior'));
+      lbNext.setAttribute('aria-label', t('Imagen siguiente'));
+      lbClose.setAttribute('aria-label', t('Cerrar'));
+      lbImgs.forEach(img => img.setAttribute('aria-label', t('Ampliar: {alt}', { alt: img.alt })));
+    });
   }
 
 });
