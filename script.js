@@ -275,14 +275,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ---------- Sobre mí: línea de tiempo ---------- */
-  // TODO: años y etapas provisionales; sustituir por los reales.
+  // Etapas reales (y = año de inicio; ic = icono sobre la barra). Para añadir o cambiar una etapa:
+  // editar este array y los botones de #tlTicks en index.html (data-y y --p = (año − 2020) / 6).
+  const TL_ICONS = {
+    cap: '<path d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path d="M6.5 11.8v4.2c0 1.2 2.5 2.5 5.5 2.5s5.5-1.3 5.5-2.5v-4.2M21.5 9.5v5"/>',
+    megaphone: '<path d="M4 10v4l10 4V6L4 10z"/><path d="M14 9.5c2 .4 3.5 1.2 3.5 2.5s-1.5 2.1-3.5 2.5M6.5 15l1 4h2.5l-.9-3.5"/>',
+    window: '<rect x="3" y="4.5" width="18" height="15" rx="1.5"/><path d="M3 9h18M6.5 6.8h.01M9.2 6.8h.01"/>',
+    book: '<path d="M4 5.5c0-.6.4-1 1-1h6v14H5a1 1 0 00-1 1zM20 5.5c0-.6-.4-1-1-1h-6v14h6a1 1 0 011 1z"/>',
+    briefcase: '<rect x="3.5" y="7.5" width="17" height="12" rx="1.5"/><path d="M9 7.5V5.5a1 1 0 011-1h4a1 1 0 011 1v2M3.5 13h17"/>',
+    check: '<circle cx="12" cy="12" r="8.5"/><path d="M8.2 12.3l2.7 2.7 5-5.4"/>'
+  };
+  const tlIcon = n => `<svg class="tl__ico" viewBox="0 0 24 24" aria-hidden="true">${TL_ICONS[n]}</svg>`;
   const tlTrackEl = document.getElementById('tlTrack');
   if (tlTrackEl) {
     const TL = [
-      { y: 2019, k: 'Etapa 01', h: 'Empiezo a hacer cosas con una cámara', p: 'Fotografía y diseño por curiosidad, y las primeras webs que nadie me pidió.', c: ['Fotografía', 'Diseño'] },
-      { y: 2022, k: 'Etapa 02', h: 'Primeros clientes y estudio propio', p: 'Nace SHOUIT. Webs a medida, contenido y redes para negocios de aquí.', c: ['SHOUIT', 'Webs', 'Contenido'] },
-      { y: 2024, k: 'Etapa 03', h: 'Agencia de comunicación en Barcelona', p: 'Creación de contenido y gestión de redes y de plataformas de formación, como Eurofitness EDU.', c: ['Eurofitness EDU', 'LearnWorlds', 'Redes'] },
-      { y: 2026, k: 'Hoy', h: 'Abierto a nuevas ofertas', p: 'Busco un equipo donde sumar web, contenido y criterio visual. Esta web es la prueba.', c: ['Disponible', 'Barcelona'] }
+      { y: 2020, ic: 'cap', k: 'Etapa 01', h: 'Empiezo marketing y publicidad', p: 'Grado superior de Marketing y Publicidad en el Centre d\'Estudis Polytechnics, en Barcelona. Aquí empieza todo: comunicación, publicidad y mis primeros proyectos.', c: ['Marketing', 'Publicidad', 'Polytechnics'] },
+      { y: 2021, ic: 'megaphone', k: 'Etapa 02', h: 'Mis primeras prácticas, en un club', p: 'Prácticas en el Club Natació Sant Andreu, donde me encargo de la comunicación interna y externa. Mi primer contacto con el mundo laboral.', c: ['Comunicación', 'Club deportivo'] },
+      { y: 2022, ic: 'window', k: 'Etapa 03', h: 'Mi primer trabajo en el sector', p: 'Community manager en Gestioncar, una cadena de concesionarios de compraventa. Llevo la comunicación, el diseño de la web, Instagram y los mailings hasta 2023.', c: ['Web', 'Instagram', 'Mailing'] },
+      { y: 2024, ic: 'book', k: 'Etapa 04', h: 'Máster y prácticas en Modula TV', p: 'Máster en marketing digital en Net Digital School: web, redes y audiovisual. A la vez, prácticas en Modula TV, agencia de comunicación y marketing y productora audiovisual: contenido, materiales gráficos, webs de clientes, redes y plataformas de formación como Eurofitness EDU.', c: ['Net Digital School', 'Contenido', 'Diseño web', 'Redes', 'Eurofitness EDU'] },
+      { y: 2025, ic: 'briefcase', k: 'Etapa 05', h: 'Contratado en Modula TV', p: 'Acabo el máster y paso a contrato en la misma empresa. Llevo clientes yo solo y tareas más complejas, y he subido de horas y de responsabilidad.', c: ['Gestión de clientes', 'Web', 'Redes'] },
+      { y: 2026, ic: 'check', k: 'Hoy', h: 'Abierto a nuevas ofertas', p: 'Sigo creciendo en Modula TV, pero busco un equipo donde sumar web, contenido y criterio visual. Esta web es la prueba.', c: ['Disponible', 'Barcelona'] }
     ];
     const yearEl = document.getElementById('tlYear');
     const kick = document.getElementById('tlKick'), title = document.getElementById('tlTitle');
@@ -298,10 +310,20 @@ document.addEventListener('DOMContentLoaded', () => {
       d.appendChild(s); yearEl.appendChild(d); cols.push(s);
     }
 
+    // Iconos sobre la barra: uno por etapa, se rellenan en verde al pasar la pastilla.
+    const trackLine = tlTrackEl.querySelector('.tl__line');
+    const nodes = TL.map(st => {
+      const n = document.createElement('span'); n.className = 'tl__node'; n.setAttribute('aria-hidden', 'true');
+      n.style.setProperty('--p', (st.y - TL[0].y) / (TL[TL.length - 1].y - TL[0].y));
+      n.innerHTML = tlIcon(st.ic);
+      trackLine.parentNode.insertBefore(n, trackLine.nextSibling);
+      return n;
+    });
+
     let curStop = -1;
     const showStage = idx => {
       const d = TL[idx];
-      kick.textContent = d.k; title.textContent = d.h; text.textContent = d.p;
+      kick.innerHTML = tlIcon(d.ic) + `<span>${d.k}</span>`; title.textContent = d.h; text.textContent = d.p;
       chips.innerHTML = '';
       d.c.forEach(c => { const li = document.createElement('li'); li.textContent = c; chips.appendChild(li); });
     };
@@ -325,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let idx = 0;
       TL.forEach((st, i) => { if (v >= st.y - 0.0001) idx = i; });
       tickBtns.forEach((b, i) => b.classList.toggle('is-on', i === idx));
+      nodes.forEach((n, i) => { n.classList.toggle('is-past', i <= idx); n.classList.toggle('is-now', i === idx); });
       if (idx === curStop) return;
       curStop = idx;
       showStage(idx);
