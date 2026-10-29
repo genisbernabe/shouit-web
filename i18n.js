@@ -1,16 +1,18 @@
 /* ==========================================================
-   Idiomas: castellano (por defecto, es el texto que hay escrito en el HTML) y catalán.
+   Idiomas: castellano (es el texto que hay escrito en el HTML), catalán e inglés.
 
    Cómo funciona
-   - El HTML y script.js están escritos en castellano. Aquí está el diccionario CA: clave = texto en
-     castellano tal cual aparece en la web, valor = su traducción al catalán.
+   - El HTML y script.js están escritos en castellano. Aquí están los diccionarios CA (catalán) y EN (inglés):
+     clave = texto en castellano tal cual aparece en la web, valor = su traducción.
    - Al cargar (y al cambiar de idioma) se recorren los textos, los alt, aria-label, placeholder y title,
      y se sustituyen por su traducción. Al volver a castellano se restauran los originales.
-   - Idioma inicial: ?lang=ca|es en la URL → el que eligió antes el visitante → el del navegador.
+   - Idioma inicial: ?lang=ca|es|en en la URL → el que eligió antes el visitante → el del navegador
+     (si no es catalán, castellano ni inglés, se muestra en inglés).
    - Los textos que dibuja script.js (cartas, línea de tiempo, visor) usan I18N.t('texto en castellano').
 
-   CADA VEZ QUE SE AÑADA O CAMBIE UN TEXTO DE LA WEB: añadir o actualizar su entrada en CA (abajo).
-   En la consola, I18N.audit() lista los textos que siguen en castellano estando en catalán.
+   CADA VEZ QUE SE AÑADA O CAMBIE UN TEXTO DE LA WEB: añadir o actualizar su entrada en CA y en EN (abajo).
+   En la consola, I18N.audit() lista los textos sin traducción en el idioma activo, e I18N.parity()
+   las claves que están en un diccionario y no en el otro.
    ========================================================== */
 (function () {
   'use strict';
@@ -122,6 +124,7 @@
     'Nombre': 'Nom',
     '¿Cómo te llamas?': 'Com et dius?',
     'Email': 'Correu electrònic',
+    'tu@email.com': 'tu@email.com',
     'Tipo de negocio': 'Tipus de negoci',
     'Restaurante, barbería, estudio...': 'Restaurant, barberia, estudi...',
     'Cuéntame': "Explica'm",
@@ -231,26 +234,239 @@
     'Gestión activa de las redes sociales del Port de Mataró.': 'Gestió activa de les xarxes socials del Port de Mataró.',
 
     /* ---------- Olimfit ---------- */
-    'Creación de contenido y gestión de redes sociales para Olimfit.': 'Creació de contingut i gestió de xarxes socials per a Olimfit.',
-    'Creación de contenido · Redes sociales': 'Creació de contingut · Xarxes socials',
-    'Creación de contenido y gestión de redes sociales para Olimfit: publicaciones con identidad propia que mantienen el perfil activo y coherente.': 'Creació de contingut i gestió de xarxes socials per a Olimfit: publicacions amb identitat pròpia que mantenen el perfil actiu i coherent.',
-    'Publicaciones con identidad.': 'Publicacions amb identitat.',
+    'Gestión de redes sociales para Olimfit.': 'Gestió de xarxes socials per a Olimfit.',
+    'Gestión de redes sociales para Olimfit: publicaciones con identidad propia que mantienen el perfil activo y coherente.': 'Gestió de xarxes socials per a Olimfit: publicacions amb identitat pròpia que mantenen el perfil actiu i coherent.',
     'Un perfil activo.': 'Un perfil actiu.',
-    'Publicaciones con identidad propia': 'Publicacions amb identitat pròpia',
-    'Piezas para el perfil de Olimfit, con una línea visual propia y coherente.': "Peces per al perfil d'Olimfit, amb una línia visual pròpia i coherent.",
     'Un perfil activo y coherente': 'Un perfil actiu i coherent',
     'Gestión de las redes de Olimfit para mantener el perfil al día.': "Gestió de les xarxes d'Olimfit per mantenir el perfil al dia."
   };
 
+  /* ---------- Inglés: misma clave (texto en castellano), traducción al inglés ---------- */
+  const EN = {
+    "SHOUIT — Estudio creativo en Barcelona": "SHOUIT — Creative studio in Barcelona",
+    "SHOUIT es un estudio creativo en Barcelona: diseño web, fotografía y contenido, y gestión de redes sociales para negocios locales.": "SHOUIT is a creative studio in Barcelona: web design, photography and content, and social media management for local businesses.",
+    "Quién soy": "Who I am",
+    "Portfolio": "Portfolio",
+    "Sobre mí": "About me",
+    "Hablemos": "Let's talk",
+    "Hablemos →": "Let's talk →",
+    "Abrir menú": "Open menu",
+    "Idioma": "Language",
+    "ESTUDIO CREATIVO — BARCELONA": "CREATIVE STUDIO — BARCELONA",
+    "Diseño web, fotografía / contenido y gestión de redes sociales": "Web design, photography / content and social media management",
+    "para negocios que quieren hacerse notar en Barcelona.": "for businesses that want to stand out in Barcelona.",
+    "DISEÑO WEB": "WEB DESIGN",
+    "FOTOGRAFÍA": "PHOTOGRAPHY",
+    "CONTENIDO": "CONTENT",
+    "REDES SOCIALES": "SOCIAL MEDIA",
+    "Desliza el carnet": "Swipe the ID card",
+    "Datos de Genís Bernabé. En móvil, usa las flechas del teclado para cambiar de carta.": "Details of Genís Bernabé. On mobile, use the keyboard arrow keys to change card.",
+    "Carta anterior": "Previous card",
+    "Carta siguiente": "Next card",
+    "Carnet": "ID card",
+    "Creativo digital": "Digital creative",
+    "Desliza": "Swipe",
+    "Tu foto aquí": "Your photo here",
+    "Edad": "Age",
+    "años": "years old",
+    "{n} años": "{n} years old",
+    "Vivo en": "I live in",
+    "Vivo en {ciudad}, {provincia}.": "I live in {ciudad}, {provincia}.",
+    "Allí son las {h}.": "It's {h} there.",
+    "Silueta de Catalunya con Barcelona y {ciudad} señaladas": "Silhouette of Catalonia with Barcelona and {ciudad} marked",
+    "Idiomas": "Languages",
+    "Catalán": "Catalan",
+    "Castellano": "Spanish",
+    "Inglés": "English",
+    "nativo": "native",
+    "First Certificate": "First Certificate",
+    "Stack": "Stack",
+    "Organización y gestión de podcast": "Podcast organisation and management",
+    "Proyectos": "Projects",
+    "proyectos": "projects",
+    "Estado": "Status",
+    "Abierto a nuevas ofertas": "Open to new offers",
+    "ABIERTO": "OPEN",
+    "a nuevas ofertas": "to new offers",
+    "Contacto": "Contact",
+    "Escríbeme": "Write to me",
+    "Copiar email": "Copy email",
+    "Copiado": "Copied",
+    "Trabajo": "Work",
+    "reales.": "for real.",
+    "Web + Contenido + Redes": "Web + Content + Social",
+    "Contenido + Redes": "Content + Social",
+    "Ver proyecto →": "View project →",
+    "¿El siguiente?": "The next one?",
+    "Tu proyecto": "Your project",
+    "aquí": "here",
+    "Quién hay detrás": "Who's behind it",
+    "Año de mi trayectoria": "Year of my career",
+    "ARRASTRA": "DRAG",
+    "Hoy": "Today",
+    "Pulsa la pastilla verde y arrástrala, o pulsa un año": "Press the green pill and drag it, or press a year",
+    "Etapa 01": "Stage 01",
+    "Etapa 02": "Stage 02",
+    "Etapa 03": "Stage 03",
+    "Etapa 04": "Stage 04",
+    "Etapa 05": "Stage 05",
+    "Empiezo marketing y publicidad": "I start marketing and advertising",
+    "Grado superior de Marketing y Publicidad en el Centre d'Estudis Polytechnics, en Barcelona. Aquí empieza todo: comunicación, publicidad y mis primeros proyectos.": "Higher vocational degree in Marketing and Advertising at the Centre d'Estudis Polytechnics, in Barcelona. This is where it all starts: communication, advertising and my first projects.",
+    "Marketing": "Marketing",
+    "Publicidad": "Advertising",
+    "Polytechnics": "Polytechnics",
+    "Mis primeras prácticas, en un club": "My first internship, at a club",
+    "Prácticas en el Club Natació Sant Andreu, donde me encargo de la comunicación interna y externa. Mi primer contacto con el mundo laboral.": "Internship at Club Natació Sant Andreu, where I look after internal and external communication. My first contact with the working world.",
+    "Comunicación": "Communication",
+    "Club deportivo": "Sports club",
+    "Mi primer trabajo en el sector": "My first job in the sector",
+    "Community manager en Gestioncar, una cadena de concesionarios de compraventa. Llevo la comunicación, el diseño de la web, Instagram y los mailings hasta 2023.": "Community manager at Gestioncar, a buy-and-sell dealership chain. I handle communication, web design, Instagram and mailings until 2023.",
+    "Web": "Web",
+    "Instagram": "Instagram",
+    "Mailing": "Mailing",
+    "Máster y prácticas en Modula TV": "Master's and internship at Modula TV",
+    "Máster en marketing digital en Net Digital School: web, redes y audiovisual. A la vez, prácticas en Modula TV, agencia de comunicación y marketing y productora audiovisual: contenido, materiales gráficos, webs de clientes, redes y plataformas de formación como Eurofitness EDU.": "Master's in digital marketing at Net Digital School: web, social media and audiovisual. At the same time, an internship at Modula TV, a communication and marketing agency and audiovisual production company: content, graphic materials, client websites, social media and training platforms such as Eurofitness EDU.",
+    "Net Digital School": "Net Digital School",
+    "Contenido": "Content",
+    "Diseño web": "Web design",
+    "Redes": "Social media",
+    "Eurofitness EDU": "Eurofitness EDU",
+    "Contratado en Modula TV": "Hired at Modula TV",
+    "Acabo el máster y paso a contrato en la misma empresa. Llevo clientes yo solo y tareas más complejas, y he subido de horas y de responsabilidad.": "I finish the master's and move onto a contract at the same company. I run clients on my own and take on more complex tasks, and I have increased my hours and responsibility.",
+    "Gestión de clientes": "Client management",
+    "Sigo creciendo en Modula TV, pero busco un equipo donde sumar web, contenido y criterio visual. Esta web es la prueba.": "I keep growing at Modula TV, but I'm looking for a team where I can add web, content and visual judgement. This site is the proof.",
+    "Disponible": "Available",
+    "Barcelona": "Barcelona",
+    "Hagamos": "Let's make",
+    "ruido juntos.": "noise together.",
+    "Nombre": "Name",
+    "¿Cómo te llamas?": "What's your name?",
+    "Email": "Email",
+    "tu@email.com": "you@email.com",
+    "Tipo de negocio": "Type of business",
+    "Restaurante, barbería, estudio...": "Restaurant, barbershop, studio...",
+    "Cuéntame": "Tell me",
+    "¿Qué necesitas?": "What do you need?",
+    "Enviar mensaje": "Send message",
+    "Barcelona, España": "Barcelona, Spain",
+    "SHOUIT. Todos los derechos reservados.": "SHOUIT. All rights reserved.",
+    "← Portfolio": "← Portfolio",
+    "Cliente": "Client",
+    "Sector": "Sector",
+    "Servicios": "Services",
+    "El proyecto": "The project",
+    "Qué hice": "What I did",
+    "Ver en Instagram ↗": "View on Instagram ↗",
+    "Siguiente proyecto": "Next project",
+    "Ver caso": "View case",
+    "Redes sociales": "Social media",
+    "Fotografía y vídeo": "Photography and video",
+    "Gestión de redes": "Social media management",
+    "Creación de contenido": "Content creation",
+    "Imagen ampliada": "Enlarged image",
+    "Imagen anterior": "Previous image",
+    "Imagen siguiente": "Next image",
+    "Cerrar": "Close",
+    "Ampliar: {alt}": "Enlarge: {alt}",
+    "Coworking · Barcelona": "Coworking · Barcelona",
+    "Diseño web completo, fotografía y vídeo, y gestión de redes sociales para CENEMA: un espacio de coworking en Barcelona pensado para autónomos, startups y equipos que buscan flexibilidad y comunidad.": "Full web design, photography and video, and social media management for CENEMA: a coworking space in Barcelona designed for freelancers, startups and teams looking for flexibility and community.",
+    "Diseño web, fotografía y gestión de redes sociales para CENEMA, un espacio de coworking en Barcelona.": "Web design, photography and social media management for CENEMA, a coworking space in Barcelona.",
+    "Web completa del coworking.": "Full website for the coworking space.",
+    "Imágenes de los espacios.": "Images of the spaces.",
+    "Gestión de las redes.": "Social media management.",
+    "CENEMA — coworking en Barcelona para profesionales": "CENEMA — coworking in Barcelona for professionals",
+    "Portada de la web": "Website home page",
+    "CENEMA — alquiler de salas por horas": "CENEMA — meeting rooms by the hour",
+    "Alquiler de salas por horas": "Meeting rooms by the hour",
+    "CENEMA — zona chillout exterior": "CENEMA — outdoor chillout area",
+    "Zona chillout exterior": "Outdoor chillout area",
+    "La web de CENEMA": "The CENEMA website",
+    "Diseño de la web del coworking: portada, alquiler de salas por horas y zonas del espacio.": "Design of the coworking website: home page, meeting rooms by the hour and areas of the space.",
+    "CENEMA — recepción con el logotipo luminoso": "CENEMA — reception with the illuminated logo",
+    "CENEMA — terraza con mesas y zona de descanso": "CENEMA — terrace with tables and lounge area",
+    "CENEMA — puestos de coworking": "CENEMA — coworking desks",
+    "CENEMA — terraza con zona chillout": "CENEMA — terrace with chillout area",
+    "CENEMA — zona de office y barra": "CENEMA — office and bar area",
+    "CENEMA — terraza con pérgola": "CENEMA — terrace with pergola",
+    "Los espacios, en imagen": "The spaces, in pictures",
+    "Fotografía de los espacios de CENEMA: recepción, puestos de coworking, office y terraza.": "Photography of the CENEMA spaces: reception, coworking desks, office and terrace.",
+    "CENEMA — publicación de Instagram: ¿Guardar o tirar? 5 cosas que quizá no necesitas en casa": "CENEMA — Instagram post: Keep or throw away? 5 things you might not need at home",
+    "CENEMA — publicación de Instagram: Las reuniones también sirven para comunicarse": "CENEMA — Instagram post: Meetings are also for communicating",
+    "CENEMA — publicación de Instagram: 5 señales de que necesitas un trastero": "CENEMA — Instagram post: 5 signs you need a storage unit",
+    "CENEMA — publicación de Instagram: ¿Por qué tu casa se llena en verano?": "CENEMA — Instagram post: Why does your home fill up in summer?",
+    "Presencia en redes": "Social media presence",
+    "Publicaciones para las redes de CENEMA sobre trasteros, coworking y orden en casa.": "Posts for CENEMA's social media about storage units, coworking and tidying up at home.",
+    "Creación de contenido y gestión de redes sociales para Eurofitness EDU, la escuela de ciclos formativos deportivos del grupo Eurofitness en Barcelona.": "Content creation and social media management for Eurofitness EDU, the sports vocational training school of the Eurofitness group in Barcelona.",
+    "Formación deportiva · Barcelona": "Sports education · Barcelona",
+    "Creación de contenido y gestión de redes sociales para Eurofitness EDU, la escuela de ciclos formativos deportivos del grupo Eurofitness en Barcelona. Ofrece grados medios y superiores en fitness, socorrismo, fútbol o guía en el medio natural, con aulas integradas en instalaciones deportivas reales y más de 25 años formando profesionales.": "Content creation and social media management for Eurofitness EDU, the sports vocational training school of the Eurofitness group in Barcelona. It offers intermediate and higher vocational degrees in fitness, lifeguarding, football or nature guiding, with classrooms built into real sports facilities and over 25 years training professionals.",
+    "Contenido para la escuela.": "Content for the school.",
+    "Plataforma de formación online": "Online training platform",
+    "Gestión de LearnWorlds.": "LearnWorlds management.",
+    "Contenido para la escuela": "Content for the school",
+    "Creación de contenido para Eurofitness EDU y sus ciclos formativos.": "Content creation for Eurofitness EDU and its vocational courses.",
+    "Gestión de las redes sociales de Eurofitness EDU.": "Management of Eurofitness EDU's social media.",
+    "La plataforma e-learning": "The e-learning platform",
+    "Gestión de LearnWorlds como plataforma de formación online de la escuela: cursos, inscripciones y automatizaciones.": "LearnWorlds management as the school's online training platform: courses, enrolments and automations.",
+    "Ver el detalle más abajo ↓": "See details below ↓",
+    "Plataforma e-learning": "E-learning platform",
+    "Gestión y desarrollo de Eurofitness EDU con LearnWorlds": "Management and development of Eurofitness EDU with LearnWorlds",
+    "Gestión y optimización de LearnWorlds como plataforma e-learning de Eurofitness EDU, trabajando tanto la parte técnica y operativa como la experiencia del alumnado. El proyecto incluye la gestión de los cursos, la automatización de procesos y la mejora continua del entorno digital, con el objetivo de ofrecer una experiencia formativa más ágil, coherente y funcional.": "Management and optimisation of LearnWorlds as Eurofitness EDU's e-learning platform, working on both the technical and operational side and the student experience. The project includes course management, process automation and continuous improvement of the digital environment, aiming to offer a more agile, coherent and functional learning experience.",
+    "Gestión, configuración y mantenimiento de la plataforma e-learning LearnWorlds.": "Management, configuration and maintenance of the LearnWorlds e-learning platform.",
+    "Creación, duplicación y actualización de cursos, contenidos y recursos formativos.": "Creating, duplicating and updating courses, content and learning resources.",
+    "Configuración de inscripciones, accesos, certificaciones y automatizaciones de comunicación.": "Setting up enrolments, access, certifications and communication automations.",
+    "Optimización de la experiencia de usuario y del recorrido del alumno dentro de la plataforma.": "Optimising the user experience and the student journey within the platform.",
+    "Resolución de incidencias técnicas e implementación de mejoras continuas en LearnWorlds.": "Fixing technical issues and implementing continuous improvements in LearnWorlds.",
+    "Alcance": "Scope",
+    "Estas tareas las realicé a través de LearnWorlds en algunos de los cursos de Eurofitness EDU.": "I carried out these tasks through LearnWorlds on some of the Eurofitness EDU courses.",
+    "Creación de contenido y gestión de redes sociales para Eurofitness, una cadena de clubs deportivos en Barcelona, el Maresme y el Vallès.": "Content creation and social media management for Eurofitness, a chain of sports clubs in Barcelona, the Maresme and the Vallès.",
+    "Fitness · Cadena de clubs deportivos": "Fitness · Sports club chain",
+    "Creación de contenido y gestión de redes sociales para Eurofitness, una cadena de clubs deportivos con centros en Barcelona, el Maresme, el Vallès y más allá. Instalaciones amplias de fitness, piscina y wellness, con actividades dirigidas, entrenamiento personal y programas como Posture Pilates o Longevital.": "Content creation and social media management for Eurofitness, a chain of sports clubs with centres in Barcelona, the Maresme, the Vallès and beyond. Spacious fitness, swimming pool and wellness facilities, with group classes, personal training and programmes such as Posture Pilates or Longevital.",
+    "Contenido para los clubs.": "Content for the clubs.",
+    "Contenido para los clubs": "Content for the clubs",
+    "Creación de contenido para Eurofitness y las actividades de sus clubs.": "Content creation for Eurofitness and its clubs' activities.",
+    "Gestión de las redes sociales de Eurofitness.": "Management of Eurofitness's social media.",
+    "Rediseño web, fotografía y gestión de redes sociales para el Port de Mataró.": "Website redesign, photography and social media management for the Port de Mataró.",
+    "Puerto · Mataró": "Port · Mataró",
+    "Rediseño web completo, fotografía y vídeo, y gestión activa de redes sociales para el Port de Mataró: náutica, gastronomía y sostenibilidad en un mismo espacio frente al mar.": "Full website redesign, photography and video, and active social media management for the Port de Mataró: sailing, gastronomy and sustainability in one space by the sea.",
+    "Rediseño web": "Website redesign",
+    "Nueva web del puerto.": "The port's new website.",
+    "Imágenes del puerto.": "Images of the port.",
+    "Gestión activa.": "Active management.",
+    "Port de Mataró — servicios del puerto": "Port de Mataró — port services",
+    "Servicios del puerto": "Port services",
+    "Una web para el puerto": "A website for the port",
+    "Rediseño completo de la web del Port de Mataró: náutica, gastronomía y sostenibilidad en un mismo espacio frente al mar.": "Complete redesign of the Port de Mataró website: sailing, gastronomy and sustainability in one space by the sea.",
+    "El puerto, en imagen": "The port, in pictures",
+    "Fotografía y vídeo del Port de Mataró y de su actividad.": "Photography and video of the Port de Mataró and its activity.",
+    "Gestión activa de redes": "Active social media management",
+    "Gestión activa de las redes sociales del Port de Mataró.": "Active management of the Port de Mataró's social media.",
+    "Un perfil activo.": "An active profile.",
+    "Un perfil activo y coherente": "An active, consistent profile",
+    "Gestión de las redes de Olimfit para mantener el perfil al día.": "Management of Olimfit's social media to keep the profile up to date.",
+    "Gestión de redes sociales para Olimfit.": "Social media management for Olimfit.",
+    "Gestión de redes sociales para Olimfit: publicaciones con identidad propia que mantienen el perfil activo y coherente.": "Social media management for Olimfit: posts with their own identity that keep the profile active and consistent."
+  };
+
   /* Patrones para textos con partes variables (alt de logos, publicaciones numeradas…) */
-  const RULES = [
-    [/^Logotipo del (.+)$/, 'Logotip del $1'],
-    [/^Logotipo de (.+)$/, 'Logotip de $1'],
-    [/^Logo de (.+)$/, 'Logotip de $1'],
-    [/^(.+) — publicación de Instagram (\d+)$/, "$1 — publicació d'Instagram $2"],
-    [/^Visitar (.+) ↗$/, 'Visitar $1 ↗'],
-    [/^(.+) →$/, null]   // «Nombre de proyecto →» (siguiente proyecto): se queda igual
-  ];
+  const RULES = {
+    ca: [
+      [/^Logotipo del (.+)$/, 'Logotip del $1'],
+      [/^Logotipo de (.+)$/, 'Logotip de $1'],
+      [/^Logo de (.+)$/, 'Logotip de $1'],
+      [/^(.+) — publicación de Instagram (\d+)$/, "$1 — publicació d'Instagram $2"],
+      [/^Visitar (.+) ↗$/, 'Visitar $1 ↗'],
+      [/^(.+) →$/, null]   // «Nombre de proyecto →» (siguiente proyecto): se queda igual
+    ],
+    en: [
+      [/^Logotipo del (.+)$/, '$1 logo'],
+      [/^Logotipo de (.+)$/, '$1 logo'],
+      [/^Logo de (.+)$/, '$1 logo'],
+      [/^(.+) — publicación de Instagram (\d+)$/, '$1 — Instagram post $2'],
+      [/^Visitar (.+) ↗$/, 'Visit $1 ↗'],
+      [/^(.+) →$/, null]
+    ]
+  };
+  const DICT = { ca: CA, en: EN };
 
   const STORE = 'gb-lang';
   const ATTRS = ['alt', 'aria-label', 'placeholder', 'title'];
@@ -258,7 +474,7 @@
   const norm = s => s.replace(/\s+/g, ' ').trim();
 
   /* ---- idioma inicial ---- */
-  const valid = l => (l === 'ca' || l === 'es') ? l : null;
+  const valid = l => (l === 'ca' || l === 'es' || l === 'en') ? l : null;
   const readStore = () => { try { return valid(localStorage.getItem(STORE)); } catch (e) { return null; } };
   const writeStore = l => { try { localStorage.setItem(STORE, l); } catch (e) { /* sin almacenamiento: no pasa nada */ } };
   let lang = 'es';
@@ -269,18 +485,21 @@
     const s = readStore();
     if (s) { lang = s; return; }
     const nav = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'es']);
-    for (const l of nav) { const c = String(l).toLowerCase().slice(0, 2); if (c === 'ca') { lang = 'ca'; return; } if (c === 'es') return; }
+    for (const l of nav) { const c = valid(String(l).toLowerCase().slice(0, 2)); if (c) { lang = c; return; } }
+    lang = 'en';   // idioma del navegador que no es ninguno de los tres
   })();
 
   /* ---- traducción de una cadena ---- */
   const fmt = (s, v) => v ? s.replace(/\{(\w+)\}/g, (m, k) => (v[k] != null ? v[k] : m)) : s;
   const lookup = key => {
-    if (CA[key] !== undefined) return CA[key];
-    for (const [re, rep] of RULES) { if (re.test(key)) return rep === null ? key : key.replace(re, rep); }
+    const d = DICT[lang];
+    if (!d) return undefined;
+    if (d[key] !== undefined) return d[key];
+    for (const [re, rep] of RULES[lang]) { if (re.test(key)) return rep === null ? key : key.replace(re, rep); }
     return undefined;
   };
   const t = (es, vars) => {
-    if (lang !== 'ca') return fmt(es, vars);
+    if (lang === 'es') return fmt(es, vars);
     const r = lookup(norm(es));
     return fmt(r !== undefined ? r : es, vars);
   };
@@ -297,7 +516,7 @@
 
   const applyText = n => {
     const had = nodeOrig.has(n), raw = had ? nodeOrig.get(n) : n.nodeValue;
-    const out = lang === 'ca' ? trRaw(raw) : raw;
+    const out = lang !== 'es' ? trRaw(raw) : raw;
     if (!had && out === raw) return;
     if (!had) nodeOrig.set(n, raw);
     if (n.nodeValue !== out) n.nodeValue = out;
@@ -307,7 +526,7 @@
       if (!el.hasAttribute(a)) return;
       let rec = attrOrig.get(el); const had = rec && a in rec;
       const raw = had ? rec[a] : el.getAttribute(a);
-      const out = lang === 'ca' ? (lookupAttr(raw)) : raw;
+      const out = lang !== 'es' ? lookupAttr(raw) : raw;
       if (!had && out === raw) return;
       if (!rec) { rec = {}; attrOrig.set(el, rec); }
       if (!had) rec[a] = raw;
@@ -320,8 +539,8 @@
   const applyHead = () => {
     titleEl = titleEl || document.querySelector('title');
     metaDesc = metaDesc || document.querySelector('meta[name="description"]');
-    if (titleEl) { if (!titleOrig) titleOrig = titleEl.textContent; document.title = lang === 'ca' ? lookupAttr(titleOrig) : titleOrig; }
-    if (metaDesc) { if (!descOrig) descOrig = metaDesc.getAttribute('content') || ''; metaDesc.setAttribute('content', lang === 'ca' ? lookupAttr(descOrig) : descOrig); }
+    if (titleEl) { if (!titleOrig) titleOrig = titleEl.textContent; document.title = lang !== 'es' ? lookupAttr(titleOrig) : titleOrig; }
+    if (metaDesc) { if (!descOrig) descOrig = metaDesc.getAttribute('content') || ''; metaDesc.setAttribute('content', lang !== 'es' ? lookupAttr(descOrig) : descOrig); }
   };
 
   const apply = (root) => {
@@ -356,7 +575,7 @@
     if (!host || host.querySelector('.nav__lang')) return;
     const g = document.createElement('div');
     g.className = 'nav__lang'; g.setAttribute('role', 'group'); g.setAttribute('aria-label', t('Idioma'));
-    [['es', 'ES', 'Castellano'], ['ca', 'CA', 'Català']].forEach(([code, label, name], i) => {
+    [['es', 'ES', 'Castellano'], ['ca', 'CA', 'Català'], ['en', 'EN', 'English']].forEach(([code, label, name], i) => {
       if (i) { const s = document.createElement('i'); s.setAttribute('aria-hidden', 'true'); s.textContent = '/'; g.appendChild(s); }
       const b = document.createElement('button');
       b.type = 'button'; b.dataset.lang = code; b.textContent = label; b.lang = code; b.title = name; b.setAttribute('aria-label', name);
@@ -373,7 +592,7 @@
     const out = new Set();
     const letters = /[A-Za-zÀ-ÿ]{3,}/;
     // Nombres propios, dominios, correos y herramientas: no se traducen
-    const NEUTRAL = /^(GENÍS BERNABÉ|Genís|Bernabé|Genís Bernabé|SHOUIT|BCN|SHOW|YOUR|POTENTIAL|SHOW YOUR POTENTIAL|Scroll|BARCELONA|CENEMA|Port de Mataró|Olimfit|Fitness|Eurofitness( EDU)?|HTML|CSS|JS|WordPress|Elementor|Photoshop|Lightroom|Premiere|LearnWorlds|Google (Analytics|Ads)|Meta Ads|Instagram|Portada de la web del Port de Mataró — Viu el batec del Port)$|^[\w.\-]+@[\w.\-]+$|^[\w.\-]+\.(com|es|org)$|— Genís Bernabé$|^Ampliar: /;
+    const NEUTRAL = /^(GENÍS BERNABÉ|Genís|Bernabé|Genís Bernabé|SHOUIT|BCN|SHOW|YOUR|POTENTIAL|SHOW YOUR POTENTIAL|Scroll|BARCELONA|CENEMA|Port de Mataró|Olimfit|Fitness|Eurofitness( EDU)?|HTML|CSS|JS|WordPress|Elementor|Photoshop|Lightroom|Premiere|LearnWorlds|Google (Analytics|Ads)|Meta Ads|Instagram|Portada de la web del Port de Mataró — Viu el batec del Port)$|^[\w.\-]+@[\w.\-]+$|^[\w.\-]+\.(com|es|org)$|— Genís Bernabé$|^(Ampliar|Enlarge): /;
     const chk = (s) => { const k = norm(s); if (k && letters.test(k) && !NEUTRAL.test(k) && lookup(k) === undefined) out.add(k); };
     // Se comprueba contra el diccionario, no contra el DOM, para no depender de lo que esté ya traducido.
     const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
@@ -388,15 +607,21 @@
     return [...out];
   };
 
+  const parity = () => ({
+    soloEnCA: Object.keys(CA).filter(k => !(k in EN)),
+    soloEnEN: Object.keys(EN).filter(k => !(k in CA))
+  });
+
   window.I18N = {
     t,
     get lang() { return lang; },
     set,
     onChange: fn => { listeners.push(fn); },
     audit,
+    parity,
     dict: CA
   };
 
   buildSwitch();
-  if (lang === 'ca') apply(); else { document.documentElement.lang = 'es'; applyHead(); }
+  if (lang !== 'es') apply(); else { document.documentElement.lang = 'es'; applyHead(); }
 })();

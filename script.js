@@ -464,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (qdDeck) {
     const horaQd = () => {
       try {
-        return new Intl.DateTimeFormat(window.I18N && window.I18N.lang === 'ca' ? 'ca-ES' : 'es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
+        return new Intl.DateTimeFormat({ ca: 'ca-ES', en: 'en-GB' }[window.I18N && window.I18N.lang] || 'es-ES', { timeZone: QS.zona, hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
       } catch (e) { return new Date().toLocaleTimeString().slice(0, 5); }
     };
     const pad = (x) => String(x).padStart(2, '0');
